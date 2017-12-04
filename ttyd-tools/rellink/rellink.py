@@ -1,6 +1,3 @@
-# Copyright PistonMiner, all rights reserved
-# Revision 0.1
-
 import sys
 import os
 import struct

@@ -47,8 +47,13 @@ commentBuffer = ctypes.create_string_buffer(0x40)
 struct.pack_into("32s", commentBuffer, 0x00, sys.argv[3].encode())
 struct.pack_into("32s", commentBuffer, 0x20, sys.argv[4].encode())
 
+# File info
+fileInfoBuffer = ctypes.create_string_buffer(0x200 - 0x40)
+struct.pack_into(">L", fileInfoBuffer, 0, len(inputBuffer))
+
+
 # Pad to block boundary
-paddingLength = blockCount * 0x2000 - (len(bannerBuffer) + len(iconBuffer) + len(commentBuffer) + len(inputBuffer))
+paddingLength = blockCount * 0x2000 - (len(bannerBuffer) + len(iconBuffer) + len(commentBuffer) + len(fileInfoBuffer) + len(inputBuffer))
 paddingBuffer = ctypes.create_string_buffer(paddingLength)
 
 outputFilename = os.path.splitext(os.path.splitext(inputFilename)[0])[0] + ".gci"
@@ -57,6 +62,7 @@ outputFile.write(bytearray(headerBuffer))
 outputFile.write(bytearray(bannerBuffer))
 outputFile.write(bytearray(iconBuffer))
 outputFile.write(bytearray(commentBuffer))
+outputFile.write(bytearray(fileInfoBuffer))
 outputFile.write(bytearray(inputBuffer))
 outputFile.write(bytearray(paddingBuffer))
 outputFile.close()

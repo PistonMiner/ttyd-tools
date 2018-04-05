@@ -107,7 +107,7 @@ int main(int argc, char **argv)
 {
 	if (argc <= 2)
 	{
-		printf("Usage: %s <elf file> <symbol file>", argv[0]);
+		printf("Usage: %s <elf file> <symbol file>\n", argv[0]);
 		return 1;
 	}
 
@@ -118,7 +118,7 @@ int main(int argc, char **argv)
 	ELFIO::elfio inputElf;
 	if (!inputElf.load(elfFilename))
 	{
-		printf("Failed to load input file");
+		printf("Failed to load input file\n");
 		return 1;
 	}
 	
@@ -283,7 +283,7 @@ int main(int argc, char **argv)
 				if (!symbols.get_symbol(symbol, symbolName, symbolValue,
 										size, bind, symbolType, sectionIndex, other))
 				{
-					printf("Unable to find symbol %u in symbol table!", static_cast<uint32_t>(symbol));
+					printf("Unable to find symbol %u in symbol table!\n", static_cast<uint32_t>(symbol));
 					return 1;
 				}
 

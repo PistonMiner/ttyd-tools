@@ -106,7 +106,10 @@ const std::vector<std::string> cRelSectionMask = {
 int main(int argc, char **argv)
 {
 	if (argc <= 2)
+	{
+		printf("Usage: %s <elf file> <symbol file>", argv[0]);
 		return 1;
+	}
 
 	std::string elfFilename = argv[1];
 	std::string lstFilename = argv[2];
@@ -115,6 +118,7 @@ int main(int argc, char **argv)
 	ELFIO::elfio inputElf;
 	if (!inputElf.load(elfFilename))
 	{
+		printf("Failed to load input file");
 		return 1;
 	}
 	
@@ -122,7 +126,6 @@ int main(int argc, char **argv)
 
 	// Find special sections
 	ELFIO::section *symSection = nullptr;
-	ELFIO::section *strSection = nullptr;
 	std::vector<ELFIO::section *> relocationSections;
 	for (const auto &section : inputElf.sections)
 	{
@@ -280,8 +283,8 @@ int main(int argc, char **argv)
 				if (!symbols.get_symbol(symbol, symbolName, symbolValue,
 										size, bind, symbolType, sectionIndex, other))
 				{
-					// #todo-elf2rel: Proper error handling
-					return -1;
+					printf("Unable to find symbol %u in symbol table!", static_cast<uint32_t>(symbol));
+					return 1;
 				}
 
 				// Add relocation to list

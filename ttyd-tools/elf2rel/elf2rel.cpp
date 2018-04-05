@@ -17,6 +17,14 @@ std::map<std::string, uint32_t> loadSymbolMap(const std::string &filename)
 	std::ifstream inputStream(filename);
 	for (std::string line; std::getline(inputStream, line); )
 	{
+		boost::trim_left(line);
+
+		// Ignore comments
+		if (line.find_first_of("//") == line.npos)
+		{
+			continue;
+		}
+
 		size_t index = line.find_first_of(':');
 
 		std::string name = line.substr(index + 1);

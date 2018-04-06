@@ -281,6 +281,10 @@ int main(int argc, char **argv)
 				ELFIO::Elf_Sxword addend;
 				relocations.get_entry(i, offset, symbol, type, addend);
 
+				// Ignore R_PPC_NONE
+				if (type == R_PPC_NONE)
+					continue;
+
 				ELFIO::Elf_Xword size;
 				unsigned char bind;
 				unsigned char symbolType;
@@ -382,11 +386,7 @@ int main(int argc, char **argv)
 	{
 		Relocation nextRel = allRelocations.front();
 		allRelocations.pop_front();
-
-		// Ignore R_PPC_NONE
-		if (nextRel.type == R_PPC_NONE)
-			continue;
-
+		
 		// Change module if necessary
 		if (currentModuleID != nextRel.moduleID)
 		{

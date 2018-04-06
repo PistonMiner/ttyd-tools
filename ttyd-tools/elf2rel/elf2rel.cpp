@@ -20,7 +20,7 @@ std::map<std::string, uint32_t> loadSymbolMap(const std::string &filename)
 		boost::trim_left(line);
 
 		// Ignore comments
-		if (line.find_first_of("//") == line.npos)
+		if (line.size() == 0 || line.find_first_of("//") == 0)
 		{
 			continue;
 		}

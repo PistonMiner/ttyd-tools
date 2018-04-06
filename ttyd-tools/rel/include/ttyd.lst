@@ -1,0 +1,82 @@
+// system.o
+// incomplete
+80005ff8:makeKey
+
+8026a0b8:_sprintf
+
+// memory.o
+// unused:smartGetWorkPtr
+8002f33c:smartTexObj
+8002f378:smartGarbage
+8002f540:smartAlloc
+8002f878:smartFree
+8002f9cc:smartAutoFree
+8002fa70:smartReInit
+8002fbe0:smartInit
+// unused:_mapAllocDump
+8002fdc4:_mapFree
+8002fe60:_mapAllocTail
+8002ff58:_mapAlloc
+// 80030048:zz_80030048_
+// 80030078:zz_80030078_
+800300c4:__memFree
+800300f0:__memAlloc
+80030154:memClear
+80030218:memInit
+
+// fontmgr.o
+// unused:JUTFont_Draw
+// unused:JUTFont_DrawPos
+80074720:_JUTFont_DrawPos
+80074bfc:JUTFont_DrawStart
+// unused:JUTFont_GetWidth
+// unused:JUTFont_GetWidthEntry
+80074e90:JUTFont_CodeToGlyph
+// unused:JUTFont_Free
+80075004:JUTFontSetup
+// unused:JUTFont_SetWidth
+800752fc:HSV2RGB
+80075528:FontGetMessageWidth
+8007554c:FontGetMessageWidthLine
+8007586c:kanjiGetWidth
+800758e4:kanjiSearch
+80075904:hankakuSearch
+80075928:FontDrawMessageMtx
+80075fcc:FontDrawMessage
+800766e0:FontDrawStringShake
+80076a10:FontDrawStringCenterMtx
+// unused:FontDrawStringCenter
+80076cdc:FontDrawStringMtx
+80077034:FontDrawStringVecPitch
+80077368:FontDrawStringPitch
+// unused:FontDrawStringVec
+800773d0:FontDrawString
+80077438:FontDrawCodeMtx
+80077594:FontDrawCode
+8007773c:FontDrawScaleVec
+80077758:FontDrawScale
+8007776c:FontGetDrawColor
+80077774:FontDrawColor_
+800777e0:FontDrawColor
+80077844:FontDrawColorIDX
+800778b4:FontDrawNoiseOff
+800778e0:FontDrawNoise
+800779e4:FontDrawRainbowColorOff
+80077a08:FontDrawRainbowColor
+80077aa8:FontDrawEdgeOff
+80077ab4:FontDrawEdge
+80077ac0:FontDrawStart_alpha
+80077b4c:FontDrawStart
+80077bdc:fontmgrTexSetup
+80077c08:fontmgrInit
+
+// dispdrv.o
+// unused:dispGetEntNum
+80010864:dispGetCurWork
+8001086c:dispCalcZ
+80010900:dispDraw
+80010b5c:dispSort
+// 80010b90:_sort
+80010bc4:dispEntry
+80010c64:dispReInit
+80010c70:dispInit

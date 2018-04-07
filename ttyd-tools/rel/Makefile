@@ -16,14 +16,31 @@ include $(DEVKITPPC)/gamecube_rules
 export ELF2REL	:=	$(TTYDTOOLS)/bin/elf2rel
 export GCIPACK	:=	python $(TTYDTOOLS)/gcipack/gcipack.py
 
+ifeq ($(VERSION),)
+all: us jp eu
+us:
+	@$(MAKE) --no-print-directory VERSION=us
+jp:
+	@$(MAKE) --no-print-directory VERSION=jp
+eu:
+	@$(MAKE) --no-print-directory VERSION=eu
+
+clean:
+	@$(MAKE) --no-print-directory clean_target VERSION=us
+	@$(MAKE) --no-print-directory clean_target VERSION=eu
+	@$(MAKE) --no-print-directory clean_target VERSION=jp
+
+.PHONY: all clean us jp eu
+else
+
 #---------------------------------------------------------------------------------
 # TARGET is the name of the output
 # BUILD is the directory where object files & intermediate files will be placed
 # SOURCES is a list of directories containing source code
 # INCLUDES is a list of directories containing extra header files
 #---------------------------------------------------------------------------------
-TARGET		:=	$(notdir $(CURDIR))
-BUILD		:=	build
+TARGET		:=	$(notdir $(CURDIR)).$(VERSION)
+BUILD		:=	build.$(VERSION)
 SOURCES		:=	source
 DATA		:=	data  
 INCLUDES	:=	include
@@ -34,10 +51,20 @@ INCLUDES	:=	include
 
 MACHDEP		= -mno-sdata -mgcn -DGEKKO -mcpu=750 -meabi -mhard-float
 
-CFLAGS		= -nostdlib -ffunction-sections -fdata-sections -g -O3 -Wall $(MACHDEP) $(INCLUDE)
+CFLAGS		= -nostdlib -ffreestanding -ffunction-sections -fdata-sections -g -O3 -Wall $(MACHDEP) $(INCLUDE)
 CXXFLAGS	= -fno-exceptions -fno-rtti -std=gnu++17 $(CFLAGS)
 
-LDFLAGS		= -r -s -e _prolog -u _prolog -u _epilog -u _unresolved -Wl,--gc-sections -nostartfiles -g $(MACHDEP) -Wl,-Map,$(notdir $@).map
+LDFLAGS		= -r -e _prolog -u _prolog -u _epilog -u _unresolved -Wl,--gc-sections -nostdlib -g $(MACHDEP) -Wl,-Map,$(notdir $@).map
+
+# Platform options
+ifeq ($(VERSION),us)
+	$(CFLAGS) += -DTTYD_US
+else ifeq ($(VERSION),jp)
+	$(CFLAGS) += -DTTYD_JP
+else ifeq ($(VERSION),eu)
+	$(CFLAGS) += -DTTYD_EU
+endif
+
 
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
@@ -90,7 +117,7 @@ export HFILES := $(addsuffix .h,$(subst .,_,$(BINFILES)))
 
 # For REL linking
 export LDFILES		:= $(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.ld)))
-export MAPFILE		:= $(CURDIR)/include/ttyd.lst
+export MAPFILE		:= $(CURDIR)/include/ttyd.$(VERSION).lst
 export BANNERFILE	:= $(CURDIR)/banner.raw
 export ICONFILE		:= $(CURDIR)/icon.raw
 
@@ -109,7 +136,7 @@ export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib) \
 			-L$(LIBOGC_LIB)
 
 export OUTPUT	:=	$(CURDIR)/$(TARGET)
-.PHONY: $(BUILD) clean
+.PHONY: $(BUILD) clean_target
 
 #---------------------------------------------------------------------------------
 $(BUILD):
@@ -117,8 +144,8 @@ $(BUILD):
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
 #---------------------------------------------------------------------------------
-clean:
-	@echo clean ...
+clean_target:
+	@echo clean ... $(VERSION)
 	@rm -fr $(BUILD) $(OUTPUT).elf $(OUTPUT).dol $(OUTPUT).rel $(OUTPUT).gci
 
 #---------------------------------------------------------------------------------
@@ -129,8 +156,8 @@ DEPENDS	:=	$(OFILES:.o=.d)
 #---------------------------------------------------------------------------------
 # main targets
 #---------------------------------------------------------------------------------
-$(OUTPUT).gci: $(OUTPUT).rel
-$(OUTPUT).rel: $(OUTPUT).elf
+$(OUTPUT).gci: $(OUTPUT).rel $(BANNERFILE) $(ICONFILE)
+$(OUTPUT).rel: $(OUTPUT).elf $(MAPFILE)
 $(OUTPUT).elf: $(LDFILES) $(OFILES)
 
 $(OFILES_SOURCES) : $(HFILES)
@@ -157,3 +184,4 @@ $(OFILES_SOURCES) : $(HFILES)
 #---------------------------------------------------------------------------------
 endif
 #---------------------------------------------------------------------------------
+endif

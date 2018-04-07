@@ -2,8 +2,6 @@
 // incomplete
 80005ff8:makeKey
 
-8026a0b8:_sprintf
-
 // memory.o
 // unused:smartGetWorkPtr
 8002f33c:smartTexObj

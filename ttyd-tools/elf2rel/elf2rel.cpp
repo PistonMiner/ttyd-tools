@@ -192,7 +192,7 @@ int main(int argc, char **argv)
 
 	// Write sections
 	std::vector<uint8_t> sectionInfoBuffer;
-	std::vector<ELFIO::section *> writtenSections;
+	std::map<ELFIO::section *, int> writtenSections;
 	int totalBssSize = 0;
 	int maxAlign = 1;
 	int maxBssAlign = 1;
@@ -229,16 +229,18 @@ int main(int argc, char **argv)
 				}
 
 				int offset = outputBuffer.size();
+
+				int encodedOffset = offset;
 				// Mark executable sections
 				if (section->get_flags() & SHF_EXECINSTR)
 				{
-					offset |= 1;
+					encodedOffset |= 1;
 				}
-				writeSectionInfo(sectionInfoBuffer, offset, static_cast<int>(section->get_size()));
+				writeSectionInfo(sectionInfoBuffer, encodedOffset, static_cast<int>(section->get_size()));
 				std::vector<uint8_t> sectionData(section->get_data(), section->get_data() + section->get_size());
 				outputBuffer.insert(outputBuffer.end(), sectionData.begin(), sectionData.end());
 
-				writtenSections.emplace_back(section);
+				writtenSections[section] = offset;
 			}
 		}
 		else
@@ -269,7 +271,7 @@ int main(int argc, char **argv)
 		int relocatedSectionIndex = section->get_info();
 		ELFIO::section *relocatedSection = inputElf.sections[relocatedSectionIndex];
 		// Only relocate sections that were written
-		if (std::find(writtenSections.begin(), writtenSections.end(), relocatedSection) != writtenSections.end())
+		if (writtenSections.find(relocatedSection) != writtenSections.end())
 		{
 			ELFIO::relocation_section_accessor relocations(inputElf, section);
 			// #todo-elf2rel: Process relocations
@@ -387,6 +389,30 @@ int main(int argc, char **argv)
 		Relocation nextRel = allRelocations.front();
 		allRelocations.pop_front();
 		
+		// Resolve early if possible
+		if (nextRel.moduleID == moduleID && (nextRel.type == R_PPC_REL24 || nextRel.type == R_PPC_REL32))
+		{
+			int offset = writtenSections.at(inputElf.sections[nextRel.section]) + nextRel.offset;
+			int delta = writtenSections.at(inputElf.sections[nextRel.targetSection]) + nextRel.addend - offset;
+			std::vector<uint8_t> instructionBuffer(outputBuffer.begin() + offset, outputBuffer.begin() + offset + 4);
+			uint32_t patchedData;
+			load(instructionBuffer, patchedData);
+			
+			if (nextRel.type == R_PPC_REL24)
+			{
+				patchedData |= (delta & 0x03FFFFFC);
+			}
+			else if (nextRel.type == R_PPC_REL32)
+			{
+				patchedData = delta;
+			}
+			
+			save(instructionBuffer, patchedData);
+			std::copy(instructionBuffer.begin(), instructionBuffer.end(), outputBuffer.begin() + offset);
+
+			continue;
+		}
+
 		// Change module if necessary
 		if (currentModuleID != nextRel.moduleID)
 		{
@@ -416,8 +442,31 @@ int main(int argc, char **argv)
 			writeRelocation(outputBuffer, 0, R_DOLPHIN_NOP, 0, 0);
 			targetDelta -= 0xFFFF;
 		}
-		// #todo-elf2rel: Resolve potential self-relocations at build time here
+		
 		// #todo-elf2rel: Add runtime unresolved symbol handling here
+		// At this point, only symbols that OSLink can handle should remain
+		switch (nextRel.type)
+		{
+		case R_PPC_NONE:
+		case R_PPC_ADDR32:
+		case R_PPC_ADDR24:
+		case R_PPC_ADDR16:
+		case R_PPC_ADDR16_LO:
+		case R_PPC_ADDR16_HI:
+		case R_PPC_ADDR16_HA:
+		case R_PPC_ADDR14:
+		case R_PPC_ADDR14_BRTAKEN:
+		case R_PPC_ADDR14_BRNKTAKEN:
+		case R_PPC_REL24:
+		case R_DOLPHIN_NOP:
+		case R_DOLPHIN_SECTION:
+		case R_DOLPHIN_END:
+			break;
+		default:
+			printf("Unsupported relocation type %d", nextRel.type);
+			break;
+		}
+
 		writeRelocation(outputBuffer, targetDelta, nextRel.type, nextRel.targetSection, nextRel.addend);
 		currentOffset = nextRel.offset;
 	}

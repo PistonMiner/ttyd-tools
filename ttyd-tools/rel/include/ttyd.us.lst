@@ -68,6 +68,15 @@
 80010c64:dispReInit
 80010c70:dispInit
 
+// seqdrv.o
+8002e1e4:seqCheckSeq
+8002e200:seqGetNextSeq
+8002e208:seqGetPrevSeq
+8002e210:seqGetSeq
+8002e218:seqSetSeq
+8002e228:seqMain
+8002e304:seqInit_MARIOSTORY
+
 // memory.o
 // unused:smartGetWorkPtr
 8002f33c:smartTexObj
@@ -147,6 +156,16 @@
 80077b4c:FontDrawStart
 80077bdc:fontmgrTexSetup
 80077c08:fontmgrInit
+
+// seq_logo.o
+800859f8:progDisp
+// unused:arcLoad
+// unused:arcPreLoad
+80085f28:dummy_draw
+80085fe0:logoDisp
+80086d6c:seq_logoMain
+8008746c:seq_logoExit
+800874b0:seq_logoInit
 
 // printf.c
 8026a0b8:sprintf

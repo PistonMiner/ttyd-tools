@@ -4,6 +4,8 @@
 #include <ttyd/mariost.h>
 #include <ttyd/fontmgr.h>
 #include <ttyd/dispdrv.h>
+#include <ttyd/seqdrv.h>
+#include <ttyd/seq_logo.h>
 
 #include "patch.h"
 
@@ -36,6 +38,12 @@ void Mod::init()
 	// Initialize typesetting early
 	ttyd::fontmgr::fontmgrTexSetup();
 	patch::hookFunction(ttyd::fontmgr::fontmgrTexSetup, [](){});
+
+	// Skip the logo
+	patch::hookFunction(ttyd::seq_logo::seq_logoMain, [](ttyd::seqdrv::SeqInfo *)
+	{
+		ttyd::seqdrv::seqSetSeq(1, nullptr, nullptr);
+	});
 }
 
 void Mod::updateEarly()
@@ -81,13 +89,12 @@ void Mod::draw()
 #else
 	#error Mario position and velocity not implemented for this version
 #endif
-
 	
 	sprintf(mDisplayBuffer,
-			"Pos: %.2f %.2f %.2f\r\nSpdY: %.2f\r\nPST: %lu",
-			marioPos[0], marioPos[1], marioPos[2],
-			marioVel[0],
-			mPalaceSkipTimer.getValue());
+	        "Pos: %.2f %.2f %.2f\r\nSpdY: %.2f\r\nPST: %lu",
+	        marioPos[0], marioPos[1], marioPos[2],
+	        marioVel[0],
+	        mPalaceSkipTimer.getValue());
 	ttyd::fontmgr::FontDrawStart();
 	uint32_t color = 0xFFFFFFFF;
 	ttyd::fontmgr::FontDrawColor(reinterpret_cast<uint8_t *>(&color));

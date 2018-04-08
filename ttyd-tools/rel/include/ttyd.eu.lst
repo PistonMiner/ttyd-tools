@@ -1,0 +1,168 @@
+// system.o
+// unused:memcmp_as4
+// unused:memset_as4
+80005634:memcpy_as4
+// unused:LZ77Decode
+// unused:mtxGetScaleElement
+80005654:mtxGetRotationElement
+// unused:mtx_set_col_vec
+// unused:mtx_set_row_vec
+// unused:mtx_col_vec
+// unused:mtx_row_vec
+8000598c:sysOSReport
+// unused:sysFrame2MsecFloat
+// unused:sysFrame2Msec
+80005a54:sysMsec2FrameFloat
+80005a94:sysMsec2Frame
+80005abc:sysFrame2SecFloat
+// unused:sysFrame2Sec
+// unused:sysSec2FrameFloat
+// unused:sysSec2Frame
+80005ac8:getV60FPS
+80005ba0:sysDummyDraw
+80005dac:sysWaitDrawSync
+80005e58:sysGetToken
+80005e68:irand
+// unused:movePos3
+// unused:movePos2
+80005eac:movePos
+80005f54:sincosf
+80005fcc:padGetRumbleStatus
+80005fdc:padRumbleHardOff
+80005ff0:padRumbleOff
+80006004:padRumbleOn
+// unused:keyGetTriggerR
+// unused:keyGetTriggerL
+80006018:keyGetSubStickY
+// unused:keyGetSubStickX
+80006028:keyGetStickY
+80006038:keyGetStickX
+80006048:keyGetButtonTrg
+8000605c:keyGetDirTrg
+80006070:keyGetButtonRep
+80006084:keyGetDirRep
+80006098:keyGetButton
+800060ac:keyGetDir
+800060c0:makeKey
+800065c4:qqsort
+// 80006748:fsort
+// unused:intplStringToEnum
+80006d54:intplGetValue
+80007104:angleABf
+800072b8:compAngle
+800072f4:distABf
+800073f0:reviseAngle
+// unused:roundi
+80007450:__assert2
+8000752c:__assert
+80007308:getMarioStDvdRoot
+
+// dispdrv.o
+// unused:dispGetEntNum
+80010a28:dispGetCurWork
+80010a30:dispCalcZ
+80010ac4:dispDraw
+80010d20:dispSort
+// 80010b90:_sort
+80010d88:dispEntry
+80010e28:dispReInit
+80010e34:dispInit
+
+// memory.o
+// unused:smartGetWorkPtr
+8002f424:smartTexObj
+8002f460:smartGarbage
+8002f628:smartAlloc
+8002f960:smartFree
+8002fab4:smartAutoFree
+8002fb58:smartReInit
+8002fcc8:smartInit
+// unused:_mapAllocDump
+8002feac:_mapFree
+8002ff48:_mapAllocTail
+80030040:_mapAlloc
+// 80030130:unk_US_PAL_01_80030130
+// 80030160:unk_US_PAL_02_80030160
+800301ac:__memFree
+800301d8:__memAlloc
+8003023c:memClear
+80030300:memInit
+
+// mariost.o
+// unused:gcResetDone
+// unused:gcResetCheck
+800700b4:gcRumbleCheck
+// unused:gcDvdCheckCancel
+// unused:gcDvdCheckInit
+800703bc:gcDvdCheckThread
+800705e0:viPostCallback
+80070998:marioStGetSystemLevel
+800709a4:marioStSystemLevel
+80070ab8:marioStDisp
+80070ae0:marioStMain
+80070d18:marioStInit
+
+// fontmgr.o
+// unused:JUTFont_Draw
+// unused:JUTFont_DrawPos
+800759dc:_JUTFont_DrawPos
+80075eb8:JUTFont_DrawStart
+// unused:JUTFont_GetWidth
+// unused:JUTFont_GetWidthEntry
+8007614c:JUTFont_CodeToGlyph
+// unused:JUTFont_Free
+800762c0:JUTFontSetup
+// unused:JUTFont_SetWidth
+800765b8:HSV2RGB
+800767e4:FontGetMessageWidth
+80076808:FontGetMessageWidthLine
+80076b28:kanjiGetWidth
+80076ba0:kanjiSearch
+80076bc0:hankakuSearch
+80076be4:FontDrawMessageMtx
+80077288:FontDrawMessage
+8007799c:FontDrawStringShake
+80077ccc:FontDrawStringCenterMtx
+// unused:FontDrawStringCenter
+80077f98:FontDrawStringMtx
+800782f0:FontDrawStringVecPitch
+80078624:FontDrawStringPitch
+// unused:FontDrawStringVec
+8007868c:FontDrawString
+800786f4:FontDrawCodeMtx
+80078850:FontDrawCode
+800789f8:FontDrawScaleVec
+80078a14:FontDrawScale
+80078a28:FontGetDrawColor
+80078a30:FontDrawColor_
+80078a9c:FontDrawColor
+80078b00:FontDrawColorIDX
+80078b70:FontDrawNoiseOff
+80078b9c:FontDrawNoise
+80078ca0:FontDrawRainbowColorOff
+80078cc4:FontDrawRainbowColor
+80078d64:FontDrawEdgeOff
+80078d70:FontDrawEdge
+80078d7c:FontDrawStart_alpha
+80078e08:FontDrawStart
+80078e98:fontmgrTexSetup
+80078ec4:fontmgrInit
+
+// printf.o
+8026deac:sprintf
+// unused:snprintf
+8026df8c:vsprintf
+// unused:vsnprintf
+// unused:vfprintf
+8026e004:vprintf
+// unused:fprintf
+8026e09c:printf
+8026e184:__StringWrite
+8026e1f0:__FileWrite
+// 8026e248:__pformatter
+// 8026e9bc:float2str
+// 8026f0d8:round_decimal
+// 8026f204:double2hex
+// 8026f53c:longlong2str
+// 8026f850:long2str
+// 8026faa8:parse_format

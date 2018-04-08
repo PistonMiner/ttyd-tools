@@ -1,6 +1,7 @@
 #include "mod.h"
 
 #include <ttyd/system.h>
+#include <ttyd/mariost.h>
 #include <ttyd/fontmgr.h>
 #include <ttyd/dispdrv.h>
 
@@ -37,24 +38,6 @@ void Mod::init()
 	patch::hookFunction(ttyd::fontmgr::fontmgrTexSetup, [](){});
 }
 
-static uint16_t getInput()
-{
-#ifdef TTYD_US
-	return *reinterpret_cast<uint16_t *>(0x803CA398);
-#else
-	#error getInput() not implemented for this version
-#endif
-}
-
-static uint32_t getThreadExecState()
-{
-#ifdef TTYD_US
-	return *reinterpret_cast<uint32_t *>(0x8041E940);
-#else
-	#error getThreadExecState() not implemented for this version
-#endif
-}
-
 void Mod::updateEarly()
 {
 	// Check for font load
@@ -64,21 +47,21 @@ void Mod::updateEarly()
 	}, this);
 	
 	// Palace skip timing code
-	if (getThreadExecState() == 4)
+	if (ttyd::mariost::marioStGetSystemLevel() == 0xF)
 	{
 		// Reset upon pausing
 		mPalaceSkipTimer.stop();
 		mPalaceSkipTimer.setValue(0);
 		mPaused = true;
 	}
-	else if (getThreadExecState() == 0 && mPaused)
+	else if (ttyd::mariost::marioStGetSystemLevel() == 0 && mPaused)
 	{
 		// Start when unpausing
 		mPalaceSkipTimer.start();
 		mPaused = false;
 	}
 	
-	if (getInput() & 0x0400)
+	if (ttyd::system::keyGetButtonTrg(0) & 0x0400)
 	{
 		// Stop when pressing A or X
 		mPalaceSkipTimer.stop();
@@ -91,16 +74,25 @@ void Mod::updateEarly()
 
 void Mod::draw()
 {
+#ifdef TTYD_US
 	uint32_t r13 = 0x8041CF20;
 	float *marioPos = *reinterpret_cast<float **>(r13 + 0x19E0) + 35;
 	float *marioVel = *reinterpret_cast<float **>(r13 + 0x19E0) + 31;
+#else
+	#error Mario position and velocity not implemented for this version
+#endif
+
 	
-	sprintf(mDisplayBuffer, "Pos: %.2f %.2f %.2f\r\nSpdY: %.2f\r\nPST: %lu", marioPos[0], marioPos[1], marioPos[2], marioVel[0], mPalaceSkipTimer.getValue());
+	sprintf(mDisplayBuffer,
+			"Pos: %.2f %.2f %.2f\r\nSpdY: %.2f\r\nPST: %lu",
+			marioPos[0], marioPos[1], marioPos[2],
+			marioVel[0],
+			mPalaceSkipTimer.getValue());
 	ttyd::fontmgr::FontDrawStart();
 	uint32_t color = 0xFFFFFFFF;
 	ttyd::fontmgr::FontDrawColor(reinterpret_cast<uint8_t *>(&color));
 	ttyd::fontmgr::FontDrawEdge();
-	ttyd::fontmgr::FontDrawMessage(-272, -120, mDisplayBuffer);
+	ttyd::fontmgr::FontDrawMessage(-272, -100, mDisplayBuffer);
 }
 
 }

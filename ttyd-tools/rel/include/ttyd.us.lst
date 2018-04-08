@@ -1,6 +1,72 @@
 // system.o
-// incomplete
+// unused:memcmp_as4
+// unused:memset_as4
+80005634:memcpy_as4
+// unused:LZ77Decode
+// unused:mtxGetScaleElement
+80005654:mtxGetRotationElement
+// unused:mtx_set_col_vec
+// unused:mtx_set_row_vec
+// unused:mtx_col_vec
+// unused:mtx_row_vec
+// unused:sysOSReport
+// unused:sysFrame2MsecFloat
+// unused:sysFrame2Msec
+8000598c:sysMsec2FrameFloat
+800059cc:sysMsec2Frame
+800059f4:sysFrame2SecFloat
+// unused:sysFrame2Sec
+// unused:sysSec2FrameFloat
+// unused:sysSec2Frame
+80005a00:getV60FPS
+80005ad8:sysDummyDraw
+80005ce4:sysWaitDrawSync
+80005d90:sysGetToken
+80005da0:irand
+// unused:movePos3
+// unused:movePos2
+80005de4:movePos
+80005e8c:sincosf
+80005f04:padGetRumbleStatus
+80005f14:padRumbleHardOff
+80005f28:padRumbleOff
+80005f3c:padRumbleOn
+// unused:keyGetTriggerR
+// unused:keyGetTriggerL
+80005f50:keyGetSubStickY
+// unused:keyGetSubStickX
+80005f60:keyGetStickY
+80005f70:keyGetStickX
+80005f80:keyGetButtonTrg
+80005f94:keyGetDirTrg
+80005fa8:keyGetButtonRep
+80005fbc:keyGetDirRep
+80005fd0:keyGetButton
+80005fe4:keyGetDir
 80005ff8:makeKey
+800064fc:qqsort
+// 80006680:fsort
+// unused:intplStringToEnum
+80006c8c:intplGetValue
+8000703c:angleABf
+800071f0:compAngle
+8000722c:distABf
+80007328:reviseAngle
+// unused:roundi
+// unused:__assert2
+// unused:__assert
+80007388:getMarioStDvdRoot
+
+// dispdrv.o
+// unused:dispGetEntNum
+80010864:dispGetCurWork
+8001086c:dispCalcZ
+80010900:dispDraw
+80010b5c:dispSort
+// 80010b90:_sort
+80010bc4:dispEntry
+80010c64:dispReInit
+80010c70:dispInit
 
 // memory.o
 // unused:smartGetWorkPtr
@@ -15,12 +81,26 @@
 8002fdc4:_mapFree
 8002fe60:_mapAllocTail
 8002ff58:_mapAlloc
-// 80030048:zz_80030048_
-// 80030078:zz_80030078_
+// 80030048:unk_US_PAL_01_80030048
+// 80030078:unk_US_PAL_02_80030078
 800300c4:__memFree
 800300f0:__memAlloc
 80030154:memClear
 80030218:memInit
+
+// mariost.o
+// unused:gcResetDone
+// unused:gcResetCheck
+8006eed8:gcRumbleCheck
+// unused:gcDvdCheckCancel
+// unused:gcDvdCheckInit
+8006f1e0:gcDvdCheckThread
+8006f404:viPostCallback
+8006f7bc:marioStGetSystemLevel
+8006f7c8:marioStSystemLevel
+8006f8dc:marioStDisp
+8006f904:marioStMain
+8006fb3c:marioStInit
 
 // fontmgr.o
 // unused:JUTFont_Draw
@@ -68,13 +148,21 @@
 80077bdc:fontmgrTexSetup
 80077c08:fontmgrInit
 
-// dispdrv.o
-// unused:dispGetEntNum
-80010864:dispGetCurWork
-8001086c:dispCalcZ
-80010900:dispDraw
-80010b5c:dispSort
-// 80010b90:_sort
-80010bc4:dispEntry
-80010c64:dispReInit
-80010c70:dispInit
+// printf.c
+8026a0b8:sprintf
+// unused:snprintf
+8026a198:vsprintf
+// unused:vsnprintf
+// unused:vfprintf
+8026a210:vprintf
+// unused:fprintf
+8026a2a8:printf
+8026a390:__StringWrite
+8026a3fc:__FileWrite
+// 8026a454:__pformatter
+// 8026abc8:float2str
+// 8026b2e4:round_decimal
+// 8026b410:double2hex
+// 8026b748:longlong2str
+// 8026ba5c:long2str
+// 8026bcb4:parse_format

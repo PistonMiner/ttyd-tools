@@ -58,11 +58,11 @@ LDFLAGS		= -r -e _prolog -u _prolog -u _epilog -u _unresolved -Wl,--gc-sections 
 
 # Platform options
 ifeq ($(VERSION),us)
-	$(CFLAGS) += -DTTYD_US
+	CFLAGS += -DTTYD_US
 else ifeq ($(VERSION),jp)
-	$(CFLAGS) += -DTTYD_JP
+	CFLAGS += -DTTYD_JP
 else ifeq ($(VERSION),eu)
-	$(CFLAGS) += -DTTYD_EU
+	CFLAGS += -DTTYD_EU
 endif
 
 

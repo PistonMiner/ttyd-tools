@@ -156,11 +156,11 @@
 8007711c:fontmgrInit
 
 // seq_logo.o
-80084a6c:progDisp
+// 80084a6c:progDisp
 // unused:arcLoad
 // unused:arcPreLoad
-80084f84:dummy_draw
-8008503c:logoDisp
+// 80084f84:dummy_draw
+// 8008503c:logoDisp
 80085998:seq_logoMain
 80085f50:seq_logoExit
 80085f94:seq_logoInit

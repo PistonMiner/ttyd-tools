@@ -4,28 +4,28 @@
 
 namespace ttyd::dispdrv {
 
-enum DisplayLayer
+enum class DisplayLayer : uint8_t
 {
-	DisplayLayer_Off = 0,
-	DisplayLayer_Off2,
-	DisplayLayer_Shadow,
-	DisplayLayer_Bg,
-	DisplayLayer_3d,
-	DisplayLayer_3deff_A,
-	DisplayLayer_3dimg,
-	DisplayLayer_3deff_B,
-	DisplayLayer_2d,
-	DisplayLayer_Fade,
-	DisplayLayer_Fade2,
-	DisplayLayer_Dbg,
-	DisplayLayer_Dbg3d,
+	kOffscreen = 0,
+	kOffscreen2,
+	kShadow,
+	kBackground,
+	k3d,
+	k3dEffectA,
+	k3dImage,
+	k3dEffectB,
+	k2d,
+	kFade,
+	kFade2,
+	kDebug,
+	kDebug3d,
 };
 
-typedef void (*PFN_dispCallback)(uint8_t layerId, void *user);
+typedef void (*PFN_dispCallback)(DisplayLayer layerId, void *user);
 
 struct DisplayWork
 {
-	uint8_t layer;
+	DisplayLayer layer;
 	uint8_t renderMode;
 	uint16_t padding_2;
 	float unk_4;
@@ -37,9 +37,9 @@ extern "C" {
 
 void dispInit();
 void dispReInit();
-void dispEntry(uint8_t layerId, uint8_t renderMode, PFN_dispCallback callback, void *user);
+void dispEntry(DisplayLayer layerId, uint8_t renderMode, PFN_dispCallback callback, void *user);
 void dispSort();
-void dispDraw(uint8_t layerId);
+void dispDraw(DisplayLayer layerId);
 // float dispCalcZ(void *vecUnk);
 DisplayWork *dispGetCurWork();
 

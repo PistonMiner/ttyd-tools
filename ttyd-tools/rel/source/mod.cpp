@@ -42,14 +42,14 @@ void Mod::init()
 	// Skip the logo
 	patch::hookFunction(ttyd::seq_logo::seq_logoMain, [](ttyd::seqdrv::SeqInfo *)
 	{
-		ttyd::seqdrv::seqSetSeq(1, nullptr, nullptr);
+		ttyd::seqdrv::seqSetSeq(ttyd::seqdrv::SeqIndex::kTitle, nullptr, nullptr);
 	});
 }
 
 void Mod::updateEarly()
 {
 	// Check for font load
-	ttyd::dispdrv::dispEntry(ttyd::dispdrv::DisplayLayer_Dbg3d, 0, [](uint8_t layerId, void *user)
+	ttyd::dispdrv::dispEntry(ttyd::dispdrv::DisplayLayer::kDebug3d, 0, [](ttyd::dispdrv::DisplayLayer layerId, void *user)
 	{
 		reinterpret_cast<Mod *>(user)->draw();
 	}, this);

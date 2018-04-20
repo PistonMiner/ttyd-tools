@@ -97,6 +97,73 @@
 80030154:memClear
 80030218:memInit
 
+// mario.o
+// 800561b8:toFrontPose
+// 800566cc:toRearPose
+// 80056be0:marioDisp
+// 8005710c:marioDispBlur
+// 80057290:marioDispBlurSub
+// 80057878:marioPreDisp
+// 80057cfc:marioRearAnime
+// 800583a8:marioMakeDispDir
+// 80058908:marioGetScale
+// 80058928:marioChkInScreen
+// 80058960:marioGetScreenPos
+// 800589e4:marioPaperLightOff
+// unused:marioPaperLightOn
+// 80058a10:marioPaperOff
+// 80058a90:marioPaperOn
+// 80058ba8:marioSetPaperAnimeLocalTime
+// 80058c68:marioChgPaper
+// 80058cf0:marioChgPoseTime
+// 80058d84:marioChgPose
+// 80058f9c:toDotMarioPose
+// 80059124:marioChgEvtPose
+// 800591b4:unk_JP_US_PAL_005_800591b4
+// 800593fc:marioAnimeId
+// 8005942c:marioChkPushAnime
+// 800594a8:marioMoveMain
+// 80059a78:marioMove
+// 8005a634:marioCtrlOff2Main
+// 8005a7e0:marioMain
+// 8005b1d8:marioReInit
+// 8005b5c8:marioInit
+// 8005ba50:marioPoseInit
+// 8005bae8:marioSoundInit
+// 8005bb08:marioOfsRotReset
+// 8005bb78:marioReset
+// 8005bda0:marioResetHitObj
+// 8005bf3c:marioChkSts
+// 8005bfdc:marioBgmodeOff
+// 8005c0a0:marioBgmodeOn
+// 8005c164:marioBgmodeChk
+// 8005c174:marioSetMutekiTime
+// 8005c1c0:marioKeyOn
+// 8005c1f4:marioKeyOff
+// 8005c21c:marioCtrlOn2
+// 8005c25c:marioCtrlOff2
+// 8005c290:marioCtrlOn
+// 8005c2c4:marioCtrlOff
+// 8005c2ec:marioKeyOffChk
+// 8005c2fc:marioCtrlOffChk
+// 8005c30c:marioFBattlePost
+// 8005c3cc:marioFBattlePrepare
+// 8005c438:unk_JP_US_PAL_006_8005c438
+// 8005c464:marioChkCtrl
+// 8005c47c:marioChkKey
+// 8005c5b8:marioCheckMenuDisable
+// 8005ca2c:unk_JP_US_PAL_007_8005ca2c
+// 8005ca58:marioCaseEventValidChk
+// 8005ca98:marioItemGetOk
+// 8005caac:marioItemGetChk
+// 8005cae8:marioItemGetDisable
+// 8005cb04:marioEntry
+// 8005cda8:marioSetSpec
+// 8005ce40:marioSetFamicomMode
+// 8005d740:marioSetCharMode
+// 8005e0b0:marioGetColor
+8005e0c0:marioGetPtr
+
 // mariost.o
 // unused:gcResetDone
 // unused:gcResetCheck
@@ -157,6 +224,20 @@
 80077bdc:fontmgrTexSetup
 80077c08:fontmgrInit
 
+// swdrv.o
+// 80085744:_swByteGet
+// 80085754:_swByteSet
+// 80085764:_swClear
+// 800857a4:_swGet
+// 800857ec:_swSet
+8008582c:swByteGet
+// 80085850:swByteSet
+// 80085874:swClear
+// 800858b4:swGet
+// 800858fc:swSet
+// 8008593c:swReInit
+// 80085980:swInit
+
 // seq_logo.o
 // 800859f8:progDisp
 // unused:arcLoad
@@ -166,6 +247,90 @@
 80086d6c:seq_logoMain
 8008746c:seq_logoExit
 800874b0:seq_logoInit
+
+// party.o
+// 800b713c:partySetFamicomMode
+// 800b7530:partyShadowOff
+// 800b7548:partyUpdateKeyData
+// 800b7650:partyClearCont
+// 800b7688:partyKeyOff
+// 800b768c:partyKeyOn
+// 800b7690:partyDisp
+// 800b7a98:partyPreDisp
+// 800b7db0:partyMakeDispDir
+// 800b80f0:partySetCamId
+// 800b80f8:partyInitCamId
+// 800b8128:party_damage_return
+// 800b865c:partyRideYoshiMain
+// 800b8b18:party_ride_yoshi_force_move
+// 800b8ba0:party_force_ride_yoshi
+// 800b8d38:partyRideMain
+// 800b98ec:partyRideChk
+// 800b9928:allPartyRideOff2
+// 800b99ec:allPartyRideOff
+// 800b9ab0:unk_JP_US_PAL_029_800b9ab0
+// 800b9b2c:allPartyForceRideOn
+// 800b9c00:getRidePos
+// 800b9e80:allPartyRideShip
+// 800b9f0c:allPartyRidePlane
+// 800b9f98:partyDokanEnd
+// 800ba05c:partyDokanMain
+// 800ba56c:partyDokanInit
+// 800baf5c:partyGoodbyeMain
+// 800bb478:partyGoodbyeInit
+// 800bb544:partyHelloMain
+// 800bbc48:partyHello
+// 800bbddc:partyDoWork
+// 800bbe84:driveParty
+// 800bc574:partyMain
+// 800bc660:unk_JP_US_PAL_030_800bc660
+// 800bcab0:unk_JP_US_PAL_031_800bcab0
+// 800bcb2c:unk_JP_US_PAL_032_800bcb2c
+// 800bcb98:partyChgRunMode
+// 800bcf34:partyUsePost
+// 800bcf90:partyReInit
+// 800bd6ac:partyInit
+// 800bd6d8:partyEntry2Pos
+// 800bdaa8:partyEntry2Hello
+// 800bddd0:partyEntry2
+// 800be144:partyEntryMain
+// 800be4c4:partyGetHeight
+// 800be4f4:yoshiSetColor
+// 800be594:partyKill2
+// 800be69c:partyKill
+// 800be7fc:partyGoodbye
+// 800be84c:partyEntryPos
+// 800bea68:partyEntry
+// 800bec20:partyEntryHello
+// 800bec70:partySetForceMove
+// 800becb8:partyStop
+// 800becdc:partyRun
+// 800bed0c:partyCtrlOn
+// 800bed44:partyCtrlOff
+// 800bed7c:partyChgPaper
+// 800bedec:partyChgPose
+// 800bee68:partyChgPoseId
+// 800befcc:partyPaperLightOff
+// 800beff4:partyPaperOff
+// 800bf070:partyPaperOn
+// 800bf190:anotherPartyGetPtr
+800bf1b4:partyGetPtr
+
+// mario_party.o
+// 80140e60:partyGetTechLv
+// 80140ea4:partyGetHp
+// 80140ee8:partyChkJoin
+// 80140f30:partyLeft
+// 80140f74:partyJoin
+// 80140fb8:marioGetExtraPartyId
+80141050:marioGetPartyId
+// 801410e8:marioGetParty
+// 80141198:marioPartyKill
+// 80141204:marioPartyGoodbye
+// 8014124c:marioPartyHello
+// 801412fc:marioPartyEntry
+// 8014140c:unk_JP_US_PAL_062_8014140c
+// 801414a0:marioUseParty
 
 // printf.c
 8026a0b8:sprintf
@@ -185,3 +350,16 @@
 // 8026b748:longlong2str
 // 8026ba5c:long2str
 // 8026bcb4:parse_format
+
+// string.c
+// 8026d38c:strstr
+// 8026d3f4:strchr
+// 8026d424:strncmp
+8026d464:strcmp
+// 8026d58c:strcat
+// 8026d5b8:strncpy
+// 8026d5fc:strcpy
+// 8026d6b4:strlen
+
+// e_atan2.c
+8026f42c:__ieee754_atan2

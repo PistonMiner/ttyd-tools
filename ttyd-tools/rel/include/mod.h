@@ -14,7 +14,9 @@ public:
 	
 private:
 	void updateEarly();
-	void draw();
+	void drawPS();
+	void drawYS();
+	void drawButtonsDisplay();
 	
 private:
 	Timer<uint32_t> mPalaceSkipTimer;

@@ -253,7 +253,7 @@ int main(int argc, char **argv)
 	std::copy(sectionInfoBuffer.begin(), sectionInfoBuffer.end(), outputBuffer.begin() + sectionInfoOffset);
 
 	// #todo-elf2rel: Make this accessible via program options, configured for TTYD right now
-	int moduleID = 30;
+	int moduleID = 33;
 
 	// Find all relocations
 	struct Relocation

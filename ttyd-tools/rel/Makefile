@@ -59,10 +59,13 @@ LDFLAGS		= -r -e _prolog -u _prolog -u _epilog -u _unresolved -Wl,--gc-sections 
 # Platform options
 ifeq ($(VERSION),us)
 	CFLAGS += -DTTYD_US
+	GAMECODE = "G8ME"
 else ifeq ($(VERSION),jp)
 	CFLAGS += -DTTYD_JP
+	GAMECODE = "G8MJ"
 else ifeq ($(VERSION),eu)
 	CFLAGS += -DTTYD_EU
+	GAMECODE = "G8MP"
 endif
 
 
@@ -169,7 +172,7 @@ $(OFILES_SOURCES) : $(HFILES)
 	
 %.gci: %.rel
 	@echo packing ... $(notdir $@)
-	@$(GCIPACK) $< "rel" "Paper Mario" "TTYD Debug Menu" $(BANNERFILE) $(ICONFILE)
+	@$(GCIPACK) $< "rel" "Paper Mario" "TTYD Debug Menu" $(BANNERFILE) $(ICONFILE) $(GAMECODE)
 	
 #---------------------------------------------------------------------------------
 # This rule links in binary data with the .jpg extension

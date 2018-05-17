@@ -110,7 +110,7 @@
 80058a60:marioChkInScreen
 80058a98:marioGetScreenPos
 80058b1c:marioPaperLightOff
-//unused:marioPaperLightOn
+// unused:marioPaperLightOn
 80058b48:marioPaperOff
 80058bc8:marioPaperOn
 80058ce0:marioSetPaperAnimeLocalTime
@@ -119,7 +119,7 @@
 80058ebc:marioChgPose
 800590d4:toDotMarioPose
 8005925c:marioChgEvtPose
-//800592ec:unk_JP_US_006_800592ec
+// 800592ec:unk_JP_US_006_800592ec
 80059534:marioAnimeId
 80059564:marioChkPushAnime
 800595e0:marioMoveMain
@@ -148,11 +148,11 @@
 8005c434:marioCtrlOffChk
 8005c444:marioFBattlePost
 8005c504:marioFBattlePrepare
-//8005c570:unk_JP_US_007_8005c570
+// 8005c570:unk_JP_US_007_8005c570
 8005c59c:marioChkCtrl
 8005c5b4:marioChkKey
 8005c6f0:marioCheckMenuDisable
-//8005cb64:unk_JP_US_008_8005cb64
+// 8005cb64:unk_JP_US_008_8005cb64
 8005cb90:marioCaseEventValidChk
 8005cbd0:marioItemGetOk
 8005cbe4:marioItemGetChk

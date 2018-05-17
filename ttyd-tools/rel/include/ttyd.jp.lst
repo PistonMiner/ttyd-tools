@@ -117,7 +117,7 @@
 80057f44:marioChgPose
 8005815c:toDotMarioPose
 800582e4:marioChgEvtPose
-//80058374:unk_JP_US_006_80058374
+// 80058374:unk_JP_US_006_80058374
 800585bc:marioAnimeId
 800585ec:marioChkPushAnime
 80058668:marioMoveMain
@@ -146,11 +146,11 @@
 8005b4a4:marioCtrlOffChk
 8005b4b4:marioFBattlePost
 8005b53c:marioFBattlePrepare
-//8005b5a8:unk_JP_US_007_8005b5a8
+// 8005b5a8:unk_JP_US_007_8005b5a8
 8005b5d4:marioChkCtrl
 8005b5ec:marioChkKey
 8005b728:marioCheckMenuDisable
-//8005bb80:unk_JP_US_008_8005bb80
+// 8005bb80:unk_JP_US_008_8005bb80
 8005bbac:marioCaseEventValidChk
 8005bbec:marioItemGetOk
 8005bc00:marioItemGetChk

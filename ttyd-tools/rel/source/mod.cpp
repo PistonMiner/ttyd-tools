@@ -6,6 +6,7 @@
 #include <ttyd/dispdrv.h>
 #include <ttyd/seqdrv.h>
 #include <ttyd/seq_logo.h>
+#include <ttyd/mario.h>
 
 #include "patch.h"
 
@@ -82,18 +83,11 @@ void Mod::updateEarly()
 
 void Mod::draw()
 {
-#ifdef TTYD_US
-	uint32_t r13 = 0x8041CF20;
-	float *marioPos = *reinterpret_cast<float **>(r13 + 0x19E0) + 35;
-	float *marioVel = *reinterpret_cast<float **>(r13 + 0x19E0) + 31;
-#else
-	#error Mario position and velocity not implemented for this version
-#endif
-	
+	ttyd::mario::Player *player = ttyd::mario::marioGetPtr();
 	sprintf(mDisplayBuffer,
 	        "Pos: %.2f %.2f %.2f\r\nSpdY: %.2f\r\nPST: %lu",
-	        marioPos[0], marioPos[1], marioPos[2],
-	        marioVel[0],
+	        player->playerPosition[0], player->playerPosition[1], player->playerPosition[2],
+	        player->wJumpVelocityY,
 	        mPalaceSkipTimer.getValue());
 	ttyd::fontmgr::FontDrawStart();
 	uint32_t color = 0xFFFFFFFF;

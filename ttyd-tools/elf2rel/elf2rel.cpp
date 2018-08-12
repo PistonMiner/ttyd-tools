@@ -113,15 +113,49 @@ const std::vector<std::string> cRelSectionMask = {
 
 int main(int argc, char **argv)
 {
-	if (argc <= 2)
+	std::string elfFilename;
+	std::string lstFilename;
+	std::string relFilename = "";
+	int moduleID = 33;
+
 	{
-		printf("Usage: %s <elf file> <symbol file>\n", argv[0]);
-		return 1;
+		namespace po = boost::program_options;
+
+		po::options_description description("Options");
+		description.add_options()
+			("help", "Print help message")
+			("input-file,i", po::value(&elfFilename), "Input ELF filename (required)")
+			("symbol-file,s", po::value(&lstFilename), "Input symbol file name (required)")
+			("output-file,o", po::value(&relFilename), "Output REL filename")
+			("rel-id", po::value(&moduleID)->default_value(0x1000), "REL file ID");
+
+		po::positional_options_description positionals;
+		positionals.add("input-file", -1);
+
+		po::variables_map varMap;
+		po::store(
+			po::command_line_parser(argc, argv)
+				.options(description)
+				.positional(positionals)
+				.run(),
+			varMap
+		);
+		po::notify(varMap);
+
+		if (varMap.count("help")
+			|| varMap.count("input-file") != 1
+			|| varMap.count("symbol-file") != 1)
+		{
+			std::cout << description << "\n";
+			return 1;
+		}
 	}
 
-	std::string elfFilename = argv[1];
-	std::string lstFilename = argv[2];
-
+	if (relFilename == "")
+	{
+		relFilename = elfFilename.substr(0, elfFilename.find_last_of('.')) + ".rel";
+	}
+	
 	// Load input file
 	ELFIO::elfio inputElf;
 	if (!inputElf.load(elfFilename))
@@ -199,10 +233,13 @@ int main(int argc, char **argv)
 	for (const auto &section : inputElf.sections)
 	{
 		// Should keep?
-		if (std::find(cRelSectionMask.begin(),
-					  cRelSectionMask.end(),
-					  section->get_name()) != cRelSectionMask.end()
-			&& section->get_size() != 0)
+		if (std::find_if(cRelSectionMask.begin(),
+						  cRelSectionMask.end(),
+						  [&](const std::string &val)
+		{
+			return val == section->get_name()
+				   || section->get_name().find(val + ".") == 0;
+		}) != cRelSectionMask.end() && section->get_size() != 0)
 		{
 			// BSS?
 			if (section->get_type() == SHT_NOBITS)
@@ -251,9 +288,6 @@ int main(int argc, char **argv)
 	}
 	// Fill in section info in main buffer
 	std::copy(sectionInfoBuffer.begin(), sectionInfoBuffer.end(), outputBuffer.begin() + sectionInfoOffset);
-
-	// #todo-elf2rel: Make this accessible via program options, configured for TTYD right now
-	int moduleID = 33;
 
 	// Find all relocations
 	struct Relocation
@@ -315,6 +349,16 @@ int main(int argc, char **argv)
 					rel.moduleID = moduleID;
 					rel.targetSection = static_cast<uint8_t>(sectionIndex);
 					rel.addend = static_cast<uint32_t>(addend + symbolValue);
+
+					ELFIO::section *targetSection = inputElf.sections[rel.targetSection];
+					if (writtenSections.find(targetSection) == writtenSections.end() && targetSection->get_type() != SHT_NOBITS)
+					{
+						printf("Relocation from section '%s' offset %llx against symbol '%s' in unwritten section '%s'\n",
+							   relocatedSection->get_name().c_str(),
+							   offset,
+							   symbolName.c_str(),
+							   targetSection->get_name().c_str());
+					}
 				}
 				else
 				{
@@ -463,7 +507,7 @@ int main(int argc, char **argv)
 		case R_DOLPHIN_END:
 			break;
 		default:
-			printf("Unsupported relocation type %d", nextRel.type);
+			printf("Unsupported relocation type %d\n", nextRel.type);
 			break;
 		}
 
@@ -494,7 +538,6 @@ int main(int argc, char **argv)
 	std::copy(headerBuffer.begin(), headerBuffer.end(), outputBuffer.begin());
 
 	// Write final REL file
-	std::string relFilename = elfFilename.substr(0, elfFilename.find_last_of('.')) + ".rel";
 	std::ofstream outputStream(relFilename, std::ios::binary);
 	outputStream.write(reinterpret_cast<const char *>(outputBuffer.data()), outputBuffer.size());
 	

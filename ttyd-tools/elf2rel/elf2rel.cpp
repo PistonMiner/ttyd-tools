@@ -228,8 +228,8 @@ int main(int argc, char **argv)
 	std::vector<uint8_t> sectionInfoBuffer;
 	std::map<ELFIO::section *, int> writtenSections;
 	int totalBssSize = 0;
-	int maxAlign = 1;
-	int maxBssAlign = 1;
+	int maxAlign = 2;
+	int maxBssAlign = 2;
 	for (const auto &section : inputElf.sections)
 	{
 		// Should keep?
@@ -239,7 +239,7 @@ int main(int argc, char **argv)
 		{
 			return val == section->get_name()
 				   || section->get_name().find(val + ".") == 0;
-		}) != cRelSectionMask.end() && section->get_size() != 0)
+		}) != cRelSectionMask.end())
 		{
 			// BSS?
 			if (section->get_type() == SHT_NOBITS)
@@ -254,12 +254,12 @@ int main(int argc, char **argv)
 			}
 			else
 			{
-				// Update max alignment
-				int align = static_cast<int>(section->get_addr_align());
+				// Update max alignment (minimum 2, low offset bit is used for exec flag)
+				int align = std::max(static_cast<int>(section->get_addr_align()), 2);
 				maxAlign = std::max(maxAlign, align);
 
 				// Write padding
-				int requiredPadding = align - outputBuffer.size() % align;
+				int requiredPadding = ((outputBuffer.size() + align - 1) & ~(align - 1)) - outputBuffer.size();
 				for (int i = 0; i < requiredPadding; ++i)
 				{
 					save<uint8_t>(outputBuffer, 0);

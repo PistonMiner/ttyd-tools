@@ -30,7 +30,7 @@ struct.pack_into(">L", file_data, 0x2C, 0) # import count
 sections = [] # [list of [offset, size]]
 imports = [] # [list of [id, offset]]
 
-for i in xrange(section_count):
+for i in range(section_count):
 	curOffset = section_info_offset + 8 * i
 
 	offset = (struct.unpack(">L", file_data[curOffset:curOffset+0x4])[0]) & ~1 # remove bit 0 (exec bit)
@@ -38,11 +38,11 @@ for i in xrange(section_count):
 
 	sections.append([offset, size])
 
-print str(section_count) + " sections"
+print(str(section_count) + " sections")
 
-print sections
+print(sections)
 
-for i in xrange(import_size / 8):
+for i in range(import_size // 8):
 	curOffset = import_offset + 8 * i
 	
 	id = struct.unpack(">L", file_data[curOffset:curOffset+0x4])[0]
@@ -50,9 +50,9 @@ for i in xrange(import_size / 8):
 	
 	imports.append([id, offset])
 
-print str(import_size / 8) + " import lists"
+print(str(import_size / 8) + " import lists")
 
-print imports
+print(imports)
 
 
 for import_entry in imports:
@@ -67,7 +67,7 @@ for import_entry in imports:
 			addend			= struct.unpack(">L", file_data[curOffset+0x4:curOffset+0x8])[0]
 			curOffset += 8
 			
-			print "Processing import entry: " + format(curRelOffset, "x") + " / " + format(operation, "x") + " / " + format(targetSection, "x") + " / " + format(addend, "x")
+			print("Processing import entry: " + format(curRelOffset, "x") + " / " + format(operation, "x") + " / " + format(targetSection, "x") + " / " + format(addend, "x"))
 			
 			effectiveOffset = sections[curRelSection][0] + curRelOffset
 			if relID == import_entry[0]:
@@ -75,7 +75,7 @@ for import_entry in imports:
 			else:
 				targetAddress = addend
 			
-			print format(effectiveOffset, "x") + " / " + format(targetAddress, "x")
+			print(format(effectiveOffset, "x") + " / " + format(targetAddress, "x"))
 			
 			#if operation == 0 or operation == 201: # R_PPC_NONE || R_DOLPHIN_NOP
 			#	dummy = 0
@@ -101,9 +101,9 @@ for import_entry in imports:
 			elif operation == 203:	# R_DOLPHIN_END
 				break
 			else:
-				print "Unknown relocation operation " + format(opcode, "x")
+				print("Unknown relocation operation " + format(operation, "x"))
 
-output_data = str(bytearray(file_data))
+output_data = bytearray(file_data)
 
 filename_out = filename_in + ".linked"
 output = open(filename_out , "wb")

@@ -1,17 +1,18 @@
 """
 File: ttydview.py
-Author: SolidifiedGaming aka Brett B.
-Revision: 1.0
+Author: Brett B.
+Revision: 1.0.1
 Purpose: Create .obj file from map collision data for viewing
 """
 
 import os
+import sys
 import math
 import numpy
 import struct
 
 inputPath = os.path.join(os.path.dirname(__file__), "map_data") + "/"
-inputFile = inputPath + input("Enter the name of the input file: ")
+inputFile = inputPath + sys.argv[1]
 outputPath = os.path.join(os.path.dirname(__file__), "obj_files") + "/"
 outputFile = outputPath + input("Enter the name of the output file: ") + ".obj"
 

@@ -1,3 +1,8 @@
+// __mem.c
+800050b4:memset
+//800050e4:__fill_mem
+8000519c:memcpy
+
 // system.o
 // unused:memcmp_as4
 // unused:memset_as4
@@ -250,3 +255,31 @@
 // 80265798:longlong2str
 // 80265aac:long2str
 // 80265d04:parse_format
+
+// si.a
+802b7acc:SIBusy
+802b7aec:SIIsChanBusy
+802b7b28:CompleteTransfer
+802b7e24:SIInterruptHandler
+802b8168:SIEnablePollingInterrupt
+802b8200:SIRegisterPollingHandler
+802b82cc:SIUnregisterPollingHandler
+802b83c0:SIInit
+802b8474:__SITransfer
+802b8680:SIGetStatus
+802b86fc:SISetCommand
+802b8710:SITransferCommands
+802b8720:SISetXY
+802b878c:SIEnablePolling
+802b8828:SIDisablePolling
+802b8894:SIGetResponseRaw
+802b8968:SIGetResponse
+802b8a2c:AlarmHandler
+802b8ab8:SITransfer
+802b8c24:GetTypeCallback
+802b8ebc:SIGetType
+802b9080:SIGetTypeAsync
+802b91bc:SIDecodeType
+802b9308:SIProbe
+802b932c:SISetSamplingRate
+802b9410:SIRefreshSamplingRate

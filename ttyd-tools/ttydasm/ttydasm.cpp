@@ -185,6 +185,9 @@ enum ScriptOpcode
 	OP_MemOpReadFloat3,
 	OP_MemOpReadFloat4,
 	OP_MemOpReadFloatIndexed,
+#ifdef GAME_SPM
+	OP_ClampInt,
+#endif
 	OP_SetUserWordBase,
 	OP_SetUserFlagBase,
 	OP_AllocateUserWordBase,
@@ -547,6 +550,9 @@ std::string disassembleOpcode(uint32_t &address, std::string &indent, bool *done
 	PASSTHROUGH(OP_MemOpReadFloat3,		"mo_read_float3");
 	PASSTHROUGH(OP_MemOpReadFloat4,		"mo_read_float4");
 	PASSTHROUGH(OP_MemOpReadFloatIndexed,"mo_read_float_indexed");
+#ifdef GAME_SPM
+	PASSTHROUGH(OP_ClampInt,			"clampi");
+#endif
 	PASSTHROUGH(OP_SetUserWordBase,		"set_uw_base");
 	PASSTHROUGH(OP_SetUserFlagBase,		"set_uf_base");
 	PASSTHROUGH(OP_AllocateUserWordBase,"alloc_uw");

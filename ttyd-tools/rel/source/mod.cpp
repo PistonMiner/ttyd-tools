@@ -40,15 +40,15 @@ void Mod::init()
 	ttyd::fontmgr::fontmgrTexSetup();
 	patch::hookFunction(ttyd::fontmgr::fontmgrTexSetup, [](){});
 
-	// Skip the logo
-	patch::hookFunction(ttyd::seq_logo::seq_logoMain, [](ttyd::seqdrv::SeqInfo *)
-	{
-		ttyd::seqdrv::seqSetSeq(ttyd::seqdrv::SeqIndex::kTitle, nullptr, nullptr);
-	});
+	// Keyboard on controller port 1
+	mKeyboard = new Keyboard(1);
 }
 
 void Mod::updateEarly()
 {
+	// Keyboard code
+	mKeyboard->update();
+
 	// Check for font load
 	ttyd::dispdrv::dispEntry(ttyd::dispdrv::DisplayLayer::kDebug3d, 0, [](ttyd::dispdrv::DisplayLayer layerId, void *user)
 	{
@@ -83,17 +83,41 @@ void Mod::updateEarly()
 
 void Mod::draw()
 {
+	char keyDownString[4] = "";
+	for (int i = 0; i < mKeyboard->getKeyDownCount(); ++i)
+	{
+		KeyCode k = mKeyboard->getKeyDown(i);
+		keyDownString[i] = Keyboard::getCharForKeycode(k);
+	}
+
+	char keyPressedString[4] = "";
+	for (int i = 0; i < mKeyboard->getKeyPressedCount(); ++i)
+	{
+		KeyCode k = mKeyboard->getKeyPressed(i);
+		keyPressedString[i] = Keyboard::getCharForKeycode(k);
+	}
+
+	char keyReleasedString[4] = "";
+	for (int i = 0; i < mKeyboard->getKeyReleasedCount(); ++i)
+	{
+		KeyCode k = mKeyboard->getKeyReleased(i);
+		keyReleasedString[i] = Keyboard::getCharForKeycode(k);
+	}
+
 	ttyd::mario::Player *player = ttyd::mario::marioGetPtr();
 	sprintf(mDisplayBuffer,
-	        "Pos: %.2f %.2f %.2f\r\nSpdY: %.2f\r\nPST: %lu",
+	        "Pos: %.2f %.2f %.2f\r\nSpdY: %.2f\r\nPST: %lu\r\nKBD: %s\r\nKBP: %s\r\nKBR: %s",
 	        player->playerPosition[0], player->playerPosition[1], player->playerPosition[2],
 	        player->wJumpVelocityY,
-	        mPalaceSkipTimer.getValue());
+	        mPalaceSkipTimer.getValue(),
+	        keyDownString,
+	        keyPressedString,
+	        keyReleasedString);
 	ttyd::fontmgr::FontDrawStart();
 	uint32_t color = 0xFFFFFFFF;
 	ttyd::fontmgr::FontDrawColor(reinterpret_cast<uint8_t *>(&color));
 	ttyd::fontmgr::FontDrawEdge();
-	ttyd::fontmgr::FontDrawMessage(-272, -100, mDisplayBuffer);
+	ttyd::fontmgr::FontDrawMessage(-272, -40, mDisplayBuffer);
 }
 
 }

@@ -168,7 +168,7 @@ $(OFILES_SOURCES) : $(HFILES)
 # REL linking
 %.rel: %.elf
 	@echo output ... $(notdir $@)
-	@$(ELF2REL) $< $(MAPFILE)
+	@$(ELF2REL) $< -s $(MAPFILE)
 	
 %.gci: %.rel
 	@echo packing ... $(notdir $@)

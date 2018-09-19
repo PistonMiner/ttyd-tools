@@ -1,6 +1,7 @@
 #pragma once
 
 #include "timer.h"
+#include "keyboard.h"
 
 #include <cstdint>
 
@@ -22,6 +23,8 @@ private:
 	
 	void (*mPFN_makeKey_trampoline)() = nullptr;
 	char mDisplayBuffer[256];
+
+	Keyboard *mKeyboard = nullptr;
 };
 
 }

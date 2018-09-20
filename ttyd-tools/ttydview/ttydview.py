@@ -1,7 +1,7 @@
 """
 File: ttydview.py
 Author: Brett B.
-Revision: 1.0.1
+Revision: 1.0.2
 Purpose: Create .obj file from map collision data for viewing
 """
 
@@ -14,7 +14,7 @@ import struct
 inputPath = os.path.join(os.path.dirname(__file__), "map_data") + "/"
 inputFile = inputPath + sys.argv[1]
 outputPath = os.path.join(os.path.dirname(__file__), "obj_files") + "/"
-outputFile = outputPath + input("Enter the name of the output file: ") + ".obj"
+outputFile = outputPath + sys.argv[2] + ".obj"
 
 f = open(inputFile, "rb")
 binaryData = f.read()

@@ -33,8 +33,13 @@ std::map<uint32_t, std::string> gSymbolMap;
 namespace ExpressionZones
 {
 const int cZoneExtent = 10000000;
+#ifdef GAME_SPM
+const int cAddrBase = -270000000;
+const int cFloatBase = -240000000;
+#else
 const int cAddrBase = -250000000;
 const int cFloatBase = -230000000;
+#endif
 const int cUFBase = -210000000;
 const int cUWBase = -190000000;
 const int cGSWBase = -170000000;

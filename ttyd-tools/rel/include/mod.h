@@ -16,12 +16,11 @@ public:
 private:
 	void updateEarly();
 	void draw();
+	void processCommand(const char *command);
 	
 private:
-	Timer<uint32_t> mPalaceSkipTimer;
-	bool mPaused = false;
-	
 	void (*mPFN_makeKey_trampoline)() = nullptr;
+	char mCommandBuffer[256] = "";
 	char mDisplayBuffer[256];
 
 	Keyboard *mKeyboard = nullptr;

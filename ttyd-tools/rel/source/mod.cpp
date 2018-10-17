@@ -11,6 +11,7 @@
 #include "patch.h"
 
 #include <cstdio>
+#include <cstring>
 
 namespace mod {
 
@@ -49,75 +50,62 @@ void Mod::updateEarly()
 	// Keyboard code
 	mKeyboard->update();
 
-	// Check for font load
+	// Register draw command
 	ttyd::dispdrv::dispEntry(ttyd::dispdrv::DisplayLayer::kDebug3d, 0, [](ttyd::dispdrv::DisplayLayer layerId, void *user)
 	{
 		reinterpret_cast<Mod *>(user)->draw();
 	}, this);
 	
-	// Palace skip timing code
-	if (ttyd::mariost::marioStGetSystemLevel() == 0xF)
+	// Keyboard input for prompt
+	size_t bufferLen = strlen(mCommandBuffer);
+	for (int i = 0; i < mKeyboard->getKeyPressedCount(); ++i)
 	{
-		// Reset upon pausing
-		mPalaceSkipTimer.stop();
-		mPalaceSkipTimer.setValue(0);
-		mPaused = true;
+		KeyCode pressed = mKeyboard->getKeyPressed(i);
+		char textInput = Keyboard::getCharForKeycode(
+			pressed,
+			mKeyboard->isKeyDown(KeyCode::kLeftShift) || mKeyboard->isKeyDown(KeyCode::kRightShift)
+		);
+		if (textInput != '\0')
+		{
+			if (bufferLen < sizeof(mCommandBuffer) - 1)
+			{
+				mCommandBuffer[bufferLen++] = textInput;
+				mCommandBuffer[bufferLen] = '\0';
+			}
+		}
+		else if (pressed == KeyCode::kEnter)
+		{
+			processCommand(mCommandBuffer);
+			mCommandBuffer[0] = '\0';
+		}
+		else if (pressed == KeyCode::kBackspace && bufferLen > 0)
+		{
+			mCommandBuffer[--bufferLen] = '\0';
+		}
 	}
-	else if (ttyd::mariost::marioStGetSystemLevel() == 0 && mPaused)
-	{
-		// Start when unpausing
-		mPalaceSkipTimer.start();
-		mPaused = false;
-	}
-	
-	if (ttyd::system::keyGetButtonTrg(0) & 0x0400)
-	{
-		// Stop when pressing A or X
-		mPalaceSkipTimer.stop();
-	}
-	mPalaceSkipTimer.tick();
-	
+
 	// Call original function
 	mPFN_makeKey_trampoline();
 }
 
 void Mod::draw()
 {
-	char keyDownString[4] = "";
-	for (int i = 0; i < mKeyboard->getKeyDownCount(); ++i)
-	{
-		KeyCode k = mKeyboard->getKeyDown(i);
-		keyDownString[i] = Keyboard::getCharForKeycode(k);
-	}
-
-	char keyPressedString[4] = "";
-	for (int i = 0; i < mKeyboard->getKeyPressedCount(); ++i)
-	{
-		KeyCode k = mKeyboard->getKeyPressed(i);
-		keyPressedString[i] = Keyboard::getCharForKeycode(k);
-	}
-
-	char keyReleasedString[4] = "";
-	for (int i = 0; i < mKeyboard->getKeyReleasedCount(); ++i)
-	{
-		KeyCode k = mKeyboard->getKeyReleased(i);
-		keyReleasedString[i] = Keyboard::getCharForKeycode(k);
-	}
-
 	ttyd::mario::Player *player = ttyd::mario::marioGetPtr();
 	sprintf(mDisplayBuffer,
-	        "Pos: %.2f %.2f %.2f\r\nSpdY: %.2f\r\nPST: %lu\r\nKBD: %s\r\nKBP: %s\r\nKBR: %s",
+	        "Pos: %.2f %.2f %.2f\r\nSpdY: %.2f\r\nCmd: %s",
 	        player->playerPosition[0], player->playerPosition[1], player->playerPosition[2],
 	        player->wJumpVelocityY,
-	        mPalaceSkipTimer.getValue(),
-	        keyDownString,
-	        keyPressedString,
-	        keyReleasedString);
+	        mCommandBuffer);
 	ttyd::fontmgr::FontDrawStart();
 	uint32_t color = 0xFFFFFFFF;
 	ttyd::fontmgr::FontDrawColor(reinterpret_cast<uint8_t *>(&color));
 	ttyd::fontmgr::FontDrawEdge();
 	ttyd::fontmgr::FontDrawMessage(-272, -40, mDisplayBuffer);
+}
+
+void Mod::processCommand(const char *command)
+{
+
 }
 
 }

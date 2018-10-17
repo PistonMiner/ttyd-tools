@@ -169,15 +169,27 @@ public:
 		return false;
 	}
 
-	static constexpr char getCharForKeycode(KeyCode code)
+	static constexpr char getCharForKeycode(KeyCode code, bool shift = false)
 	{
 		if (code >= KeyCode::kA && code <= KeyCode::kZ)
 		{
-			return static_cast<char>('A' + static_cast<int>(code) - static_cast<int>(KeyCode::kA));
+			return static_cast<char>((shift ? 'A' : 'a') + static_cast<int>(code) - static_cast<int>(KeyCode::kA));
 		}
 		else if (code >= KeyCode::k0 && code <= KeyCode::k9)
 		{
 			return static_cast<char>('0' + static_cast<int>(code) - static_cast<int>(KeyCode::k0));
+		}
+		else if (code == KeyCode::kMinus)
+		{
+			return shift ? '_' : '-';
+		}
+		else if (code == KeyCode::kComma)
+		{
+			return shift ? ';' : ',';
+		}
+		else if (code == KeyCode::kSpace)
+		{
+			return ' ';
 		}
 		else
 		{

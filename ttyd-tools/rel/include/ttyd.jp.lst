@@ -256,6 +256,15 @@
 // 80265aac:long2str
 // 80265d04:parse_format
 
+// string.c
+802673dc:strchr
+8026740c:strncmp
+8026744c:strcmp
+80267574:strcat
+802675a0:strncpy
+802675e4:strcpy
+8026769c:strlen
+
 // si.a
 802b7acc:SIBusy
 802b7aec:SIIsChanBusy

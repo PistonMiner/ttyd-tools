@@ -18,10 +18,14 @@ private:
 	void draw();
 	void processCommand(const char *command);
 	
+	void updateHeapInfo();
+
 private:
 	void (*mPFN_makeKey_trampoline)() = nullptr;
 	char mCommandBuffer[256] = "";
-	char mDisplayBuffer[256];
+
+	int mDebugHeapId = -1;
+	char mDebugHeapText[64];
 
 	Keyboard *mKeyboard = nullptr;
 };

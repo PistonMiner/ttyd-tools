@@ -1,5 +1,7 @@
 #include "mod.h"
 
+#include "patch.h"
+
 #include <ttyd/system.h>
 #include <ttyd/mariost.h>
 #include <ttyd/fontmgr.h>
@@ -8,7 +10,7 @@
 #include <ttyd/seq_logo.h>
 #include <ttyd/mario.h>
 
-#include "patch.h"
+#include <gc/os.h>
 
 #include <cstdio>
 #include <cstring>
@@ -84,6 +86,8 @@ void Mod::updateEarly()
 		}
 	}
 
+	updateHeapInfo();
+
 	// Call original function
 	mPFN_makeKey_trampoline();
 }
@@ -91,21 +95,109 @@ void Mod::updateEarly()
 void Mod::draw()
 {
 	ttyd::mario::Player *player = ttyd::mario::marioGetPtr();
-	sprintf(mDisplayBuffer,
-	        "Pos: %.2f %.2f %.2f\r\nSpdY: %.2f\r\nCmd: %s",
+	char displayBuffer[256];
+	sprintf(displayBuffer,
+	        "Pos: %.2f %.2f %.2f\r\n"
+	        "SpdY: %.2f\r\n"
+	        "Cmd: %s\r\n"
+	        "%s",
 	        player->playerPosition[0], player->playerPosition[1], player->playerPosition[2],
 	        player->wJumpVelocityY,
-	        mCommandBuffer);
+	        mCommandBuffer,
+	        mDebugHeapText);
 	ttyd::fontmgr::FontDrawStart();
 	uint32_t color = 0xFFFFFFFF;
 	ttyd::fontmgr::FontDrawColor(reinterpret_cast<uint8_t *>(&color));
 	ttyd::fontmgr::FontDrawEdge();
-	ttyd::fontmgr::FontDrawMessage(-272, -40, mDisplayBuffer);
+	ttyd::fontmgr::FontDrawMessage(-272, -40, displayBuffer);
 }
 
 void Mod::processCommand(const char *command)
 {
+	size_t functionNameLength = strchr(command, ' ') - command;
+	if (!strncmp(command, "debug_heap", functionNameLength))
+	{
+		// Read heap ID
+		int targetHeap;
+		sscanf(command, "debug_heap %d", &targetHeap);
+		mDebugHeapId = targetHeap;
+	}
+}
 
+void Mod::updateHeapInfo()
+{
+	if (mDebugHeapId == -1)
+	{
+		mDebugHeapText[0] = '\0';
+		return;
+	}
+
+	if (mDebugHeapId >= gc::os::OSAlloc_NumHeaps || mDebugHeapId < 0)
+	{
+		sprintf(mDebugHeapText, "Heap: %d is not a valid heap\r\n", mDebugHeapId);
+		return;
+	}
+
+	const gc::os::HeapInfo &heap = gc::os::OSAlloc_HeapArray[mDebugHeapId];
+
+	// Check heap integrity
+	bool valid = true;
+	gc::os::ChunkInfo *currentChunk = nullptr;
+	gc::os::ChunkInfo *prevChunk = nullptr;
+	for (currentChunk = heap.firstUsed; currentChunk; currentChunk = currentChunk->next)
+	{
+		// Check pointer sanity
+		auto pointerIsValid = [](void *ptr)
+		{
+			uint32_t pointerRaw = reinterpret_cast<uint32_t>(ptr);
+			return pointerRaw >= 0x80000000 && pointerRaw <= 0x817fffff;
+		};
+		if (!pointerIsValid(currentChunk))
+		{
+			valid = false;
+			break;
+		}
+
+		// Sanity check size
+		if (currentChunk->size > 0x17fffff)
+		{
+			valid = false;
+			break;
+		}
+
+		// Check linked list integrity
+		if (prevChunk != currentChunk->prev)
+		{
+			valid = false;
+			break;
+		}
+
+		prevChunk = currentChunk;
+	}
+	if (!valid)
+	{
+		sprintf(mDebugHeapText,
+			    "Heap: %d corrupt at %08lx\r\n",
+			    mDebugHeapId,
+			    reinterpret_cast<uint32_t>(currentChunk));
+		return;
+	}
+
+	// Accumulate used memory
+	int usage = 0;
+	int chunks = 0;
+	for (gc::os::ChunkInfo *chunk = heap.firstUsed; chunk; chunk = chunk->next)
+	{
+		usage += chunk->size;
+		++chunks;
+	}
+
+	sprintf(mDebugHeapText,
+		    "Heap: id %d, %.2f/%.2fkb, %d cks\r\n",
+		    mDebugHeapId,
+		    usage / 1024.f,
+		    heap.capacity / 1024.f,
+		    chunks);
 }
 
 }

@@ -258,6 +258,12 @@
 // 8026f850:long2str
 // 8026faa8:parse_format
 
+// scanf.c
+80270138:sscanf
+// 802701fc:__StringRead
+// 8027028c:__sformatter
+// 80270c38:parse_format
+
 // string.c
 80271180:strstr
 802711e8:strchr
@@ -267,6 +273,20 @@
 802713ac:strncpy
 802713f0:strcpy
 802714a8:strlen
+
+// os.a
+// OSAlloc.c
+// text
+// 8029a238:DLInsert
+8029a2e4:OSAllocFromHeap
+8029a3e0:OSFreeToHeap
+8029a45c:OSSetCurrentHeap
+8029a46c:OSInitAlloc
+8029a4dc:OSCreateHeap
+8029a548:OSDestroyHeap
+// data
+8041f070:OSAlloc_HeapArray
+8041f074:OSAlloc_NumHeaps
 
 // si.a
 802c194c:SIBusy

@@ -1,5 +1,7 @@
 #include "keyboard.h"
 
+#include <gc/si.h>
+
 #include <cstring>
 
 namespace mod {
@@ -26,14 +28,14 @@ void Keyboard::setChannel(int channel)
 
 bool Keyboard::connect()
 {
-	if (ttyd::si::SIProbe(mChannel) != 0x08200000)
+	if (gc::si::SIProbe(mChannel) != 0x08200000)
 	{
 		// No keyboard in that slot
 		return false;
 	}
 	
 	// Enable polling from device
-	ttyd::si::SIEnablePolling(1 << (31 - mChannel));
+	gc::si::SIEnablePolling(1 << (31 - mChannel));
 	
 	mConnected = true;
 	return true;
@@ -43,10 +45,10 @@ void Keyboard::disconnect()
 {
 	// Flush response
 	uint64_t message;
-	ttyd::si::SIGetResponse(mChannel, &message);
+	gc::si::SIGetResponse(mChannel, &message);
 	
 	// Disable polling
-	ttyd::si::SIDisablePolling(1 << (31 - mChannel));
+	gc::si::SIDisablePolling(1 << (31 - mChannel));
 	mConnected = false;
 }
 
@@ -58,12 +60,12 @@ void Keyboard::update()
 	}
 	
 	// Poll next state
-	ttyd::si::SISetCommand(mChannel, 0x00540000);
-	ttyd::si::SITransferCommands();
+	gc::si::SISetCommand(mChannel, 0x00540000);
+	gc::si::SITransferCommands();
 	
 	// Read data
 	uint64_t message;
-	if (!ttyd::si::SIGetResponse(mChannel, &message) || message & (1LL << 63))
+	if (!gc::si::SIGetResponse(mChannel, &message) || message & (1LL << 63))
 	{
 		// Failed to receive response or ERRSTAT is set
 		disconnect();

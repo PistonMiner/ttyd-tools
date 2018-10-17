@@ -1,7 +1,5 @@
 #pragma once
 
-#include <ttyd/si.h>
-
 #include <cstdint>
 
 #include <vector>

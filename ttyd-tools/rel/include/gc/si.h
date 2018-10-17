@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace ttyd::si {
+namespace gc::si {
 
 extern "C" {
 

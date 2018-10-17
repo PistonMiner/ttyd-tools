@@ -171,11 +171,15 @@ public:
 	{
 		if (code >= KeyCode::kA && code <= KeyCode::kZ)
 		{
-			return static_cast<char>((shift ? 'A' : 'a') + static_cast<int>(code) - static_cast<int>(KeyCode::kA));
+			return static_cast<char>(static_cast<int>(code) - static_cast<int>(KeyCode::kA) + (shift ? 'A' : 'a'));
 		}
-		else if (code >= KeyCode::k0 && code <= KeyCode::k9)
+		else if (code >= KeyCode::k1 && code <= KeyCode::k9)
 		{
-			return static_cast<char>('0' + static_cast<int>(code) - static_cast<int>(KeyCode::k0));
+			return static_cast<char>(static_cast<int>(code) - static_cast<int>(KeyCode::k1) + '1');
+		}
+		else if (code == KeyCode::k0)
+		{
+			return '0';
 		}
 		else if (code == KeyCode::kMinus)
 		{

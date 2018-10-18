@@ -285,8 +285,8 @@
 8029a4dc:OSCreateHeap
 8029a548:OSDestroyHeap
 // data
-8041f070:OSAlloc_HeapArray
-8041f074:OSAlloc_NumHeaps
+8042b9e0:OSAlloc_HeapArray
+8042b9e4:OSAlloc_NumHeaps
 
 // si.a
 802c194c:SIBusy

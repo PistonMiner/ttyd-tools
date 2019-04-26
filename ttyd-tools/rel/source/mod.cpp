@@ -122,6 +122,20 @@ void Mod::processCommand(const char *command)
 		sscanf(command, "debug_heap %d", &targetHeap);
 		mDebugHeapId = targetHeap;
 	}
+	else if (!strncmp(command, "change_map", functionNameLength))
+	{
+		static char mapName[32];
+		static char beroName[32];
+		int readArgumentCount = sscanf(command, "change_map %31s %31s", mapName, beroName);
+		if (readArgumentCount > 0)
+		{
+			if (readArgumentCount != 2)
+			{
+				beroName[0] = '\0';
+			}
+			ttyd::seqdrv::seqSetSeq(ttyd::seqdrv::SeqIndex::kMapChange, mapName, beroName);
+		}
+	}
 }
 
 void Mod::updateHeapInfo()

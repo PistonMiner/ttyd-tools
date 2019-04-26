@@ -32,7 +32,7 @@ extern "C" {
 
 void seqInit_MARIOSTORY();
 void seqMain();
-void seqSetSeq(SeqIndex seq, const char *mapName, const char *beroName);
+void seqSetSeq(SeqIndex seq, void *parameter0, void *parameter1);
 uint32_t seqGetSeq();
 uint32_t seqGetPrevSeq();
 uint32_t seqGetNextSeq();

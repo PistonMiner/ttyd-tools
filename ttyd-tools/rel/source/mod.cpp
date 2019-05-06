@@ -134,7 +134,7 @@ void Mod::processCommand(const char *command)
 	if (!strncmp(command, "debug_heap", functionNameLength))
 	{
 		// Read heap ID
-		int targetHeap;
+		int targetHeap = -1;
 		sscanf(command, "debug_heap %d", &targetHeap);
 		mDebugHeapId = targetHeap;
 	}

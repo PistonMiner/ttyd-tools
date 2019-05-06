@@ -26,6 +26,8 @@ private:
 	char mCommandBuffer[256] = "";
 	int mBackspaceHoldTimer = 0;
 
+	bool mShowUi = true;
+
 	int mDebugHeapId = -1;
 	char mDebugHeapText[64];
 

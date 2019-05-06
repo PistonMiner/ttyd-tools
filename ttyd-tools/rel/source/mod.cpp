@@ -110,6 +110,9 @@ void Mod::updateEarly()
 
 void Mod::draw()
 {
+	if (!mShowUi)
+		return;
+
 	ttyd::mario::Player *player = ttyd::mario::marioGetPtr();
 	char displayBuffer[256];
 	sprintf(displayBuffer,
@@ -151,6 +154,12 @@ void Mod::processCommand(const char *command)
 			}
 			ttyd::seqdrv::seqSetSeq(ttyd::seqdrv::SeqIndex::kMapChange, mapName, beroName);
 		}
+	}
+	else if (!strncmp(command, "show_ui", functionNameLength))
+	{
+		int shouldShowUi = 1;
+		sscanf(command, "show_ui %d", &shouldShowUi);
+		mShowUi = shouldShowUi;
 	}
 }
 

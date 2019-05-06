@@ -22,7 +22,9 @@ private:
 
 private:
 	void (*mPFN_makeKey_trampoline)() = nullptr;
+	
 	char mCommandBuffer[256] = "";
+	int mBackspaceHoldTimer = 0;
 
 	int mDebugHeapId = -1;
 	char mDebugHeapText[64];

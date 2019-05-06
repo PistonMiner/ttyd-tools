@@ -83,7 +83,23 @@ void Mod::updateEarly()
 		else if (pressed == KeyCode::kBackspace && bufferLen > 0)
 		{
 			mCommandBuffer[--bufferLen] = '\0';
+			mBackspaceHoldTimer = 0;
 		}
+	}
+
+	// Backspace repeat handling
+	if (mKeyboard->isKeyReleased(KeyCode::kBackspace))
+	{
+		mBackspaceHoldTimer = 0;
+	}
+	if (mKeyboard->isKeyDown(KeyCode::kBackspace))
+	{
+		++mBackspaceHoldTimer;
+	}
+	if (bufferLen > 0 && (mBackspaceHoldTimer >= 60))
+	{
+		// Erase one per frame
+		mCommandBuffer[--bufferLen] = '\0';
 	}
 
 	updateHeapInfo();

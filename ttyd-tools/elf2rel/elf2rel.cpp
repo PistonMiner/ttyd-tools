@@ -371,7 +371,7 @@ int main(int argc, char **argv)
 
 						rel.moduleID = 0;
 						rel.targetSection = 0; // #todo-elf2rel: Check if this is important
-						rel.addend = it->second;
+						rel.addend = static_cast<uint32_t>(addend + it->second);
 					}
 				}
 

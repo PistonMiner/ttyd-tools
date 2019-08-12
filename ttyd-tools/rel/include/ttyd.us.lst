@@ -229,6 +229,11 @@
 80077bdc:fontmgrTexSetup
 80077c08:fontmgrInit
 
+// database.o
+80084f24:setupDataBase
+8008558c:setupDataCheck
+80085648:setupDataLoad
+
 // seq_logo.o
 // 800859f8:progDisp
 // unused:arcLoad

@@ -16,17 +16,27 @@ public:
 private:
 	void updateEarly();
 	void draw();
+
+	void updateConsole();
 	void processCommand(const char *command);
-	
 	void updateHeapInfo();
+	
+	void drawConsole();
+	void drawMovementInfo();
+	void drawHeapInfo();
 
 private:
 	void (*mPFN_makeKey_trampoline)() = nullptr;
 	
-	char mCommandBuffer[256] = "";
+	bool mShowUi = true;
+	char mDisplayBuffer[256];
+
+	bool mShowMovementInfo = false;
+
+	char mCommandBuffer[64] = "";
 	int mBackspaceHoldTimer = 0;
 
-	bool mShowUi = true;
+	bool mConsoleActive = false;
 
 	int mDebugHeapId = -1;
 	char mDebugHeapText[64];

@@ -53,11 +53,57 @@ void Mod::updateEarly()
 	mKeyboard->update();
 
 	// Register draw command
-	ttyd::dispdrv::dispEntry(ttyd::dispdrv::DisplayLayer::kDebug3d, 0, [](ttyd::dispdrv::DisplayLayer layerId, void *user)
+	ttyd::dispdrv::dispEntry(ttyd::dispdrv::DisplayLayer::kDebug3d, 1, [](ttyd::dispdrv::DisplayLayer layerId, void *user)
 	{
 		reinterpret_cast<Mod *>(user)->draw();
 	}, this);
 	
+	updateConsole();
+	updateHeapInfo();
+
+	// Call original function
+	mPFN_makeKey_trampoline();
+}
+
+void Mod::draw()
+{
+	if (!mShowUi)
+		return;
+
+	mDisplayBuffer[0] = '\0';
+
+	drawHeapInfo();
+	drawMovementInfo();
+	drawConsole();
+
+	int lineCount = 1;
+	for (char *p = strchr(mDisplayBuffer, '\n'); p && p[1] != '\0'; p = strchr(p + 1, '\n'))
+	{
+		++lineCount;
+	}
+
+	ttyd::fontmgr::FontDrawStart();
+	uint32_t color = 0x328BFFFF;
+	ttyd::fontmgr::FontDrawColor(reinterpret_cast<uint8_t *>(&color));
+	ttyd::fontmgr::FontDrawEdge();
+	ttyd::fontmgr::FontDrawMessage(-271, -212 + 28 * lineCount, mDisplayBuffer);
+}
+
+void Mod::updateConsole()
+{
+	// Console shortcut L+Z or Grave
+	if ((ttyd::system::keyGetButton(0) == 0x0050
+		&& ttyd::system::keyGetButtonTrg(0) & 0x0050)
+		|| mKeyboard->isKeyPressed(KeyCode::kPlus))
+	{
+		mConsoleActive = !mConsoleActive;
+	}
+
+	if (!mConsoleActive)
+	{
+		return;
+	}
+
 	// Keyboard input for prompt
 	size_t bufferLen = strlen(mCommandBuffer);
 	for (int i = 0; i < mKeyboard->getKeyPressedCount(); ++i)
@@ -96,45 +142,33 @@ void Mod::updateEarly()
 	{
 		++mBackspaceHoldTimer;
 	}
-	if (bufferLen > 0 && (mBackspaceHoldTimer >= 60))
+	if (bufferLen > 0 && (mBackspaceHoldTimer >= 40))
 	{
 		// Erase one per frame
 		mCommandBuffer[--bufferLen] = '\0';
 	}
-
-	updateHeapInfo();
-
-	// Call original function
-	mPFN_makeKey_trampoline();
-}
-
-void Mod::draw()
-{
-	if (!mShowUi)
-		return;
-
-	ttyd::mario::Player *player = ttyd::mario::marioGetPtr();
-	char displayBuffer[256];
-	sprintf(displayBuffer,
-	        "Pos: %.2f %.2f %.2f\r\n"
-	        "SpdY: %.2f\r\n"
-	        "Cmd: %s\r\n"
-	        "%s",
-	        player->playerPosition[0], player->playerPosition[1], player->playerPosition[2],
-	        player->wJumpVelocityY,
-	        mCommandBuffer,
-	        mDebugHeapText);
-	ttyd::fontmgr::FontDrawStart();
-	uint32_t color = 0xFFFFFFFF;
-	ttyd::fontmgr::FontDrawColor(reinterpret_cast<uint8_t *>(&color));
-	ttyd::fontmgr::FontDrawEdge();
-	ttyd::fontmgr::FontDrawMessage(-272, -40, displayBuffer);
 }
 
 void Mod::processCommand(const char *command)
 {
 	size_t functionNameLength = strchr(command, ' ') - command;
-	if (!strncmp(command, "debug_heap", functionNameLength))
+	if (!strncmp(command, "exit", functionNameLength))
+	{
+		mConsoleActive = false;
+	}
+	else if (!strncmp(command, "show_ui", functionNameLength))
+	{
+		int shouldShowUi = 1;
+		sscanf(command, "show_ui %d", &shouldShowUi);
+		mShowUi = shouldShowUi;
+	}
+	else if (!strncmp(command, "show_pos", functionNameLength))
+	{
+		int shouldShowPos = 1;
+		sscanf(command, "show_pos %d", &shouldShowPos);
+		mShowMovementInfo = shouldShowPos;
+	}
+	else if (!strncmp(command, "debug_heap", functionNameLength))
 	{
 		// Read heap ID
 		int targetHeap = -1;
@@ -155,12 +189,6 @@ void Mod::processCommand(const char *command)
 			ttyd::seqdrv::seqSetSeq(ttyd::seqdrv::SeqIndex::kMapChange, mapName, beroName);
 		}
 	}
-	else if (!strncmp(command, "show_ui", functionNameLength))
-	{
-		int shouldShowUi = 1;
-		sscanf(command, "show_ui %d", &shouldShowUi);
-		mShowUi = shouldShowUi;
-	}
 }
 
 void Mod::updateHeapInfo()
@@ -173,7 +201,7 @@ void Mod::updateHeapInfo()
 
 	if (mDebugHeapId >= gc::os::OSAlloc_NumHeaps || mDebugHeapId < 0)
 	{
-		sprintf(mDebugHeapText, "Heap: %d is not a valid heap\r\n", mDebugHeapId);
+		sprintf(mDebugHeapText, "Heap: %d is not a valid heap\n", mDebugHeapId);
 		return;
 	}
 
@@ -215,10 +243,12 @@ void Mod::updateHeapInfo()
 	}
 	if (!valid)
 	{
-		sprintf(mDebugHeapText,
-			    "Heap: %d corrupt at %08lx\r\n",
-			    mDebugHeapId,
-			    reinterpret_cast<uint32_t>(currentChunk));
+		sprintf(
+			mDebugHeapText,
+			"Heap: %d corrupt at %08lx\n",
+			mDebugHeapId,
+			reinterpret_cast<uint32_t>(currentChunk)
+		);
 		return;
 	}
 
@@ -231,12 +261,55 @@ void Mod::updateHeapInfo()
 		++chunks;
 	}
 
-	sprintf(mDebugHeapText,
-		    "Heap: id %d, %.2f/%.2fkb, %d cks\r\n",
-		    mDebugHeapId,
-		    usage / 1024.f,
-		    heap.capacity / 1024.f,
-		    chunks);
+	sprintf(
+		mDebugHeapText,
+		"Heap: id %d, %.2f/%.2fkb, %d cks\n",
+		mDebugHeapId,
+		usage / 1024.f,
+		heap.capacity / 1024.f,
+		chunks
+	);
+}
+
+void Mod::drawConsole()
+{
+	if (!mConsoleActive)
+	{
+		return;
+	}
+	
+	strcat(mDisplayBuffer, "$ ");
+	strcat(mDisplayBuffer, mCommandBuffer);
+	strcat(mDisplayBuffer, "\n");
+}
+
+void Mod::drawMovementInfo()
+{
+	if (!mShowMovementInfo)
+	{
+		return;
+	}
+
+	char text[64];
+	ttyd::mario::Player *player = ttyd::mario::marioGetPtr();
+	sprintf(
+		text,
+		"Pos: %.2f %.2f %.2f\n"
+		"SpdY: %.2f\n",
+		player->playerPosition[0], player->playerPosition[1], player->playerPosition[2],
+		player->wJumpVelocityY
+	);
+	strcat(mDisplayBuffer, text);
+}
+
+void Mod::drawHeapInfo()
+{
+	if (mDebugHeapId == -1)
+	{
+		return;
+	}
+
+	strcat(mDisplayBuffer, mDebugHeapText);
 }
 
 }

@@ -53,7 +53,7 @@ void Mod::updateEarly()
 	mKeyboard->update();
 
 	// Register draw command
-	ttyd::dispdrv::dispEntry(ttyd::dispdrv::DisplayLayer::kDebug3d, 1, [](ttyd::dispdrv::DisplayLayer layerId, void *user)
+	ttyd::dispdrv::dispEntry(ttyd::dispdrv::CameraId::kDebug3d, 1, 0.f, [](ttyd::dispdrv::CameraId layerId, void *user)
 	{
 		reinterpret_cast<Mod *>(user)->draw();
 	}, this);

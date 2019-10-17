@@ -51,16 +51,19 @@ Map object transform and texture coordinate transform animations are currently s
 
 ### Camera
 The Camera collection contains the camera marker meshes and curves that will end up in the camera road file (`c`).
-A camera curve defines the path the camera should follow in order to track Mario and map to Blender curve objects. There is exactly one curve active at any one time. A curve is considered to be active when any of the markers attached to it is the one Mario is standing in.
-Markers are meshes that define "zones" of which curves should be active depending on where Mario stands. The first marker mesh that is hit when projecting Mario's position downwards is considered active. This usually just means that you should put the marker slightly below where Mario should be standing in order to activate it.
+A camera curve defines the path the camera should follow in order to track Mario and map to Blender curve objects. There is exactly one curve active at any one time. A curve is considered to be active when any of the markers attached to it is the one Mario is standing in. The actual curve should lie on the XZ-plane (XY in Blender). When the curve is active, the camera is positioned pointing orthogonally to the left-hand side of the curve and "slides" around the curve until it points at Mario. Effectively, this means that if you want to have the camera point forward, the curve should be going from left to right, so that the left side of the curve is facing forwards.
+
+Markers are meshes that define "zones" that define which curve should be active depending on where Mario stands. The first marker mesh that is hit when projecting Mario's position downwards is considered active. Effectively this means that you should put the marker slightly below whereever Mario should be standing in order to activate it.
+
 Every curve must have at least one marker. To define the markers for a curve, add custom properties on the Blender object (the object data-block, **not** the Curve data-block) named "marker0", "marker1", etc. with the names of the marker objects for that curve. Only "marker0" is required.
+
 TODO: Other curve properties
 
 ## Known limitations
 * No support for:
- * Lights
- * Fog
- * Different TEV modes
- * Hit attributes
- * Different texture formats (partially implemented)
- * Material blend alpha (partially implemented)
+  * Lights
+  * Fog
+  * Different TEV modes
+  * Hit attributes
+  * Different texture formats (partially implemented)
+  * Material blend alpha (partially implemented)

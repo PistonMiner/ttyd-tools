@@ -10,7 +10,10 @@ Copy the folder `io_scene_ttyd` in this directory into the `scripts/addons/` dir
 
 ## Playtesting
 To actually playtest your map in-game, you can use a tool like GCRebuilder to place the exported map files (`d`, `c`, `t`) in a subfolder of the disc image's `m` folder.
+
 You can either replace an existing map which you can then just go to in the game, or you can put it in as a completely new map. If you elect to go with the second option, you can use e.g. a REL GCI mod to load the map up dynamically, such as the one in the `rel` folder of this repository.
+
+For a quick preview, you can also use Jasper's [noclip.website](https://noclip.website) by selecting **just the `d` and `t` files** (not `c` or any others), and dragging and dropping them into the browser with the site open.
 
 ## Usage
 Different Blender collections are used to map objects to different functions in the map and must be selected accordingly when exporting. All collections must be present even if unused. Objects should not be in more than one of these functional collections.

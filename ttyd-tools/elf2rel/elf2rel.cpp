@@ -39,6 +39,7 @@ std::map<std::string, uint32_t> loadSymbolMap(const std::string &filename)
 }
 
 void writeModuleHeader(std::vector<uint8_t> &buffer,
+					   int version,
 					   int id,
 					   int sectionCount,
 					   int sectionInfoOffset,
@@ -63,7 +64,7 @@ void writeModuleHeader(std::vector<uint8_t> &buffer,
 	save<uint32_t>(buffer, sectionInfoOffset);
 	save<uint32_t>(buffer, 0); // name offset
 	save<uint32_t>(buffer, 0); // name size
-	save<uint32_t>(buffer, 3); // version
+	save<uint32_t>(buffer, version); // version
 
 	save<uint32_t>(buffer, totalBssSize);
 	save<uint32_t>(buffer, relocationOffset);
@@ -76,9 +77,15 @@ void writeModuleHeader(std::vector<uint8_t> &buffer,
 	save<uint32_t>(buffer, prologOffset);
 	save<uint32_t>(buffer, epilogOffset);
 	save<uint32_t>(buffer, unresolvedOffset);
-	save<uint32_t>(buffer, maxAlign);
-	save<uint32_t>(buffer, maxBssAlign);
-	save<uint32_t>(buffer, fixedDataSize);
+	if (version >= 2)
+	{
+		save<uint32_t>(buffer, maxAlign);
+		save<uint32_t>(buffer, maxBssAlign);
+	}
+	if (version >= 3)
+	{
+		save<uint32_t>(buffer, fixedDataSize);
+	}
 }
 
 void writeSectionInfo(std::vector<uint8_t> &buffer, int offset, int size)
@@ -117,6 +124,7 @@ int main(int argc, char **argv)
 	std::string lstFilename;
 	std::string relFilename = "";
 	int moduleID = 33;
+	int relVersion = 3;
 
 	{
 		namespace po = boost::program_options;
@@ -127,7 +135,8 @@ int main(int argc, char **argv)
 			("input-file,i", po::value(&elfFilename), "Input ELF filename (required)")
 			("symbol-file,s", po::value(&lstFilename), "Input symbol file name (required)")
 			("output-file,o", po::value(&relFilename), "Output REL filename")
-			("rel-id", po::value(&moduleID)->default_value(0x1000), "REL file ID");
+			("rel-id", po::value(&moduleID)->default_value(0x1000), "REL file ID")
+			("rel-version", po::value(&relVersion)->default_value(3), "REL file format version (1, 2, 3)");
 
 		po::positional_options_description positionals;
 		positionals.add("input-file", -1);
@@ -144,7 +153,9 @@ int main(int argc, char **argv)
 
 		if (varMap.count("help")
 			|| varMap.count("input-file") != 1
-			|| varMap.count("symbol-file") != 1)
+			|| varMap.count("symbol-file") != 1
+			|| relVersion < 1
+			|| relVersion > 3)
 		{
 			std::cout << description << "\n";
 			return 1;
@@ -217,7 +228,7 @@ int main(int argc, char **argv)
 
 	std::vector<uint8_t> outputBuffer;
 	// Dummy values for header until offsets are determined
-	writeModuleHeader(outputBuffer, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+	writeModuleHeader(outputBuffer, relVersion, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 	int sectionInfoOffset = outputBuffer.size();
 	for (int i = 0; i < inputElf.sections.size(); ++i)
 	{
@@ -523,6 +534,7 @@ int main(int argc, char **argv)
 	// Write final header
 	std::vector<uint8_t> headerBuffer;
 	writeModuleHeader(headerBuffer,
+					  relVersion,
 					  moduleID,
 					  inputElf.sections.size(),
 					  sectionInfoOffset,

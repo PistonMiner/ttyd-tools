@@ -102,6 +102,12 @@
 8003023c:memClear
 80030300:memInit
 
+// mapdata.o
+800390c0:relSetBtlAddr
+80039170:relSetEvtAddr
+800392c8:areaDataPtr
+80039360:mapDataPtr
+
 // mario.o
 800562b8:toFrontPose
 800567e8:toRearPose

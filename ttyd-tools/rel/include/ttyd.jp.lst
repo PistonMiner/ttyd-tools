@@ -129,6 +129,37 @@
 // 80037298:make_pri_table
 800373c4:evtGetWork
 
+// evt_map.o
+800375f0:evt_mapdisp_onoff
+80037630:evt_map_replace_mapobj
+80037708:evt_map_entry_airport_harbor
+800378a4:check2
+80037930:check
+800379bc:evt_map_get_flush_color
+80037a50:evt_map_set_flush_color
+80037b18:evt_map_set_flush_onoff
+80037bb4:evt_map_set_tevcallback
+80037c14:evt_mapobj_get_position
+80037ce0:evt_mapobj_clear_offscreen
+80037d44:evt_mapobj_set_offscreen
+80037dcc:evt_mapobj_flag_onoff
+80037e74:evt_map_set_playrate
+80037ecc:evt_map_replayanim
+80037f30:evt_map_pauseanim
+80037f94:evt_map_checkanim
+8003800c:evt_map_playanim
+80038088:evt_mapobj_color
+80038178:evt_map_blend_set_mobj_flag
+80038214:evt_map_blend_set_flag
+800383ec:evt_map_blend_off
+8003842c:evt_map_set_blend
+80038500:evt_map_fog_onoff
+80038540:evt_map_get_fog
+800385ec:evt_map_set_fog
+800386cc:evt_mapobj_scale
+8003879c:evt_mapobj_rotate
+8003886c:evt_mapobj_trans
+
 // mapdata.o
 8003893c:relSetBtlAddr
 800389ec:relSetEvtAddr

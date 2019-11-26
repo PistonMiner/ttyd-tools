@@ -100,6 +100,35 @@
 8002faf0:memClear
 8002fbb4:memInit
 
+// evtmgr.o
+8003538c:evtGetPtrID
+800353ec:evtGetPtr
+80035428:evtStartOther
+800354b0:evtStopOther
+80035538:evtStartAll
+800355cc:evtStopAll
+80035660:evtStartID
+80035700:evtStopID
+800357a0:evtStart
+80035b74:evtStop
+80035f48:evtSetType
+80035f50:evtSetSpeed
+80035f60:evtSetPri
+80035f68:evtCheckID
+80035fc8:evtDeleteID
+80036064:evtDelete
+80036234:evtmgrMain
+80036420:evtRestart
+80036568:evtBrotherEntry
+80036850:evtChildEntry
+80036b84:evtEntryType
+80036e10:evtEntry
+// 8003709c:evtEntryRunCheck
+80037114:evtmgrReInit
+80037180:evtmgrInit
+// 80037298:make_pri_table
+800373c4:evtGetWork
+
 // mapdata.o
 8003893c:relSetBtlAddr
 800389ec:relSetEvtAddr

@@ -1,258 +1,258 @@
-| Hex| Dec | Mnemonic               | Summary
-+----+-----+------------------------+-------------------------------------
-| 00 |   0 |                        | Internal - fetch next instruction
-| 01 |   1 | end                    | Script End
-| 02 |   2 | return                 | Return
-| 03 |   3 | <label number>:        | NOP in execution, defines label during script context initialization (1 parm which is the label ID)
-| 04 |   4 | goto                   | goto label or address
-| 05 |   5 | loop                   | Begin Loop
-| 06 |   6 | end_loop               | Loop stack iterate
-| 07 |   7 | loop_break             | break; from loop
-| 08 |   8 | loop_continue          | continue; from loop
-| 09 |   9 | wait_frames            | Wait for frames
-| 0A |  10 | wait_ms                | Wait for ms
-| 0B |  11 | wait_until             | Wait until expr is false
-| 0C |  12 | if_string_eq           | if parm strings equal
-| 0D |  13 | if_string_ne           | if parm strings not equal
-| 0E |  14 | if_string_lt           | if parm strings lt
-| 0F |  15 | if_string_gt           | if parm strings gt
-| 10 |  16 | if_string_le           | if parm strings le
-| 11 |  17 | if_string_ge           | if parm strings ge
-| 12 |  18 | if_float_eq            | if parm floats eq
-| 13 |  19 | if_float_ne            | if parm floats ne
-| 14 |  20 | if_float_lt            | if parm floats lt
-| 15 |  21 | if_float_gt            | if parm floats gt
-| 16 |  22 | if_float_le            | if parm floats le
-| 17 |  23 | if_float_ge            | if parm floats ge
-| 18 |  24 | if_int_eq              | if parm ints eq
-| 19 |  25 | if_int_ne              | if parm ints ne
-| 1A |  26 | if_int_lt              | if parm ints lt
-| 1B |  27 | if_int_gt              | if parm ints gt
-| 1C |  28 | if_int_le              | if parm ints le
-| 1D |  29 | if_int_ge              | if parm ints ge
-| 1E |  30 | if_bits_set            | if parm int AND with raw is nonzero
-| 1F |  31 | if_bits_clear          | if parm int AND with raw is zero
-| 20 |  32 | else                   | else
-| 21 |  33 | endif                  | endif
-| 22 |  34 | switchi                | switch expression
-| 23 |  35 | switchr                | switch raw	? looks broken, not accounted for in other switch functions and not used by the game. dont use.
-| 24 |  36 | case_int_eq            | case var equal to int
-| 25 |  37 | case_int_ne            | case var not equal to int
-| 26 |  38 | case_int_lt            | case var less than int
-| 27 |  39 | case_int_gt            | case var greater than int
-| 28 |  40 | case_int_le            | case var less equal than int
-| 29 |  41 | case_int_ge            | case var greater equal int
-| 2A |  42 | case_default           | case default
-| 2B |  43 | case_int_eq_any        | case eq combo (one condition must be met)
-| 2C |  44 | case_int_ne_all        | case ne combo (all conditions must be met)
-| 2D |  45 | case_bits_set          | case and with binary mask
-| 2E |  46 | end_multi_case         | break from case combo
-| 2F |  47 | case_int_range         | case range a to b inclusive
-| 30 |  48 | switch_break           | break from switch
-| 31 |  49 | end_switch             | end switch
-| 32 |  50 | setii                  | set int expr to int expr
-| 33 |  51 | setir                  | set int expr to raw
-| 34 |  52 | setff                  | set float expr to float expr
-| 35 |  53 | addi                   | add parm ints, save in first parm
-| 36 |  54 | subi                   | sub parm ints, save in first parm
-| 37 |  55 | muli                   | mul parm ints, save in first parm
-| 38 |  56 | divi                   | div parm ints, save in first parm
-| 39 |  57 | modi                   | modulus, save in first parm
-| 3A |  58 | addf                   | add parm floats, save in first parm
-| 3B |  59 | subf                   | sub parm floats, save in first parm
-| 3C |  60 | mulf                   | mul parm floats, save in first parm
-| 3D |  61 | divf                   | div parm floats, save in first parm
-| 3E |  62 | mo_set_base_int        | set struc op base
-| 3F |  63 | mo_read_int            | load int from struc op and advance
-| 40 |  64 | mo_read_int2           | load int vec2 from struc op and advance
-| 41 |  65 | mo_read_int3           | load int vec3 from struc op and advance
-| 42 |  66 | mo_read_int4           | load int vec4 from struc op and advance
-| 43 |  67 | mo_read_int_indexed    | load indexed int from struc op
-| 44 |  68 | mo_set_base_float      | same as 3E, set struc op base
-| 45 |  69 | mo_read_float          | load float from struc op and advance
-| 46 |  70 | mo_read_float2         | load float vec2 from struc op to exprs and advance
-| 47 |  71 | mo_read_float3         | load float vec3 from struc op to exprs and advance
-| 48 |  72 | mo_read_float4         | load float vec4 from struc op to exprs and advance
-| 49 |  73 | mo_read_float_indexed  | load indexed float from struc op
-| 4A |  74 | set_uw_base            | set user word base (UW)
-| 4B |  75 | set_uf_base            | set user flag base (UF)
-| 4C |  76 | alloc_uw               | allocate to UW base
-| 4D |  77 | andi                   | binary and expr
-| 4E |  78 | andr                   | binary and raw
-| 4F |  79 | ori                    | binary or expr
-| 50 |  80 | orr                    | binary or raw
-| 51 |  81 | cvt_ms_f               | convert ms to frame count (fast multiply by 60/1000)
-| 52 |  82 | cvt_f_ms               | convert frame count to ms (fast multiply by 1000/60)
-| 53 |  83 | storei                 | store int expr to pointer as dword
-| 54 |  84 | storef                 | store float expr to pointer as float
-| 55 |  85 | loadi                  | set int expr to int pointer val
-| 56 |  86 | loadf                  | set float expr to float pointer val
-| 57 |  87 | storei_ind             | set int expr indirect to int (**out = *in)
-| 58 |  88 | storef_ind             | set int expr indirect to float (**out = *in)
-| 59 |  89 | loadi_ind              | set int expr to expr indirect (*out = **in)
-| 5A |  90 | loadf_ind              | set float expr to expr indirect (*out = **in)
-| 5B |  91 | callc                  | call C++ function
-| 5C |  92 | callsa                 | call script async
-| 5D |  93 | callsa_tid             | call script async and save TID
-| 5E |  94 | callss                 | call script sync
-| 5F |  95 | stop_tid               | terminate thread
-| 60 |  96 | jump                   | ? jump to pointer
-| 61 |  97 | set_thread_priority    | ? set execution order (unused)
-| 62 |  98 | set_thread_quantum     | set time scale
-| 63 |  99 | set_thread_type_mask   | set type mask
-| 64 | 100 | suspend_types          | suspend all threads of type
-| 65 | 101 | resume_types           | resume all threads of type
-| 66 | 102 | suspend_types_other    | suspend other threads of type
-| 67 | 103 | resume_types_other     | resume other threads of type
-| 68 | 104 | suspend_tid            | suspend thread by ID
-| 69 | 105 | resume_tid             | resume thread by ID
-| 6A | 106 | check_thread_running   | checks if a thread is still running by TID (expr)
-| 6B | 107 | begin_thread           | Start thread
-| 6C | 108 | begin_thread_tid       | Start thread & save TID
-| 6D | 109 | end_thread             | End thread
-| 6E | 110 | begin_child_thread     | Start child thread
-| 6F | 111 | begin_child_thread_tid | Start child thread & save TID
-| 70 | 112 | end_child_thread       | End child thread
-| 71 | 113 | dbg_report             | output debug string
-| 72 | 114 |                        | ? NOP
-| 73 | 115 | dbg_expr_to_string     | Convert expression to debug string
-| 74 | 116 |                        | ? set debug mode
-| 75 | 117 |                        | ? NOP
-| 76 | 118 |                        | ? searches for a script context, then doesn't care about the results anyways.
-| 77 | 119 |                        | unused
-| 78 | 120 |                        | unused
-| 79 | 121 |                        | unused
-| 7A | 122 |                        | unused
-| 7B | 123 |                        | unused
-| 7C | 124 |                        | unused
-| 7D | 125 |                        | unused
-| 7E | 126 |                        | unused
-| 7F | 127 |                        | unused
-| 80 | 128 |                        | unused
-| 81 | 129 |                        | unused
-| 82 | 130 |                        | unused
-| 83 | 131 |                        | unused
-| 84 | 132 |                        | unused
-| 85 | 133 |                        | unused
-| 86 | 134 |                        | unused
-| 87 | 135 |                        | unused
-| 88 | 136 |                        | unused
-| 89 | 137 |                        | unused
-| 8A | 138 |                        | unused
-| 8B | 139 |                        | unused
-| 8C | 140 |                        | unused
-| 8D | 141 |                        | unused
-| 8E | 142 |                        | unused
-| 8F | 143 |                        | unused
-| 90 | 144 |                        | unused
-| 91 | 145 |                        | unused
-| 92 | 146 |                        | unused
-| 93 | 147 |                        | unused
-| 94 | 148 |                        | unused
-| 95 | 149 |                        | unused
-| 96 | 150 |                        | unused
-| 97 | 151 |                        | unused
-| 98 | 152 |                        | unused
-| 99 | 153 |                        | unused
-| 9A | 154 |                        | unused
-| 9B | 155 |                        | unused
-| 9C | 156 |                        | unused
-| 9D | 157 |                        | unused
-| 9E | 158 |                        | unused
-| 9F | 159 |                        | unused
-| A0 | 160 |                        | unused
-| A1 | 161 |                        | unused
-| A2 | 162 |                        | unused
-| A3 | 163 |                        | unused
-| A4 | 164 |                        | unused
-| A5 | 165 |                        | unused
-| A6 | 166 |                        | unused
-| A7 | 167 |                        | unused
-| A8 | 168 |                        | unused
-| A9 | 169 |                        | unused
-| AA | 170 |                        | unused
-| AB | 171 |                        | unused
-| AC | 172 |                        | unused
-| AD | 173 |                        | unused
-| AE | 174 |                        | unused
-| AF | 175 |                        | unused
-| B0 | 176 |                        | unused
-| B1 | 177 |                        | unused
-| B2 | 178 |                        | unused
-| B3 | 179 |                        | unused
-| B4 | 180 |                        | unused
-| B5 | 181 |                        | unused
-| B6 | 182 |                        | unused
-| B7 | 183 |                        | unused
-| B8 | 184 |                        | unused
-| B9 | 185 |                        | unused
-| BA | 186 |                        | unused
-| BB | 187 |                        | unused
-| BC | 188 |                        | unused
-| BD | 189 |                        | unused
-| BE | 190 |                        | unused
-| BF | 191 |                        | unused
-| C0 | 192 |                        | unused
-| C1 | 193 |                        | unused
-| C2 | 194 |                        | unused
-| C3 | 195 |                        | unused
-| C4 | 196 |                        | unused
-| C5 | 197 |                        | unused
-| C6 | 198 |                        | unused
-| C7 | 199 |                        | unused
-| C8 | 200 |                        | unused
-| C9 | 201 |                        | unused
-| CA | 202 |                        | unused
-| CB | 203 |                        | unused
-| CC | 204 |                        | unused
-| CD | 205 |                        | unused
-| CE | 206 |                        | unused
-| CF | 207 |                        | unused
-| D0 | 208 |                        | unused
-| D1 | 209 |                        | unused
-| D2 | 210 |                        | unused
-| D3 | 211 |                        | unused
-| D4 | 212 |                        | unused
-| D5 | 213 |                        | unused
-| D6 | 214 |                        | unused
-| D7 | 215 |                        | unused
-| D8 | 216 |                        | unused
-| D9 | 217 |                        | unused
-| DA | 218 |                        | unused
-| DB | 219 |                        | unused
-| DC | 220 |                        | unused
-| DD | 221 |                        | unused
-| DE | 222 |                        | unused
-| DF | 223 |                        | unused
-| E0 | 224 |                        | unused
-| E1 | 225 |                        | unused
-| E2 | 226 |                        | unused
-| E3 | 227 |                        | unused
-| E4 | 228 |                        | unused
-| E5 | 229 |                        | unused
-| E6 | 230 |                        | unused
-| E7 | 231 |                        | unused
-| E8 | 232 |                        | unused
-| E9 | 233 |                        | unused
-| EA | 234 |                        | unused
-| EB | 235 |                        | unused
-| EC | 236 |                        | unused
-| ED | 237 |                        | unused
-| EE | 238 |                        | unused
-| EF | 239 |                        | unused
-| F0 | 240 |                        | unused
-| F1 | 241 |                        | unused
-| F2 | 242 |                        | unused
-| F3 | 243 |                        | unused
-| F4 | 244 |                        | unused
-| F5 | 245 |                        | unused
-| F6 | 246 |                        | unused
-| F7 | 247 |                        | unused
-| F8 | 248 |                        | unused
-| F9 | 249 |                        | unused
-| FA | 250 |                        | unused
-| FB | 251 |                        | unused
-| FC | 252 |                        | unused
-| FD | 253 |                        | unused
-| FE | 254 |                        | unused
-| FF | 255 |                        | unused
+| Hex| Dec | Original Mnemonic   | ttydasm Mnemonic       | Summary
++----+-----+---------------------+------------------------+-------------------------------------
+| 00 |   0 |                     |                        | Internal - fetch next instruction
+| 01 |   1 |                     | end                    | Script End
+| 02 |   2 | end_evt             | return                 | Return
+| 03 |   3 | lbl                 | <label number>:        | NOP in execution, defines label during script context initialization (1 parm which is the label ID)
+| 04 |   4 | goto                | goto                   | goto label or address
+| 05 |   5 | do                  | loop                   | Begin Loop
+| 06 |   6 | while               | end_loop               | Loop stack iterate
+| 07 |   7 | do_break            | loop_break             | break; from loop
+| 08 |   8 | do_continue         | loop_continue          | continue; from loop
+| 09 |   9 | wait_frm            | wait_frames            | Wait for frames
+| 0A |  10 | wait_msec           | wait_ms                | Wait for ms
+| 0B |  11 | halt                | wait_until             | Wait until expr is false
+| 0C |  12 | if_str_equal        | if_string_eq           | if parm strings equal
+| 0D |  13 | if_str_not_equal    | if_string_ne           | if parm strings not equal
+| 0E |  14 | if_str_small        | if_string_lt           | if parm strings lt
+| 0F |  15 | if_str_large        | if_string_gt           | if parm strings gt
+| 10 |  16 | if_str_small_equal  | if_string_le           | if parm strings le
+| 11 |  17 | if_str_large_equal  | if_string_ge           | if parm strings ge
+| 12 |  18 | iff_equal           | if_float_eq            | if parm floats eq
+| 13 |  19 | iff_not_equal       | if_float_ne            | if parm floats ne
+| 14 |  20 | iff_small           | if_float_lt            | if parm floats lt
+| 15 |  21 | iff_large           | if_float_gt            | if parm floats gt
+| 16 |  22 | iff_small_equal     | if_float_le            | if parm floats le
+| 17 |  23 | iff_large_equal     | if_float_ge            | if parm floats ge
+| 18 |  24 | if_equal            | if_int_eq              | if parm ints eq
+| 19 |  25 | if_not_equal        | if_int_ne              | if parm ints ne
+| 1A |  26 | if_small            | if_int_lt              | if parm ints lt
+| 1B |  27 | if_large            | if_int_gt              | if parm ints gt
+| 1C |  28 | if_small_equal      | if_int_le              | if parm ints le
+| 1D |  29 | if_large_equal      | if_int_ge              | if parm ints ge
+| 1E |  30 | if_flag             | if_bits_set            | if parm int AND with raw is nonzero
+| 1F |  31 | if_not_flag         | if_bits_clear          | if parm int AND with raw is zero
+| 20 |  32 | else                | else                   | else
+| 21 |  33 | end_if              | endif                  | endif
+| 22 |  34 | switch              | switchi                | switch expression
+| 23 |  35 | switchi             | switchr                | switch raw	? looks broken, not accounted for in other switch functions and not used by the game. dont use.
+| 24 |  36 | case_equal          | case_int_eq            | case var equal to int
+| 25 |  37 | case_not_equal      | case_int_ne            | case var not equal to int
+| 26 |  38 | case_small          | case_int_lt            | case var less than int
+| 27 |  39 | case_large          | case_int_gt            | case var greater than int
+| 28 |  40 | case_small_equal    | case_int_le            | case var less equal than int
+| 29 |  41 | case_large_equal    | case_int_ge            | case var greater equal int
+| 2A |  42 | case_etc            | case_default           | case default
+| 2B |  43 | case_or             | case_int_eq_any        | case eq combo (one condition must be met)
+| 2C |  44 | case_and            | case_int_ne_all        | case ne combo (all conditions must be met)
+| 2D |  45 | case_flag           | case_bits_set          | case and with binary mask
+| 2E |  46 | case_end            | end_multi_case         | break from case combo
+| 2F |  47 | case_between        | case_int_range         | case range a to b inclusive
+| 30 |  48 | switch_break        | switch_break           | break from switch
+| 31 |  49 | end_switch          | end_switch             | end switch
+| 32 |  50 | set                 | setii                  | set int expr to int expr
+| 33 |  51 | seti                | setir                  | set int expr to raw
+| 34 |  52 | setf                | setff                  | set float expr to float expr
+| 35 |  53 | add                 | addi                   | add parm ints, save in first parm
+| 36 |  54 | sub                 | subi                   | sub parm ints, save in first parm
+| 37 |  55 | mul                 | muli                   | mul parm ints, save in first parm
+| 38 |  56 | div                 | divi                   | div parm ints, save in first parm
+| 39 |  57 | mod                 | modi                   | modulus, save in first parm
+| 3A |  58 | addf                | addf                   | add parm floats, save in first parm
+| 3B |  59 | subf                | subf                   | sub parm floats, save in first parm
+| 3C |  60 | mulf                | mulf                   | mul parm floats, save in first parm
+| 3D |  61 | divf                | divf                   | div parm floats, save in first parm
+| 3E |  62 | set_read            | mo_set_base_int        | set struc op base
+| 3F |  63 | read                | mo_read_int            | load int from struc op and advance
+| 40 |  64 | read2               | mo_read_int2           | load int vec2 from struc op and advance
+| 41 |  65 | read3               | mo_read_int3           | load int vec3 from struc op and advance
+| 42 |  66 | read4               | mo_read_int4           | load int vec4 from struc op and advance
+| 43 |  67 | read_n              | mo_read_int_indexed    | load indexed int from struc op
+| 44 |  68 | set_readf           | mo_set_base_float      | same as 3E, set struc op base
+| 45 |  69 | readf               | mo_read_float          | load float from struc op and advance
+| 46 |  70 | readf2              | mo_read_float2         | load float vec2 from struc op to exprs and advance
+| 47 |  71 | readf3              | mo_read_float3         | load float vec3 from struc op to exprs and advance
+| 48 |  72 | readf4              | mo_read_float4         | load float vec4 from struc op to exprs and advance
+| 49 |  73 | readf_n             | mo_read_float_indexed  | load indexed float from struc op
+| 4A |  74 | set_user_wrk        | set_uw_base            | set user word base (UW)
+| 4B |  75 | set_user_flg        | set_uf_base            | set user flag base (UF)
+| 4C |  76 | alloc_user_wrk      | alloc_uw               | allocate to UW base
+| 4D |  77 | and                 | andi                   | binary and expr
+| 4E |  78 | andi                | andr                   | binary and raw
+| 4F |  79 | or                  | ori                    | binary or expr
+| 50 |  80 | ori                 | orr                    | binary or raw
+| 51 |  81 | set_frame_from_msec | cvt_ms_f               | convert ms to frame count (fast multiply by 60/1000)
+| 52 |  82 | set_mesc_from_frame | cvt_f_ms               | convert frame count to ms (fast multiply by 1000/60)
+| 53 |  83 | set_ram             | storei                 | store int expr to pointer as dword
+| 54 |  84 | set_ramf            | storef                 | store float expr to pointer as float
+| 55 |  85 | get_ram             | loadi                  | set int expr to int pointer val
+| 56 |  86 | get_ramf            | loadf                  | set float expr to float pointer val
+| 57 |  87 | setr                | storei_ind             | set int expr indirect to int (**out = *in)
+| 58 |  88 | setrf               | storef_ind             | set int expr indirect to float (**out = *in)
+| 59 |  89 | getr                | loadi_ind              | set int expr to expr indirect (*out = **in)
+| 5A |  90 | getrf               | loadf_ind              | set float expr to expr indirect (*out = **in)
+| 5B |  91 | user_func           | callc                  | call C++ function
+| 5C |  92 | run_evt             | callsa                 | call script async
+| 5D |  93 | run_evt_id          | callsa_tid             | call script async and save TID
+| 5E |  94 | run_child_evt       | callss                 | call script sync
+| 5F |  95 | delete_evt          | stop_tid               | terminate thread
+| 60 |  96 | restart_evt         | jump                   | ? jump to pointer
+| 61 |  97 | set_pri             | set_thread_priority    | ? set execution order (unused)
+| 62 |  98 | set_spd             | set_thread_quantum     | set time scale
+| 63 |  99 | set_type            | set_thread_type_mask   | set type mask
+| 64 | 100 | stop_all            | suspend_types          | suspend all threads of type
+| 65 | 101 | start_all           | resume_types           | resume all threads of type
+| 66 | 102 | stop_other          | suspend_types_other    | suspend other threads of type
+| 67 | 103 | start_other         | resume_types_other     | resume other threads of type
+| 68 | 104 | stop_id             | suspend_tid            | suspend thread by ID
+| 69 | 105 | start_id            | resume_tid             | resume thread by ID
+| 6A | 106 | chk_evt             | check_thread_running   | checks if a thread is still running by TID (expr)
+| 6B | 107 | inline_evt          | begin_thread           | Start thread
+| 6C | 108 | inline_evt_id       | begin_thread_tid       | Start thread & save TID
+| 6D | 109 | end_inline          | end_thread             | End thread
+| 6E | 110 | brother_evt         | begin_child_thread     | Start child thread
+| 6F | 111 | brother_evt_id      | begin_child_thread_tid | Start child thread & save TID
+| 70 | 112 | end_brother         | end_child_thread       | End child thread
+| 71 | 113 | debug_put_msg       | dbg_report             | output debug string
+| 72 | 114 | debug_msg_clear     |                        | ? NOP
+| 73 | 115 | debug_put_reg       | dbg_expr_to_string     | Convert expression to debug string
+| 74 | 116 | debug_name          |                        | ? set debug mode
+| 75 | 117 | debug_rem           |                        | ? NOP
+| 76 | 118 | debug_bp            |                        | ? searches for a script context, then doesn't care about the results anyways.
+| 77 | 119 |                     |                        | unused
+| 78 | 120 |                     |                        | unused
+| 79 | 121 |                     |                        | unused
+| 7A | 122 |                     |                        | unused
+| 7B | 123 |                     |                        | unused
+| 7C | 124 |                     |                        | unused
+| 7D | 125 |                     |                        | unused
+| 7E | 126 |                     |                        | unused
+| 7F | 127 |                     |                        | unused
+| 80 | 128 |                     |                        | unused
+| 81 | 129 |                     |                        | unused
+| 82 | 130 |                     |                        | unused
+| 83 | 131 |                     |                        | unused
+| 84 | 132 |                     |                        | unused
+| 85 | 133 |                     |                        | unused
+| 86 | 134 |                     |                        | unused
+| 87 | 135 |                     |                        | unused
+| 88 | 136 |                     |                        | unused
+| 89 | 137 |                     |                        | unused
+| 8A | 138 |                     |                        | unused
+| 8B | 139 |                     |                        | unused
+| 8C | 140 |                     |                        | unused
+| 8D | 141 |                     |                        | unused
+| 8E | 142 |                     |                        | unused
+| 8F | 143 |                     |                        | unused
+| 90 | 144 |                     |                        | unused
+| 91 | 145 |                     |                        | unused
+| 92 | 146 |                     |                        | unused
+| 93 | 147 |                     |                        | unused
+| 94 | 148 |                     |                        | unused
+| 95 | 149 |                     |                        | unused
+| 96 | 150 |                     |                        | unused
+| 97 | 151 |                     |                        | unused
+| 98 | 152 |                     |                        | unused
+| 99 | 153 |                     |                        | unused
+| 9A | 154 |                     |                        | unused
+| 9B | 155 |                     |                        | unused
+| 9C | 156 |                     |                        | unused
+| 9D | 157 |                     |                        | unused
+| 9E | 158 |                     |                        | unused
+| 9F | 159 |                     |                        | unused
+| A0 | 160 |                     |                        | unused
+| A1 | 161 |                     |                        | unused
+| A2 | 162 |                     |                        | unused
+| A3 | 163 |                     |                        | unused
+| A4 | 164 |                     |                        | unused
+| A5 | 165 |                     |                        | unused
+| A6 | 166 |                     |                        | unused
+| A7 | 167 |                     |                        | unused
+| A8 | 168 |                     |                        | unused
+| A9 | 169 |                     |                        | unused
+| AA | 170 |                     |                        | unused
+| AB | 171 |                     |                        | unused
+| AC | 172 |                     |                        | unused
+| AD | 173 |                     |                        | unused
+| AE | 174 |                     |                        | unused
+| AF | 175 |                     |                        | unused
+| B0 | 176 |                     |                        | unused
+| B1 | 177 |                     |                        | unused
+| B2 | 178 |                     |                        | unused
+| B3 | 179 |                     |                        | unused
+| B4 | 180 |                     |                        | unused
+| B5 | 181 |                     |                        | unused
+| B6 | 182 |                     |                        | unused
+| B7 | 183 |                     |                        | unused
+| B8 | 184 |                     |                        | unused
+| B9 | 185 |                     |                        | unused
+| BA | 186 |                     |                        | unused
+| BB | 187 |                     |                        | unused
+| BC | 188 |                     |                        | unused
+| BD | 189 |                     |                        | unused
+| BE | 190 |                     |                        | unused
+| BF | 191 |                     |                        | unused
+| C0 | 192 |                     |                        | unused
+| C1 | 193 |                     |                        | unused
+| C2 | 194 |                     |                        | unused
+| C3 | 195 |                     |                        | unused
+| C4 | 196 |                     |                        | unused
+| C5 | 197 |                     |                        | unused
+| C6 | 198 |                     |                        | unused
+| C7 | 199 |                     |                        | unused
+| C8 | 200 |                     |                        | unused
+| C9 | 201 |                     |                        | unused
+| CA | 202 |                     |                        | unused
+| CB | 203 |                     |                        | unused
+| CC | 204 |                     |                        | unused
+| CD | 205 |                     |                        | unused
+| CE | 206 |                     |                        | unused
+| CF | 207 |                     |                        | unused
+| D0 | 208 |                     |                        | unused
+| D1 | 209 |                     |                        | unused
+| D2 | 210 |                     |                        | unused
+| D3 | 211 |                     |                        | unused
+| D4 | 212 |                     |                        | unused
+| D5 | 213 |                     |                        | unused
+| D6 | 214 |                     |                        | unused
+| D7 | 215 |                     |                        | unused
+| D8 | 216 |                     |                        | unused
+| D9 | 217 |                     |                        | unused
+| DA | 218 |                     |                        | unused
+| DB | 219 |                     |                        | unused
+| DC | 220 |                     |                        | unused
+| DD | 221 |                     |                        | unused
+| DE | 222 |                     |                        | unused
+| DF | 223 |                     |                        | unused
+| E0 | 224 |                     |                        | unused
+| E1 | 225 |                     |                        | unused
+| E2 | 226 |                     |                        | unused
+| E3 | 227 |                     |                        | unused
+| E4 | 228 |                     |                        | unused
+| E5 | 229 |                     |                        | unused
+| E6 | 230 |                     |                        | unused
+| E7 | 231 |                     |                        | unused
+| E8 | 232 |                     |                        | unused
+| E9 | 233 |                     |                        | unused
+| EA | 234 |                     |                        | unused
+| EB | 235 |                     |                        | unused
+| EC | 236 |                     |                        | unused
+| ED | 237 |                     |                        | unused
+| EE | 238 |                     |                        | unused
+| EF | 239 |                     |                        | unused
+| F0 | 240 |                     |                        | unused
+| F1 | 241 |                     |                        | unused
+| F2 | 242 |                     |                        | unused
+| F3 | 243 |                     |                        | unused
+| F4 | 244 |                     |                        | unused
+| F5 | 245 |                     |                        | unused
+| F6 | 246 |                     |                        | unused
+| F7 | 247 |                     |                        | unused
+| F8 | 248 |                     |                        | unused
+| F9 | 249 |                     |                        | unused
+| FA | 250 |                     |                        | unused
+| FB | 251 |                     |                        | unused
+| FC | 252 |                     |                        | unused
+| FD | 253 |                     |                        | unused
+| FE | 254 |                     |                        | unused
+| FF | 255 |                     |                        | unused

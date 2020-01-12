@@ -37,11 +37,11 @@ struct EvtEntry
 	uint32_t lfData;
 	int32_t unk_e0;
 	int32_t unk_e4;
-    void *loopStartAddressStack[8];
-    int32_t loopIterationsLeftStack[8];
-    int8_t switchStateStack[8];
-    int32_t switchValueStack[8];
-    void* memoryCmdBase;
+	void *loopStartAddressStack[8];
+	int32_t loopIterationsLeftStack[8];
+	int8_t switchStateStack[8];
+	int32_t switchValueStack[8];
+	void *memoryCmdBase;
 	void *uwBase;
 	void *ufBase;
 	int32_t threadId;

@@ -242,12 +242,15 @@ def writeVertex(vertex):
 
 def writeFace(vCount):
 	global curFaceStart
-	for v in range(curFaceStart, curFaceStart + vCount-2, 1):
+	for v in range(curFaceStart, curFaceStart + vCount-3, 2):
 		out.write("f " + str(v+1) + " " + str(v+2) + " " + str(v+3) + "\n")
+		out.write("f " + str(v+3) + " " + str(v+2) + " " + str(v+4) + "\n")
+	if vCount % 2 == 1:
+		out.write("f " + str(curFaceStart+vCount-2) + " " + str(curFaceStart+vCount-1) + " " + str(curFaceStart+vCount) + "\n")
 	curFaceStart = vertexCount
 
-def writeGroup(node):
-	out.write("g " + node.name + "\n")
+def writeGroup(name):
+	out.write("g " + name + "\n")
 
 vcdTable = None
 

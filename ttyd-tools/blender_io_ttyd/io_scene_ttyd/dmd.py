@@ -1247,7 +1247,7 @@ class DmdAnimation:
 
 							value = k.co[1]
 							tangent_in = (k.co[1] - k.handle_left[1]) / (k.co[0] - k.handle_left[0])
-							tangent_out = (k.handle_right[1] - k.co[1]) / (k.handle_left[0] - k.co[0])
+							tangent_out = (k.handle_right[1] - k.co[1]) / (k.handle_right[0] - k.co[0])
 							is_step = False
 							break
 

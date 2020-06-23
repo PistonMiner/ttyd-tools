@@ -1,0 +1,220 @@
+//------------------------------------------------
+//--- 010 Editor v9.0.1 Binary Template
+//
+//      File: MarioSt_CameraRoad.bt
+//   Authors: Linus S. (PistonMiner)
+//   Version: 3
+//   Purpose: Template for Paper Mario: The Thousand Year Door /m/*/c files
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+BigEndian();
+
+typedef struct
+{
+    float X;
+    float Y;
+    float Z;
+} Vector<read=Vector_read>;
+
+string Vector_read(const Vector &vec)
+{
+    local string out;
+    SPrintf(out, "%.2f; %.2f; %.2f", vec.X, vec.Y, vec.Z);
+    return out;
+}
+
+typedef struct
+{
+    Vector min;
+    Vector max;
+} Box<read=Box_read>;
+
+string Box_read(const Box &box)
+{
+    local string out;
+    SPrintf(out, "(%s) (%s)", Vector_read(box.min), Vector_read(box.max));
+    return out;
+}
+
+typedef struct
+{
+    uint32 index_offset;
+    uint32 index_count;
+} polygon;
+
+typedef struct
+{
+    char curveName[32];
+    uint32 wbLockY;
+    float wLockedYVal;
+    uint32 bDisabled;
+
+    char pad_2c[0x40 - 0x2c];
+
+    uint32 clampStartSegment;
+    uint32 clampEndSegment;
+    float clampMaxDistanceLeft;
+    float clampMaxDistanceRight;
+
+    // Not seen used
+    float clampStartSegmentProgress;
+    float clampEndSegmentProgress;
+
+    float wCameraToTargetDistance;
+
+    // Unreferenced from code, guess:
+    // Two additional camera-target offsets on different axes
+    float unk_5c[2];
+
+    float camElevationDegrees;
+
+    // Unreferenced from code, guess:
+    // camera azimuth, roll?
+    float unk_68[2];
+
+    float camPitchDegrees; // Angle between cam to target after elevation and final cam direction
+
+    // Unreferenced from code, guess:
+    // camera yaw, roll
+    float unk_74[2];
+
+    float shiftXRate;
+
+    // Unreferenced from code, guess:
+    // shift Z rate
+    float unk_80;
+
+    uint32 wbEnableClamping;
+
+    Box bbox;
+    uint32 curve_data_offset<format=hex>;
+    uint32 curve_data_count;
+    uint32 geometry_offset;
+    uint32 geometry_count;
+    uint32 zero; // type G offset
+    uint32 unk_count; // type G count
+} curve;
+
+typedef struct
+{
+    char geomName[64];
+    Box boundingBox;
+    uint32 vertex_offset;   // This is needed for the vertex base since indices are relative and not absolute
+    uint32 vertex_count;
+    uint32 polygon_offset;
+    uint32 polygon_count;
+} geometry;
+
+typedef struct
+{
+    uint32 totalSize;
+    char type[64];
+    char version[64];
+
+    if (version == "1.01")
+    {
+        Printf("v1.01 - The Thousand Year Door\n");
+    }
+    else if (version == "1.02")
+    {
+        Printf("v1.02 - Super Paper Mario\n");
+    }
+    else if (version == "1.03")
+    {
+        Printf("v1.03 - Color Splash\n");
+    }
+
+    char build_date[64];
+
+    // Three floats:
+    // - FOV? some angle in degrees (used in TTYD US calcCamRoad @ 8000bd20 for camera shift) 
+    // - nearZ? (not seen used but appears logical given common value 0.1)
+    // - farZ? (not seen used but appears logical given common value 1000)
+    uint32 cameraParameterCount;
+    uint32 curveCount;
+    uint32 geometryCount;
+    uint32 polygonCount;
+    uint32 curveDataCount;
+    uint32 vertexCount;
+    uint32 indexCount;
+    uint32 gCount;
+    uint32 hCount;
+
+    if (version == "1.03")
+    {
+        uint32 iCount;
+    }
+
+    // Offsets to things with zero entries sometimes have weird values like 0xFFBF3A10
+    // This is likely an artifact of how these files were built. It's likely that
+    // what they did is subtract out the base address of the buffer to get offsets
+    // instead of pointers. However they also subtract from the null pointers, leading
+    // to that value, which is what you get when you subtract 0x0040C5F0 from a null
+    // pointer, which is likely where this buffer was loaded in memory when the file
+    // was created. It varies a bit with versions, 0xFFBF3A10 is for TTYD.
+    // E.g. SPM has 0-0x0040F114. Color Splash doesn't have this artifact, unused
+    // pointers are simply wedged in between other entries as you might expect.
+    uint32 offsetCameraParameters<format=hex>;
+    uint32 offsetCurves<format=hex>;
+    uint32 offsetGeometry<format=hex>;
+    uint32 offsetPolygons<format=hex>;
+    uint32 offsetCurveData<format=hex>;
+    uint32 offsetVertices<format=hex>;
+    uint32 offsetIndices<format=hex>;
+    uint32 offsetG<format=hex>; // Size is 0x68, alternate type of curve. Presumably used in 1.00
+    uint32 offsetH<format=hex>;
+
+    if (version == "1.03")
+    {
+        uint32 offsetI<format=hex>;
+    }
+
+    if (cameraParameterCount != 0)
+    {
+        FSeek(offsetCameraParameters);
+        Vector cameraParameters[cameraParameterCount];
+    }
+    if (curveCount != 0)
+    {
+        FSeek(offsetCurves);
+        curve curves[curveCount];
+    }
+    if (geometryCount != 0)
+    {
+        FSeek(offsetGeometry);
+        geometry geoms[geometryCount];
+    }
+    if (polygonCount != 0)
+    {
+        FSeek(offsetPolygons);
+        polygon polygons[polygonCount];
+    }
+    if (curveDataCount != 0)
+    {
+        FSeek(offsetCurveData);
+        // X1: point position X
+        // Y1: point progress
+        // Z1: point position Z
+        // X2: point tangent X
+        // Y2: zero (?)
+        // Z2: point tangent Z
+        Vector curveData[curveDataCount];
+    }
+    if (vertexCount != 0)
+    {
+        FSeek(offsetVertices);
+        Vector vertices[vertexCount];
+    }
+    if (indexCount != 0)
+    {
+        FSeek(offsetIndices);
+        uint32 indices[indexCount];
+    }
+} header;
+
+
+header root;

@@ -546,6 +546,16 @@
 8041f070:OSAlloc_HeapArray
 8041f074:OSAlloc_NumHeaps
 
+// demo.a
+// DEMOPuts.c
+802a5340:DEMOInitCaption
+802a559c:DEMOPuts
+802a58ac:DEMOPrintf
+// DEMOStats.c
+802a5970:DEMOWriteStats
+802a5d04:DEMOUpdateStats
+802a5d5c:DEMOPrintStats
+
 // si.a
 802bd7b8:SIBusy
 802bd7d8:SIIsChanBusy

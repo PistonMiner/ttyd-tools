@@ -498,6 +498,41 @@
 80088818:seq_logoExit
 8008885c:seq_logoInit
 
+// evt_shop.o
+800ef564:evtShopIsActive
+// 800ef5b4:evt_shop_main_func
+// 800efa20:unkeep_pouchcheck_func
+// 800efa60:keep_pouchcheck_func
+// 800efaa0:item_data_db_restore
+// 800efae4:item_data_db_arrange
+// 800efb3c:sell_pouchcheck_func
+// 800efb74:name_price
+// 800efc00:get_fook_evt
+// 800efc38:get_ptr
+// 800efc68:set_buy_item_id
+// 800efc9c:get_buy_evt
+// 800efcd4:get_msg
+// 800efd48:get_value
+// 800efe08:disp_off
+// 800efe40:shopper_name
+// 800efe78:shop_point_item
+// 800eff5c:exchange_shop_point
+// 800effd8:chk_shop_point
+// 800f0174:reset_shop_point
+// 800f01a4:add_shop_point
+// 800f02f8:get_shop_point
+// 800f0344:shop_flag_onoff
+// 800f03bc:point_wait
+// 800f040c:point_disp_onoff
+800f0470:evt_shop_setup
+// 800f077c:disp_list
+// 800f0840:list_disp
+// 800f0fa0:title_disp
+// 800f1180:point_disp
+// 800f134c:help_disp
+// 800f13cc:help_main
+// 800f13ec:name_disp
+
 // printf.o
 8026deac:sprintf
 // unused:snprintf

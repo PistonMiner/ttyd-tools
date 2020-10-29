@@ -532,6 +532,30 @@
 // 800f0560:help_main
 // 800f0580:name_disp
 
+// envdrv.o
+80199178:envSetYami
+80199558:envSetYamiView
+80199598:envSetWater
+80199c70:envAddTev
+// 8019b2b4:envTevLoadTexMtxImm
+// 8019ba58:envDisp_FF
+8019c018:envGlareFilterZ
+8019c04c:envGlareFilter
+// 8019c138:envGlare
+8019c758:envBlurOff
+8019c7b4:envBlurOn
+// 8019c8ac:envDisp_Blur
+// 8019cd80:envDisp_DepthOfField
+8019dad0:envMain
+// 8019db5c:envDisp2
+// 8019dc44:envDisp
+// 8019dca0:envCapture2
+// 8019ddbc:envCapture
+8019df84:envTexSetup
+8019e058:envReInit
+8019e09c:envInit
+// 8019e0f0:_callback
+
 // printf.c
 8026a0b8:sprintf
 // unused:snprintf

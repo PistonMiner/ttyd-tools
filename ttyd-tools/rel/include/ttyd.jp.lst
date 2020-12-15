@@ -420,6 +420,103 @@
 8005d204:marioGetColor
 8005d214:marioGetPtr
 
+// evt_mobj.o
+80060924:evt_mobj_koopa_pole
+// 80060b98:mobj_koopa_pole_evt
+// 80060f78:kpa_clear_jump_data
+// 80060fa4:kpa_disp_pole_init
+// 80060ff4:kpa_disp_pole_score_main
+// 80061100:kpa_disp_pole_score
+// 80061178:kpa_score_to_str
+// 800612c0:kpa_get_width
+// 80061318:kpa_get_level
+// 80061364:kpa_get_hata_name
+// 800613b0:kpa_get_pole_name
+800613fc:evt_mobj_koopa_fireber_dodai
+// 800616ec:mobj_koopa_fireber_dodai_evt
+80061c28:evt_mobj_koopa_sango
+// 80061dc4:mobj_koopa_sango_evt
+// 80062154:fire_func
+800622c4:evt_mobj_koopa_dokan
+// 8006249c:mobj_koopa_dokan_evt
+8006269c:evt_mobj_koopa_blk
+// 80062800:mobj_koopa_blk
+8006293c:evt_mobj_koopa_hidden_blk
+80062ae0:evt_mobj_koopa_badgeblk
+// 80062c6c:mobj_koopa_badgeblk
+80062f70:evt_mobj_koopa_brick
+// 80063138:mobj_koopa_brickblk
+80063498:evt_mobj_koopa_stone_blk
+// 800635f4:mobj_koopa_stone_blk_evt
+800635fc:evt_mobj_koopa_ojama_blk
+// 80063780:mobj_koopa_ojama_blk_evt
+// 800639d0:kpa_powerup
+80063a58:evt_mobj_kururing_floor
+// 80063c3c:mobj_kururing_floor
+// 800643e4:kururing_capture
+80064740:evt_mobj_breaking_floor
+// 80064904:mobj_breaking_floor
+80064a88:evt_mobj_brick
+// 80064dd4:mobj_10countblk
+// 80065038:mobj_brickblk
+80065334:evt_mobj_powerupblk
+// 800654b4:mobj_powerupblk
+80065738:evt_mobj_badgeblk
+// 800658ec:mobj_badgeblk
+80065bf0:evt_mobj_save_blk
+// 80065d74:mobj_save_blk
+80065f00:evt_mobj_recovery_blk
+// 800660a4:mobj_recovery_blk
+80066694:evt_mobj_signboard
+// 800667c8:mobj_signboard
+80066868:evt_mobj_itembox
+// 80066be8:mobj_itembox
+800670c8:evt_mobj_lock
+// 80067270:mobj_lock
+800676d4:evt_mobj_lock_unlock
+8006776c:evt_mobj_switch_float_blk
+// 800679d8:mobj_switch_float_blk
+80068040:evt_mobj_float_blk
+// 800682e4:mobj_float_blk
+80068458:evt_mobj_lv_blk
+// 80068604:mobj_lv_blk_evt
+80068a94:evt_mobj_jumpstand_blue
+// 80068c18:mobj_jumpstand_blue
+80068e40:evt_mobj_jumpstand_red
+// 80068fb8:mobj_jumpstand_red
+80069224:evt_mobj_rideswitch_lightblue
+// 800693a8:mobj_rideswitch_lightblue
+80069648:evt_mobj_timerswitch
+// 80069890:mobj_timerswitch
+80069bc0:evt_mobj_floatswitch_red
+80069d24:evt_mobj_switch_red
+// 80069eb0:mobj_switch_red
+80069fe0:evt_mobj_tornadoswitch_blue
+8006a144:evt_mobj_floatswitch_blue
+8006a2a8:evt_mobj_switch_blue
+// 8006a450:mobj_switch_blue
+8006a580:evt_mobj_hit_onoff
+8006a640:evt_mobj_hitevt_onoff
+8006a6e4:evt_mobj_set_camid
+8006a768:evt_mobj_wait_animation_end
+8006a7e8:evt_mobj_set_anim
+8006a87c:evt_mobj_set_gravity_bound
+8006a928:evt_mobj_exec_cancel
+8006a99c:evt_mobj_set_z_position
+8006aa58:evt_mobj_set_y_position
+8006ab14:evt_mobj_set_x_position
+8006abd0:evt_mobj_set_position
+8006acdc:evt_mobj_get_z_position
+8006ad5c:evt_mobj_get_y_position
+8006addc:evt_mobj_get_x_position
+8006ae5c:evt_mobj_get_position
+8006aefc:evt_mobj_set_scale
+8006aff8:evt_mobj_get_kindname
+8006b050:evt_mobj_flag_onoff
+8006b0d4:evt_mobj_check
+8006b128:evt_mobj_delete
+8006b158:evt_mobj_entry
+
 // mariost.o
 // unused:gcResetDone
 // unused:gcResetCheck

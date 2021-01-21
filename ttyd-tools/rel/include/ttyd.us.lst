@@ -581,6 +581,88 @@
 80077bdc:fontmgrTexSetup
 80077c08:fontmgrInit
 
+// evt_bero.o
+// text
+// 80078a74:evt_camera_change_event_from_road
+// 80078c1c:evt_bero_1stcheck
+80078c90:evt_bero_mario_go_wait
+80078cac:evt_bero_mario_go
+80078cbc:evt_bero_mario_go_init
+// 80078ccc:evt_bero_cam_shift_init
+// 80078cf4:evt_bero_cam3d_change
+80078e08:evt_bero_overwrite
+// 80078ee8:evt_bero_move_mario_speed
+// 80079198:evt_bero_disppos_load
+// 800791ec:evt_bero_disppos_save
+80079230:evt_bero_case_id_load
+8007928c:evt_bero_case_id_save
+800792ec:evt_bero_get_number
+800793ac:evt_bero_switch_off
+800794b0:evt_bero_switch_on
+// 800795b4:bero_set_disp_position_pipe
+// 80079684:bero_get_position_pipe2
+// 800797d0:bero_get_position_pipe_pure
+// 800798b8:bero_get_position_pipe_sub
+80079b74:bero_get_position_normal
+80079e84:evt_bero_get_info_num
+8007a088:evt_bero_id_filter
+// 8007a154:evt_bero_read_mario_pera
+8007a214:evt_bero_get_into_info
+8007a50c:evt_bero_get_info
+8007a60c:evt_bero_get_now_number
+8007a63c:evt_bero_set_now_number
+8007a66c:evt_bero_get_info_nextarea
+8007a6e4:evt_bero_get_info_kinddir
+8007a76c:evt_bero_get_info_length
+8007a860:evt_bero_get_info_anime
+8007a8f8:evt_bero_get_end_position
+8007a95c:evt_bero_get_start_position
+8007a9c0:evt_bero_exec_wait
+8007aa04:evt_bero_exec_get
+8007aa34:evt_bero_exec_onoff
+8007aa9c:evt_bero_get_entername
+8007aad0:evt_bero_mapchange
+8007ab44:bero_id_filter
+8007abe8:bero_clear_Offset
+8007abfc:bero_get_ptr
+8007ac08:bero_get_BeroEZ
+8007ac10:bero_get_BeroEY
+8007ac18:bero_get_BeroEX
+8007ac20:bero_get_BeroSZ
+8007ac28:bero_get_BeroSY
+8007ac30:bero_get_BeroSX
+8007ac38:bero_get_BeroNUM
+8007ac40:bero_get_BeroEXEC
+// 8007ac48:N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos
+// 8007ac7c:N_evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry
+// data
+// 8030cdb4:evt_bero_nonride_check
+8030ce48:bero_open_door_play_se
+8030d138:bero_close_door_play_se
+8030d428:bero_play_enter_anime
+8030d674:bero_play_out_anime
+// 8030d888:bero_case_init_check
+// 8030da14:bero_case_exec_none
+// 8030dac8:bero_case_exec_road
+// 8030dbf4:bero_case_exec_door
+// 8030dd58:bero_case_exec_pipe_sub
+// 8030e28c:bero_case_exec_pipe
+// 8030e554:bero_case_exec_gate
+8030e608:bero_case_entry
+// 8030e798:bero_case_entry_sub
+8030e8b4:bero_case_switch_on
+8030e900:bero_case_switch_off
+// 8030e97c:evt_bero_info_run_road
+// 8030ea20:evt_bero_info_run_door
+// 8030eadc:evt_bero_info_run_pipe_sub00
+// 8030eba8:evt_bero_info_run_pipe
+8030ec7c:evt_bero_info_run
+// 8030f060:evt_bero_initial_pos
+// 8030f2d8:evt_bero_mario_enter
+// sdata
+// 80416088:evt_bero_info_run_none
+// 8041609c:evt_bero_info_run_gate
+
 // database.o
 80084f24:setupDataBase
 8008558c:setupDataCheck

@@ -733,7 +733,13 @@
 80198330:envInit
 // 80198384:_callback
 
-// printf.o
+// MSL_C.PPCEABI.bare.H.a mem.c
+80263cb8:memcmp
+// 80263d04:__memrchr
+80263d30:memchr
+80263d5c:memmove
+
+// MSL_C.PPCEABI.bare.H.a printf.c
 80264108:sprintf
 // unused:snprintf
 802641e8:vsprintf
@@ -752,13 +758,13 @@
 // 80265aac:long2str
 // 80265d04:parse_format
 
-// scanf.c
+// MSL_C.PPCEABI.bare.H.a scanf.c
 80266394:sscanf
 // 80266458:__StringRead
 // 802664e8:__sformatter
 // 80266e94:parse_format
 
-// string.c
+// MSL_C.PPCEABI.bare.H.a string.c
 802673dc:strchr
 8026740c:strncmp
 8026744c:strcmp
@@ -780,6 +786,40 @@
 // data
 80418ea0:OSAlloc_HeapArray
 80418ea4:OSAlloc_NumHeaps
+
+// os.a OSCache.c
+802909fc:DCEnable
+80290a10:DCInvalidateRange
+80290a3c:DCFlushRange
+80290a6c:DCStoreRange
+80290a9c:DCFlushRangeNoSync
+80290ac8:DCStoreRangeNoSync
+80290af4:DCZeroRange
+80290b20:ICInvalidateRange
+80290b54:ICFlashInvalidate
+80290b64:ICEnable
+// 80290b78:__LCEnable
+80290c44:LCEnable
+80290c7c:LCDisable
+80290ca4:LCStoreBlocks
+80290cc8:LCStoreData
+80290d74:LCQueueWait
+80290d88:L2GlobalInvalidate
+80290e20:DMAErrorHandler
+80290f80:__OSCacheInit
+
+// os.a OSError.c
+80291a10:OSReport
+80291a90:OSPanic
+80291bbc:OSSetErrorHandler
+80291dd4:__OSUnhandledException
+
+// os.a OSTime.c
+80297a48:OSGetTime
+80297a60:OSGetTick
+80297a68:__OSGetSystemTime
+// 80297acc:GetDates
+80297c68:OSTicksToCalendarTime
 
 // demo.a
 // DEMOPuts.c

@@ -831,6 +831,32 @@
 8029ff00:DEMOUpdateStats
 8029ff58:DEMOPrintStats
 
+// exi.a EXIBios.c
+// 802b5a20:SetExiInterruptMask
+802b5b14:EXIImm
+802b5d70:EXIImmEx
+802b5e10:EXIDma
+802b5efc:EXISync
+802b6148:EXIClearInterrupts
+802b6190:EXISetExiCallback
+// 802b620c:__EXIProbe
+802b6380:EXIProbe
+802b6400:EXIProbeEx
+802b64b4:EXIAttach
+802b65c0:EXIDetach
+802b667c:EXISelect
+802b67a8:EXIDeselect
+// 802b68b8:EXIIntrruptHandler
+// 802b6980:TCIntrruptHandler
+// 802b6b98:EXTIntrruptHandler
+802b6c68:EXIInit
+802b6e3c:EXILock
+802b6f30:EXIUnlock
+802b700c:EXIGetState
+// 802b7024:UnlockedHandler
+802b704c:EXIGetID
+802b73fc:EXIGetType
+
 // si.a
 802b7acc:SIBusy
 802b7aec:SIIsChanBusy

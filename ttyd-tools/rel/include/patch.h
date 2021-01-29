@@ -1,5 +1,7 @@
 #pragma once
 
+#include <gc/os.h>
+
 #include <cstdint>
 
 namespace mod::patch {
@@ -20,6 +22,10 @@ Func hookFunction(Func function, Dest destination)
 	// Write actual hook
 	writeBranch(&instructions[0], reinterpret_cast<void *>(static_cast<Func>(destination)));
 	
+	// Make relocated instruction visible
+	gc::os::DCFlushRange(trampoline, sizeof(uint32_t));
+	gc::os::ICInvalidateRange(trampoline, sizeof(uint32_t));
+
 	return reinterpret_cast<Func>(trampoline);
 }
 

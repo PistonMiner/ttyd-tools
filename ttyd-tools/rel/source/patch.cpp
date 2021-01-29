@@ -12,6 +12,10 @@ void writeBranch(void *ptr, void *destination)
 	
 	uint32_t *p = reinterpret_cast<uint32_t *>(ptr);
 	*p = value;
+
+	// Make visible
+	gc::os::DCFlushRange(destination, sizeof(uint32_t));
+	gc::os::ICInvalidateRange(destination, sizeof(uint32_t));
 }
 
 }

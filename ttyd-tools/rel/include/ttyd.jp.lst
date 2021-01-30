@@ -808,6 +808,22 @@
 80290e20:DMAErrorHandler
 80290f80:__OSCacheInit
 
+// os.a OSContext.c
+80291074:__OSLoadFPUContext
+80291198:__OSSaveFPUContext
+802912c0:OSSaveFPUContext
+802912c8:OSSetCurrentContext
+80291324:OSGetCurrentContext
+80291330:OSSaveContext
+802913b0:OSLoadContext
+80291488:OSGetStackPointer
+80291490:OSClearContext
+802914b4:OSInitContext
+80291570:OSDumpContext
+// 80291818:OSSwitchFPUContext
+8029189c:__OSContextInit
+802918e4:OSFillFPUContext
+
 // os.a OSError.c
 80291a10:OSReport
 80291a90:OSPanic

@@ -168,6 +168,81 @@
 800392c8:areaDataPtr
 80039360:mapDataPtr
 
+// animdrv.o
+800394ac:animPoseGetGroupName
+800394e8:animPoseGetGroupIdx
+80039594:animPoseGetShapeIdx
+80039640:animPoseDrawShape
+800398d8:animPoseSetDispCallBack
+800398f4:animPoseGetVivianType
+8003990c:animPoseVivianMain
+80039944:animPoseWorldMatrixEvalOn
+800399fc:L_animPoseWorldPositionEvalOff
+80039a54:animPoseWorldPositionEvalOn
+// 80039b0c:evalProc
+80039cf4:animPoseTestXLU
+80039d2c:animPoseGetCurrentAnim
+80039d6c:animPoseGetAnimBaseDataPtr
+80039d9c:animPoseGetAnimDataPtr
+80039de0:animPoseGetAnimPosePtr
+80039df4:animGroupBaseAsync
+80039f28:animSetPaperTexMtx
+80039ff4:animPoseDisp_MakeExtTexture
+// 8003a778:animPaperPoseDispSub
+// 8003b098:animPaperPoseDisp
+8003b110:animPoseAutoRelease
+8003b2dc:animPaperPoseRelease
+8003b3b8:animPoseRelease
+8003b54c:animSetPaperTexObj
+8003b5c0:animPoseDrawMtx
+8003bd50:_animPoseDrawMtx
+8003c538:animPoseDraw
+// 8003c5a4:dispProc
+// 8003c96c:renderProc
+// 8003d6f4:materialProc
+// 8003dde4:animSetMaterial_Texture
+// 8003e390:pushGXModelMtx_JointNode__
+// 8003e8d4:pushGXModelMtx_TransformNode__
+8003ee14:animPoseMain
+80040754:animPoseGetMaterialEvtColor
+8004076c:animPoseGetMaterialLightFlag
+80040784:animPoseGetMaterialFlag
+8004079c:animPoseSetMaterialEvtColor
+800407b8:animPoseSetMaterialLightFlagOff
+800407d8:animPoseSetMaterialLightFlagOn
+800407f8:animPoseSetMaterialFlagOff
+80040818:animPoseSetMaterialFlagOn
+80040838:animPoseGetPeraEnd
+80040884:animPoseGetLoopTimes
+8004089c:animPoseGetHeight
+80040900:animPoseGetRadius
+80040964:animPoseSetGXFunc
+80040980:animPoseSetEffectAnim
+80040b10:animPoseSetEffect
+80040d8c:animPoseSetPaperAnim
+80040eec:animPoseSetPaperAnimGroup
+80041174:animPaperPoseGetId
+80041258:animPoseSetAnim
+800413d4:animPoseSetStartTime
+800413f4:animPoseSetLocalTime
+80041514:animPoseSetLocalTimeRate
+8004152c:animPosePaperPeraOff
+80041554:animPosePaperPeraOn
+80041598:animPosePeraOff
+800415b4:animPosePeraOn
+800415d0:animEffectAsync
+80041708:animPaperPoseEntry
+80041854:animPoseEntry
+80041d40:animPoseBattleInit
+80041d6c:animPoseRefresh
+// 80041fc8:animPose_AllocBuffer
+80042904:animMain
+8004293c:animInit
+// 80042bb0:testAlloc
+// 80042f44:initTestHeap
+80042f90:animTimeGetTime
+80043018:animGetPtr
+
 // npcdrv.o
 80043020:fbatPreventMarioEventChk
 80043054:npcCheckBlow

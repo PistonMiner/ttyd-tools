@@ -53,7 +53,7 @@ gc::color4 animPoseGetMaterialEvtColor(int32_t poseId);
 
 void animPoseMain(int32_t poseId);
 void animPoseDraw(int32_t poseId, int32_t wXluStage, float x, float y, float z, float rotY, float scale);
-void _animPoseDrawMtx(AnimPose *pose, const gx::mat3x4 *mat, int32_t wXluStage, float rotY, float scale);
+void _animPoseDrawMtx(AnimPose *pose, const gc::mat3x4 *mat, int32_t wXluStage, float rotY, float scale);
 void animPoseDrawMtx(int32_t poseId, const gc::mat3x4 *mat, int32_t wXluStage, float rotY, float scale);
 // animSetPaperTexObj
 
@@ -79,7 +79,7 @@ void animPoseWorldMatrixEvalOn(int32_t poseId);
 void animPoseVivianMain(int32_t poseId, const gc::vec3 *position);
 int32_t animPoseGetVivianType(int32_t poseId);
 
-void animPoseSetDispCallBack(int32_t poseId, void (*dispCb)(void *user, int32_t groupId, gx::mat3x4 *mat), void *user);
+void animPoseSetDispCallBack(int32_t poseId, void (*dispCb)(void *user, int32_t groupId, gc::mat3x4 *mat), void *user);
 void animPoseDrawShape(int32_t poseId, int32_t shapeId);
 int32_t animPoseGetShapeIdx(int32_t poseId, const char *shapeName);
 int32_t animPoseGetGroupIdx(int32_t poseId, const char *groupName);

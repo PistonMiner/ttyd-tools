@@ -7,10 +7,6 @@
 #define EVT_END() \
 	0x1 };
 
-// For ending an array of evt commands without an "end" op; e.g. patching
-// commands over the middle of an existing event.  Should not be generally used.
-#define EVT_PATCH_END() } ;
-
 #define EVT_HELPER_OP(op) \
 	reinterpret_cast<int32_t>((op))
 
@@ -296,7 +292,7 @@ using evt_helper_int_array = int32_t[];
     
 // User function calls with unchecked parameter counts.
 // (Alternative to using the EVT_DECLARE_USER_FUNC macro w/-1)
-#define UNCHECKED_USER_FUNC(function, ...) \
+#define USER_FUNC_UNSAFE(function, ...) \
 	EVT_HELPER_CMD(1 + EVT_HELPER_NUM_ARGS(__VA_ARGS__), 91), \
 	reinterpret_cast<int32_t>(function), \
 	##__VA_ARGS__ ,

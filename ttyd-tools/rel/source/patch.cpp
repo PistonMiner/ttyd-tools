@@ -14,8 +14,8 @@ void writeBranch(void *ptr, void *destination)
 	*p = value;
 
 	// Make visible
-	gc::os::DCFlushRange(destination, sizeof(uint32_t));
-	gc::os::ICInvalidateRange(destination, sizeof(uint32_t));
+	gc::os::DCFlushRange(p, sizeof(uint32_t));
+	gc::os::ICInvalidateRange(p, sizeof(uint32_t));
 }
 
 }

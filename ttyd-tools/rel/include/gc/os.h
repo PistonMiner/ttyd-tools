@@ -68,6 +68,8 @@ struct OSContext
 	double fpr_ps[32];
 } __attribute__((__packed__));
 
+static_assert(sizeof(OSContext) == 0x2c8);
+
 extern "C" {
 
 void OSInitContext(OSContext *context, uint32_t srr0, uint32_t r1);

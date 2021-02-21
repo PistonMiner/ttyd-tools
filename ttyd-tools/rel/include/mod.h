@@ -1,9 +1,49 @@
 #pragma once
 
-#include "timer.h"
-#include "keyboard.h"
+#include "util.h"
+#include "console.h"
 
 #include <cstdint>
+
+struct ModInitFunction
+{
+	ModInitFunction(void (*f)())
+	{
+		next = sFirst;
+		sFirst = this;
+		initFunction = f;
+	}
+
+	ModInitFunction *next;
+	void (*initFunction)();
+
+	static ModInitFunction *sFirst;
+};
+
+struct ModUpdateFunction
+{
+	ModUpdateFunction(void (*f)())
+	{
+		next = sFirst;
+		sFirst = this;
+		updateFunction = f;
+	}
+
+	ModUpdateFunction *next;
+	void (*updateFunction)();
+
+	static ModUpdateFunction *sFirst;
+};
+
+#define MOD_INTERNAL_ADD_FUNCTION(type) \
+	static void MOD_ANONYMOUS(mod_if_func)(); \
+	static type MOD_ANONYMOUS(mod_if_obj)(MOD_ANONYMOUS(mod_if_func)); \
+	static void MOD_ANONYMOUS(mod_if_func)()
+
+#define MOD_INIT_FUNCTION() \
+	MOD_INTERNAL_ADD_FUNCTION(ModInitFunction)
+#define MOD_UPDATE_FUNCTION() \
+	MOD_INTERNAL_ADD_FUNCTION(ModUpdateFunction)
 
 namespace mod {
 
@@ -12,36 +52,15 @@ class Mod
 public:
 	Mod();
 	void init();
-	
+
 private:
 	void updateEarly();
 	void draw();
 
-	void updateConsole();
-	void processCommand(const char *command);
-	void updateHeapInfo();
-	
-	void drawConsole();
-	void drawMovementInfo();
-	void drawHeapInfo();
-
 private:
 	void (*mPFN_makeKey_trampoline)() = nullptr;
-	
-	bool mShowUi = true;
-	char mDisplayBuffer[256];
 
-	bool mShowMovementInfo = false;
-
-	char mCommandBuffer[64] = "";
-	int mBackspaceHoldTimer = 0;
-
-	bool mConsoleActive = false;
-
-	int mDebugHeapId = -1;
-	char mDebugHeapText[64];
-
-	Keyboard *mKeyboard = nullptr;
+	ConsoleSystem mConsole;
 };
 
 }

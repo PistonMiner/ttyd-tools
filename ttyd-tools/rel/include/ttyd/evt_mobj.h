@@ -238,7 +238,6 @@ EVT_DECLARE_USER_FUNC(evt_mobj_breaking_floor, 7)
 EVT_DECLARE_USER_FUNC(evt_mobj_kururing_floor, 7)
 
 #if TTYD_EU
-// TODO(LinusS): Add remaining EU MOBJs
 // evt_mobj_trap_floor(char *name, float x, float y, float z, char *mapobj_name, int unused, int &used)
 // Only available on EU due to `tst`.
 EVT_DECLARE_USER_FUNC(evt_mobj_trap_floor, 7)

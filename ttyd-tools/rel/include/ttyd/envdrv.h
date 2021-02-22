@@ -118,6 +118,7 @@ void envMain();
 void envBlurOn(int32_t bStatic, int32_t duration);
 void envBlurOff();
 
+// Glare, used in Riverside. 
 void envGlareFilter(int32_t type, int16_t top, int16_t left, int16_t bottom, int16_t right);
 void envGlareFilterZ(float z);
 

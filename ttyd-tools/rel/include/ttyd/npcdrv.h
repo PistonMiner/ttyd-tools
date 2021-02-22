@@ -92,7 +92,7 @@ struct NpcEntry
 {
 	uint32_t flags;
 	uint32_t reactionFlags;
-	char wUnkAnimation[32];
+	char name[32];
 	NpcTribeDescription *tribe;
 	char currentAnimation[32];
 	char stayAnimation[32];

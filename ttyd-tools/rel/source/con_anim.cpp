@@ -21,6 +21,8 @@ ConIntVar ap_view_tx("ap_view_tx", 0);
 ConIntVar ap_view_ty("ap_view_ty", 0);
 ConIntVar ap_view_tz("ap_view_tz", 0);
 ConIntVar ap_view_scale("ap_view_scale", 20);
+ConIntVar ap_view_ry("ap_view_ry", 0);
+ConIntVar ap_view_ry_rate("ap_view_ry_rate", 0);
 
 ConIntVar ap_view_anim_id("ap_view_anim_id", 0);
 ConIntVar ap_view_anim_cycle("ap_view_anim_cycle", 0);
@@ -48,6 +50,9 @@ ConCommand ap_view("ap_view", [](const char *args)
 
 		// Reset anim ID to avoid going out of bounds on new model
 		ap_view_anim_id.value = 0;
+
+		// Reset rotation
+		ap_view_ry.value = 0;
 	}
 });
 
@@ -90,6 +95,20 @@ MOD_UPDATE_FUNCTION()
 	animPoseSetAnim(gApViewPoseId, anim_name, 0);
 	animPoseMain(gApViewPoseId);
 
+	// Rotate
+	if (ap_view_ry_rate.value != 0)
+	{
+		ap_view_ry.value += ap_view_ry_rate.value;
+	}
+	while (ap_view_ry.value >= 3600)
+	{
+		ap_view_ry.value -= 3600;
+	}
+	while (ap_view_ry.value < 0)
+	{
+		ap_view_ry.value += 3600;
+	}
+
 	// FIXME: Transparency doesn't work properly
 	ttyd::dispdrv::dispEntry(
 		ttyd::dispdrv::CameraId::k3d, 1, 0.f,
@@ -104,10 +123,11 @@ MOD_UPDATE_FUNCTION()
 			mat.a[3]  = ap_view_tx.value;
 			mat.a[7]  = ap_view_ty.value;
 			mat.a[11] = ap_view_tz.value;
+			float rot_y = ap_view_ry.value * 0.1f;
 
-			animPoseDrawMtx(gApViewPoseId, &mat, 1, 0.f, 1.f);
-			animPoseDrawMtx(gApViewPoseId, &mat, 2, 0.f, 1.f);
-			animPoseDrawMtx(gApViewPoseId, &mat, 3, 0.f, 1.f);
+			animPoseDrawMtx(gApViewPoseId, &mat, 1, rot_y, 1.f);
+			animPoseDrawMtx(gApViewPoseId, &mat, 2, rot_y, 1.f);
+			animPoseDrawMtx(gApViewPoseId, &mat, 3, rot_y, 1.f);
 		},
 		nullptr
 	);

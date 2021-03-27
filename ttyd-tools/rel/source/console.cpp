@@ -30,6 +30,25 @@ ConIntVar con_log_fade("con_log_fade", 1);
 ConIntVar con_log_fade_start("con_log_fade_start", 3000);
 ConIntVar con_log_fade_duration("con_log_fade_duration", 1000);
 
+void CC_find(const char *args)
+{
+	char filter[128] = "";
+	if (sscanf(args, "%127s", filter) > 1)
+		return;
+
+	for (ConCommand *cc = ConCommand::sFirst; cc; cc = cc->next)
+	{
+		if (strstr(cc->name, filter))
+			gConsole->logInfo("%s [cmd]\n", cc->name);
+	}
+	for (ConIntVar *cv = ConIntVar::sFirst; cv; cv = cv->next)
+	{
+		if (strstr(cv->name, filter))
+			gConsole->logInfo("%s [int=%d]\n", cv->name, cv->value);
+	}
+}
+ConCommand find("find", CC_find);
+
 static void DemoFontSetColor(gc::color4 color)
 {
 #if TTYD_US

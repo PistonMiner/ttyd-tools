@@ -29,6 +29,7 @@ private:
 	static ConCommand *sFirst;
 
 	friend class ConsoleSystem;
+	friend void CC_find(const char *args);
 };
 
 class ConIntVar
@@ -56,6 +57,7 @@ private:
 	static ConIntVar *sFirst;
 
 	friend class ConsoleSystem;
+	friend void CC_find(const char *args);
 };
 
 

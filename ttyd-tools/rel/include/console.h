@@ -99,6 +99,7 @@ private:
 	void drawLine(int line, const char *text, gc::color4 color = {0xff,0xff,0xff,0xff});
 
 	void updatePrompt();
+	void updateUsbGecko();
 	void processCommand(const char *text);
 	void disp();
 
@@ -127,6 +128,9 @@ private:
 	char mPromptBuffer[64] = "";
 	int mBackspaceHoldTimer = 0;
 	Keyboard mKeyboard;
+
+	int mUgBufferSize = 0;
+	char mUgBuffer[64];
 };
 
 }

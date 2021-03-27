@@ -1,5 +1,6 @@
 #include "console.h"
 
+#include "ug.h"
 #include "util.h"
 
 #include <ttyd/mario.h>
@@ -29,6 +30,10 @@ ConIntVar con_log_level("con_log_level", 0);
 ConIntVar con_log_fade("con_log_fade", 1);
 ConIntVar con_log_fade_start("con_log_fade_start", 3000);
 ConIntVar con_log_fade_duration("con_log_fade_duration", 1000);
+
+ConIntVar con_ug_mode("con_ug_mode", 2);
+ConIntVar con_ug_chan("con_ug_chan", 1);
+ConIntVar con_ug_send_block("con_ug_send_block", 1);
 
 void CC_find(const char *args)
 {
@@ -95,6 +100,7 @@ void ConsoleSystem::init()
 
 void ConsoleSystem::update()
 {
+	updateUsbGecko();
 	updatePrompt();
 
 	ttyd::dispdrv::CameraId cam_id;
@@ -180,6 +186,24 @@ void ConsoleSystem::logDebug(const char *fmt, ...)
 
 void ConsoleSystem::logColor(const char *log_text, gc::color4 color)
 {
+	// Send to USB Gecko if enabled
+	// We really don't want to probe every time we log, so we don't. If the UG
+	// is detached, the per-frame probe will switch back into standby
+	if (con_ug_mode.value == 1)
+	{
+		int chan = con_ug_chan.value;
+
+		const char *data_left = log_text;
+		int size_left = strlen(log_text);
+		while (size_left > 0)
+		{
+			int got = ugSend(chan, data_left, size_left);
+			if (got < 0)
+				break;
+			size_left -= got;
+		}
+	}
+
 	// Cut off until it fits
 	int num_lines = CountLines(log_text);
 	int max_lines = MOD_ARRAYSIZE(mLogLines);
@@ -347,6 +371,72 @@ void ConsoleSystem::updatePrompt()
 	{
 		// Erase one per frame
 		mPromptBuffer[--bufferLen] = '\0';
+	}
+}
+
+void ConsoleSystem::updateUsbGecko()
+{
+	if (!con_ug_mode.value)
+		return;
+
+	// Make sure there's a UG inserted
+	int chan = con_ug_chan.value;
+	if (!ugProbe(chan))
+	{
+		if (con_ug_mode.value == 1)
+		{
+			// Switch to standby to avoid sending random commands to EXI
+			// devices which might be attached after the UG
+			logWarning(
+				"Console UG enabled but none attached to slot %c, switching to standby\n",
+				'A' + chan
+			);
+			con_ug_mode.value = 2;
+		}
+		return;
+	}
+
+	// Receive as much as able
+	int size_left = MOD_ARRAYSIZE(mUgBuffer) - mUgBufferSize;
+	int got = ugRecv(chan, mUgBuffer + mUgBufferSize, size_left);
+	if (got < 0)
+		return;
+	mUgBufferSize += got;
+
+	// Process commands
+	while (true)
+	{
+		char *cmd_end = strchr(mUgBuffer, '\n');
+		if (!cmd_end)
+			break;
+
+		// Switch from standby to enabled when we receive a command
+		if (con_ug_mode.value == 2)
+		{
+			con_ug_mode.value = 1;
+		}
+		*cmd_end = '\0';
+		processCommand(mUgBuffer);
+
+		// Move up buffer
+		int cmd_size = cmd_end + 1 - mUgBuffer;
+		memmove(
+			mUgBuffer,
+			mUgBuffer + cmd_size,
+			mUgBufferSize - cmd_size
+		);
+		mUgBufferSize -= cmd_size;
+	}
+
+	// Check for overflow
+	if (mUgBufferSize == MOD_ARRAYSIZE(mUgBuffer))
+	{
+		// We could execute the truncated command but that seems worse than
+		// dropping the buffer. The unfortunate side effect is that we will
+		// probably execute the *back* part of the command as a new one, but
+		// that's probably better.
+		logError("Console UG buffer overflow, command dropped\n");
+		mUgBufferSize = 0;
 	}
 }
 

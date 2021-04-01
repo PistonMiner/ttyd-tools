@@ -4,6 +4,7 @@
 #pragma once
 
 #include <vector>
+#include <cstdint>
 
 enum RelRelocationType
 {

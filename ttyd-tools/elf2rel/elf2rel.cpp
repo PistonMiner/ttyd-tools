@@ -36,7 +36,7 @@ std::map<std::string, SymbolLocation> loadSymbolMap(const std::string &filename)
 		}
 
 		// dol symbols:    addr:symbolName
-		// rel symbols:    addr:symbolName?moduleId,sectionId
+		// rel symbols:    offset:symbolName?moduleId,sectionId
 		size_t index = line.find_first_of(':'); // addr-name separator
 		size_t index2 = line.find_first_of('?', index); // name-module separator
 		size_t index3 = line.find_first_of(',', index2); // module-section separator

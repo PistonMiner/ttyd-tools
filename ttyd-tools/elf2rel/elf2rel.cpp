@@ -55,7 +55,7 @@ std::map<std::string, SymbolLocation> loadSymbolMap(const std::string &filename)
 		if (dol)
 			moduleId = 0;
 		else
-			moduleId = strtoul(line.substr(index2 + 1, index3).c_str(), nullptr, 10);
+			moduleId = strtoul(line.substr(index2 + 1, index3 - (index2 + 1)).c_str(), nullptr, 10);
 
 		uint32_t sectionId;
 		if (dol)

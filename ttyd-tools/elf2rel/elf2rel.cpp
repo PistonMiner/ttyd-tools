@@ -13,9 +13,16 @@
 #include <tuple>
 #include <deque>
 
-std::map<std::string, uint32_t> loadSymbolMap(const std::string &filename)
+struct SymbolLocation
 {
-	std::map<std::string, uint32_t> outputMap;
+	uint32_t moduleId; // 0 means dol
+	uint32_t targetSection; // OSLink ignores for dol
+	uint32_t addr;
+};
+
+std::map<std::string, SymbolLocation> loadSymbolMap(const std::string &filename)
+{
+	std::map<std::string, SymbolLocation> outputMap;
 
 	std::ifstream inputStream(filename);
 	for (std::string line; std::getline(inputStream, line); )
@@ -28,14 +35,51 @@ std::map<std::string, uint32_t> loadSymbolMap(const std::string &filename)
 			continue;
 		}
 
-		size_t index = line.find_first_of(':');
+		// dol symbols:    addr:symbolName
+		// rel symbols:    offset:symbolName?moduleId,sectionId
+		size_t index = line.find_first_of(':'); // addr-name separator
+		size_t index2 = line.find_first_of('?', index); // name-module separator
+		size_t index3 = line.find_first_of(',', index2); // module-section separator
+		bool dol = (index2 == std::string::npos) || (index3 == std::string::npos);
 
-		std::string name = line.substr(index + 1);
+		std::string name;
+		if (dol)
+			name = line.substr(index + 1);
+		else
+			name = line.substr(index + 1, index2 - (index + 1));
 		boost::trim_left(name);
 
 		uint32_t addr = strtoul(line.substr(0, index).c_str(), nullptr, 16);
 
-		outputMap[name] = addr;
+		uint32_t moduleId;
+		if (dol)
+		{
+			moduleId = 0;
+		}
+		else
+		{
+			std::string moduleIdStr = line.substr(index2 + 1, index3 - (index2 + 1));
+			if (moduleIdStr.substr(0, 2) == "0x")
+				moduleId = strtoul(moduleIdStr.substr(2).c_str(), nullptr, 16);
+			else
+				moduleId = strtoul(moduleIdStr.c_str(), nullptr, 10);
+		}
+
+		uint32_t sectionId;
+		if (dol)
+		{
+			sectionId = 0;
+		}
+		else
+		{
+			std::string sectionIdStr = line.substr(index3 + 1);
+			if (sectionIdStr.substr(0, 2) == "0x")
+				sectionId = strtoul(sectionIdStr.substr(2).c_str(), nullptr, 16);
+			else
+				sectionId = strtoul(sectionIdStr.c_str(), nullptr, 10);
+		}
+
+		outputMap[name] = { moduleId, sectionId, addr };
 	}
 
 	return outputMap;
@@ -382,10 +426,9 @@ int main(int argc, char **argv)
 					{
 						// Known external!
 						resolved = true;
-
-						rel.moduleID = 0;
-						rel.targetSection = 0; // #todo-elf2rel: Check if this is important
-						rel.addend = static_cast<uint32_t>(addend + it->second);
+						rel.moduleID = it->second.moduleId;
+						rel.targetSection = it->second.targetSection;
+						rel.addend = static_cast<uint32_t>(addend + it->second.addr);
 					}
 				}
 

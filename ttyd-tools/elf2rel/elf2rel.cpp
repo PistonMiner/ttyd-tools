@@ -53,15 +53,31 @@ std::map<std::string, SymbolLocation> loadSymbolMap(const std::string &filename)
 
 		uint32_t moduleId;
 		if (dol)
+		{
 			moduleId = 0;
+		}
 		else
-			moduleId = strtoul(line.substr(index2 + 1, index3 - (index2 + 1)).c_str(), nullptr, 10);
+		{
+			std::string moduleIdStr = line.substr(index2 + 1, index3 - (index2 + 1));
+			if (moduleIdStr.substr(0, 2) == "0x")
+				moduleId = strtoul(moduleIdStr.substr(2).c_str(), nullptr, 16);
+			else
+				moduleId = strtoul(moduleIdStr.c_str(), nullptr, 10);
+		}
 
 		uint32_t sectionId;
 		if (dol)
+		{
 			sectionId = 0;
+		}
 		else
-			sectionId = strtoul(line.substr(index3 + 1).c_str(), nullptr, 10);
+		{
+			std::string sectionIdStr = line.substr(index3 + 1);
+			if (sectionIdStr.substr(0, 2) == "0x")
+				sectionId = strtoul(sectionIdStr.substr(2).c_str(), nullptr, 16);
+			else
+				sectionId = strtoul(sectionIdStr.c_str(), nullptr, 10);
+		}
 
 		outputMap[name] = { moduleId, sectionId, addr };
 	}

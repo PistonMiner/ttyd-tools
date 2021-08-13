@@ -33,7 +33,6 @@ ConIntVar con_log_fade_duration("con_log_fade_duration", 1000);
 
 ConIntVar con_ug_mode("con_ug_mode", 2);
 ConIntVar con_ug_chan("con_ug_chan", 1);
-ConIntVar con_ug_send_block("con_ug_send_block", 1);
 
 void CC_find(const char *args)
 {
@@ -200,6 +199,7 @@ void ConsoleSystem::logColor(const char *log_text, gc::color4 color)
 			int got = ugSend(chan, data_left, size_left);
 			if (got < 0)
 				break;
+			data_left += got;
 			size_left -= got;
 		}
 	}

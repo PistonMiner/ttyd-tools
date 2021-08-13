@@ -8,53 +8,51 @@
 .globl patchInstructionHookSaveContextAndHandle
 patchInstructionHookSaveContextAndHandle:
 	# Entry state:
+	# * r1 is set up for a stackframe of size IH_STACKFRAME_SIZE
 	# * r3 contains original LR
-	# * [r1 - IH_STACKFRAME_SIZE + IH_STACKFRAME_R3].d contains original R3
+	# * [r1 + IH_STACKFRAME_R3].d contains original R3
 	# * lr points to trampoline
 	# * [lr + 0x8].d contains handler fn ptr
 	# * [lr + 0xc].d contains handler user data
 
 	# Save link register
-	stw %r3, (-IH_STACKFRAME_SIZE + IH_STACKFRAME_LR)(%r1)
+	stw %r3, (IH_STACKFRAME_LR)(%r1)
 	# Save trampoline return point
 	mflr %r3
-	stw %r3, (-IH_STACKFRAME_SIZE + IH_STACKFRAME_TRAMPOLINE)(%r1)
+	stw %r3, (IH_STACKFRAME_TRAMPOLINE)(%r1)
 
 	# Write r0
-	stw %r0, (-IH_STACKFRAME_SIZE + IH_STACKFRAME_CTX + 0x0+4*0)(%r1)
+	stw %r0, (IH_STACKFRAME_CTX + 0x0+4*0)(%r1)
 
 	# Write r1-r2, r13-r31, GQRs 1-7, CR, false LR/SRR0, MSR (SRR1), CTR, XER
-	addi %r3, %r1, -IH_STACKFRAME_SIZE + IH_STACKFRAME_CTX
+	addi %r3, %r1, IH_STACKFRAME_CTX
 	bl OSSaveContext
+
+	# Correct r1 to before the stackframe was established
+	addi %r3, %r1, IH_STACKFRAME_SIZE
+	stw %r3, (IH_STACKFRAME_CTX + 0x0+4*1)(%r1)
 
 	# Finish GPRs
 	# Write r3-r12 (double-writing r13-r31)
-	lwz %r3, (-IH_STACKFRAME_SIZE + IH_STACKFRAME_R3)(%r1)
-	stmw %r3, (-IH_STACKFRAME_SIZE + IH_STACKFRAME_CTX + 0x0+4*3)(%r1)
+	lwz %r3, (IH_STACKFRAME_R3)(%r1)
+	stmw %r3, (IH_STACKFRAME_CTX + 0x0+4*3)(%r1)
 
 	# Zero control fields
 	li %r3, 0
-	stw %r3, (-IH_STACKFRAME_SIZE + IH_STACKFRAME_CTX + 0x1a0)(%r1)
+	stw %r3, (IH_STACKFRAME_CTX + 0x1a0)(%r1)
 
 	# Write f0-f31, paired single variants and FPCSR
-	addi %r5, %r1, -IH_STACKFRAME_SIZE + IH_STACKFRAME_CTX
+	addi %r5, %r1, IH_STACKFRAME_CTX
 	bl __OSSaveFPUContext
 
 	# Correct LR
-	lwz %r3, (-IH_STACKFRAME_SIZE + IH_STACKFRAME_LR)(%r1)
-	stw %r3, (-IH_STACKFRAME_SIZE + IH_STACKFRAME_CTX + 0x84)(%r1)
+	lwz %r3, (IH_STACKFRAME_LR)(%r1)
+	stw %r3, (IH_STACKFRAME_CTX + 0x84)(%r1)
 
 	# Correct SRR0 to trampoline (keep pointer for access below)
-	lwz %r4, (-IH_STACKFRAME_SIZE + IH_STACKFRAME_TRAMPOLINE)(%r1)
-	stw %r4, (-IH_STACKFRAME_SIZE + IH_STACKFRAME_CTX + 0x198)(%r1)
-
-	# Set up stackframe
-	stwu %r1, -IH_STACKFRAME_SIZE(%r1)
-
-	# Fake saved LR for debugging
-	lis %r3, 0xdead
-	ori %r3, %r3, 0xcafe
-	stw %r3, 0x4(%r1)
+	lwz %r4, (IH_STACKFRAME_TRAMPOLINE)(%r1)
+	stw %r4, (IH_STACKFRAME_CTX + 0x198)(%r1)
+	stw %r4, (IH_STACKFRAME_SIZE + 0x4)(%r1)
 
 	# Invoke handler
 	# The offset of these must be kept in sync with the C code!
@@ -65,17 +63,14 @@ patchInstructionHookSaveContextAndHandle:
 	lwz %r4, 0xc(%r4) # handler user arg
 	blrl
 
-	# Tear down stackframe
-	addi %r1, %r1, IH_STACKFRAME_SIZE
-
 	# Restore f0-f31, paired single variants and FPCSR
-	addi %r4, %r1, -IH_STACKFRAME_SIZE + IH_STACKFRAME_CTX
+	addi %r4, %r1, IH_STACKFRAME_CTX
 	bl __OSLoadFPUContext
 
 	# Set control bit to restore all GPRs
 	li %r3, 2
-	sth %r3, (-IH_STACKFRAME_SIZE + IH_STACKFRAME_CTX + 0x1a2)(%r1)
+	sth %r3, (IH_STACKFRAME_CTX + 0x1a2)(%r1)
 
 	# Restore everything else, jumping back into the trampoline
-	addi %r3, %r1, -IH_STACKFRAME_SIZE + IH_STACKFRAME_CTX
+	addi %r3, %r1, IH_STACKFRAME_CTX
 	b OSLoadContext

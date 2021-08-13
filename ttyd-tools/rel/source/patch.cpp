@@ -12,6 +12,12 @@ constexpr static uint32_t assemble_stw(int rS, int rA, int d)
 	return 36u << 26 | rS << 21 | rA << 16 | encoded_disp;
 }
 
+constexpr static uint32_t assemble_stwu(int rS, int rA, int d)
+{
+	uint16_t encoded_disp = d & 0xffff;
+	return 37u << 26 | rS << 21 | rA << 16 | encoded_disp;
+}
+
 constexpr static uint32_t assemble_mfspr(int rD, int spr)
 {
 	uint32_t encoded_spr = 0;
@@ -50,27 +56,29 @@ void hookInstruction(void *location, InstructionHookHandler handler, void *user)
 	static_assert(kIhStackframeSize == 0x2e8);
 
 	// Construct trampoline
-	constexpr int kTrampolineSize = 7;
+	constexpr int kTrampolineSize = 8;
 	uint32_t *trampoline = new uint32_t[kTrampolineSize];
-	// ppc: stw r3, (-IH_STACKFRAME_SIZE + IH_STACKFRAME_R3)(r1)
-	trampoline[0] = assemble_stw(3, 1, -kIhStackframeSize + kIhStackframeUserR3);
+	// ppc: stwu r1, -IH_STACKFRAME_SIZE(r1)
+	trampoline[0] = assemble_stwu(1, 1, -kIhStackframeSize);
+	// ppc: stw r3, (IH_STACKFRAME_R3)(r1)
+	trampoline[1] = assemble_stw(3, 1, kIhStackframeUserR3);
 	// ppc: mflr r3
-	trampoline[1] = assemble_mfspr(3, 8);
+	trampoline[2] = assemble_mfspr(3, 8);
 	// ppc: bl to second stage handler
-	trampoline[2] = assemble_b((void *)patchInstructionHookSaveContextAndHandle, &trampoline[2], true);
+	trampoline[3] = assemble_b((void *)patchInstructionHookSaveContextAndHandle, &trampoline[3], true);
 	// ppc: replaced instruction
-	trampoline[3] = *(uint32_t *)location;
+	trampoline[4] = *(uint32_t *)location;
 	// ppc: branch back
 	// Hooked instruction location can be extracted by inspecting this
 	// instruction (which can be located via SRR0)
-	trampoline[4] = assemble_b((uint8_t *)location + 4, &trampoline[4], false);
+	trampoline[5] = assemble_b((uint8_t *)location + 4, &trampoline[5], false);
 
 	// The offsets of these relative to the bl to the handler must be kept in
 	// sync with the assembly!
 	// handler fn ptr
-	trampoline[5] = (uint32_t)handler;
+	trampoline[6] = (uint32_t)handler;
 	// user data
-	trampoline[6] = (uint32_t)user;
+	trampoline[7] = (uint32_t)user;
 
 	DCFlushRange(trampoline, kTrampolineSize * sizeof(uint32_t));
 	ICInvalidateRange(trampoline, kTrampolineSize * sizeof(uint32_t));

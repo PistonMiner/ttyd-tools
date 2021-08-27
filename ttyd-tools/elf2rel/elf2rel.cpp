@@ -36,47 +36,44 @@ std::map<std::string, SymbolLocation> loadSymbolMap(const std::string &filename)
 		}
 
 		// dol symbols:    addr:symbolName
-		// rel symbols:    offset:symbolName?moduleId,sectionId
-		size_t index = line.find_first_of(':'); // addr-name separator
-		size_t index2 = line.find_first_of('?', index); // name-module separator
-		size_t index3 = line.find_first_of(',', index2); // module-section separator
-		bool dol = (index2 == std::string::npos) || (index3 == std::string::npos);
-
+		// rel symbols:    module,section,offset:symbolName
+		
+		uint32_t moduleId, sectionId, addr;
 		std::string name;
-		if (dol)
-			name = line.substr(index + 1);
-		else
-			name = line.substr(index + 1, index2 - (index + 1));
+
+		// Find name after colon separator, always present
+		size_t colonIndex = line.find_first_of(':');
+		name = line.substr(colonIndex + 1);
 		boost::trim_left(name);
 
-		uint32_t addr = strtoul(line.substr(0, index).c_str(), nullptr, 16);
-
-		uint32_t moduleId;
-		if (dol)
+		// Handle comma separators, if present
+		// Commas can be included in mangled symbol names, so this has to be limited to before the name
+		std::string locInfo = line.substr(0, colonIndex);
+		size_t commaIndex1 = line.find_first_of(',');
+		if (commaIndex1 == std::string::npos)
 		{
 			moduleId = 0;
-		}
-		else
-		{
-			std::string moduleIdStr = line.substr(index2 + 1, index3 - (index2 + 1));
-			if (moduleIdStr.substr(0, 2) == "0x")
-				moduleId = strtoul(moduleIdStr.substr(2).c_str(), nullptr, 16);
-			else
-				moduleId = strtoul(moduleIdStr.c_str(), nullptr, 10);
-		}
-
-		uint32_t sectionId;
-		if (dol)
-		{
 			sectionId = 0;
+			addr = std::stoul(locInfo, nullptr, 16);
 		}
 		else
 		{
-			std::string sectionIdStr = line.substr(index3 + 1);
-			if (sectionIdStr.substr(0, 2) == "0x")
-				sectionId = strtoul(sectionIdStr.substr(2).c_str(), nullptr, 16);
+			size_t commaIndex2 = line.find_first_of(',', commaIndex1 + 1);
+
+			std::string moduleIdStr = locInfo.substr(0, commaIndex1);
+			if (moduleIdStr.substr(0, 2) == "0x")
+				moduleId = std::stoul(moduleIdStr.substr(2), nullptr, 16);
 			else
-				sectionId = strtoul(sectionIdStr.c_str(), nullptr, 10);
+				moduleId = std::stoul(moduleIdStr, nullptr, 10);
+
+			std::string sectionIdStr = locInfo.substr(commaIndex1 + 1, commaIndex2 - commaIndex1);
+			if (sectionIdStr.substr(0, 2) == "0x")
+				sectionId = std::stoul(sectionIdStr.substr(2), nullptr, 16);
+			else
+				sectionId = std::stoul(sectionIdStr, nullptr, 10);
+
+			std::string addrStr = locInfo.substr(commaIndex2 + 1);
+			addr = std::stoul(addrStr, nullptr, 16);
 		}
 
 		outputMap[name] = { moduleId, sectionId, addr };

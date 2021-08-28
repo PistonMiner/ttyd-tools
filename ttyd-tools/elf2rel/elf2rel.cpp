@@ -62,15 +62,23 @@ std::map<std::string, SymbolLocation> loadSymbolMap(const std::string &filename)
 
 			std::string moduleIdStr = locInfo.substr(0, commaIndex1);
 			if (moduleIdStr.substr(0, 2) == "0x")
+			{
 				moduleId = std::stoul(moduleIdStr.substr(2), nullptr, 16);
+			}
 			else
+			{
 				moduleId = std::stoul(moduleIdStr, nullptr, 10);
+			}
 
 			std::string sectionIdStr = locInfo.substr(commaIndex1 + 1, commaIndex2 - commaIndex1);
 			if (sectionIdStr.substr(0, 2) == "0x")
+			{
 				sectionId = std::stoul(sectionIdStr.substr(2), nullptr, 16);
+			}
 			else
+			{
 				sectionId = std::stoul(sectionIdStr, nullptr, 10);
+			}
 
 			std::string addrStr = locInfo.substr(commaIndex2 + 1);
 			addr = std::stoul(addrStr, nullptr, 16);
@@ -445,9 +453,13 @@ int main(int argc, char **argv)
 	auto getModuleDelay = [moduleID](uint32_t id)
 	{
 		if (id == 0 || id == moduleID)
+		{
 			return 1;
+		}
 		else
+		{
 			return 0;
+		}
 	};
 
 	// Sort relocations
@@ -458,7 +470,9 @@ int main(int argc, char **argv)
 		int delayLeft = getModuleDelay(left.moduleID);
 		int delayRight = getModuleDelay(right.moduleID);
 		if (delayLeft != delayRight)
+		{
 			return delayLeft < delayRight;
+		}
 		
 		return std::tuple<uint32_t, uint32_t, uint32_t>(left.moduleID, left.section, left.offset)
 			   < std::tuple<uint32_t, uint32_t, uint32_t>(right.moduleID, right.section, right.offset);
@@ -539,7 +553,9 @@ int main(int argc, char **argv)
 			// If the next module ID was forced to the back and the current one wasn't,
 			// then this is the end of the relocations included in the fixed size
 			if (getModuleDelay(nextRel.moduleID) > getModuleDelay(currentModuleID))
+			{
 				fixedRelocationsSize = outputBuffer.size() - relocationOffset;
+			}
 
 			currentModuleID = nextRel.moduleID;
 			currentSectionIndex = -1;
@@ -594,7 +610,9 @@ int main(int argc, char **argv)
 	// If the final module referenced isn't forced to the back, then all
 	// relocations must be included in the fixed size
 	if (getModuleDelay(currentModuleID) == 0)
+	{
 		fixedRelocationsSize = outputBuffer.size() - relocationOffset;
+	}
 
 	// Write final import infos
 	int importInfoSize = importInfoBuffer.size();

@@ -441,10 +441,25 @@ int main(int argc, char **argv)
 		}
 	}
 
+	// Returns whether a module should be placed at the end of relocations for trimming
+	auto getModuleDelay = [moduleID](uint32_t id)
+	{
+		if (id == 0 || id == moduleID)
+			return 1;
+		else
+			return 0;
+	};
+
 	// Sort relocations
 	std::sort(allRelocations.begin(), allRelocations.end(),
-			  [](const Relocation &left, const Relocation &right)
+			  [&](const Relocation &left, const Relocation &right)
 	{
+		// Relocations against the dol & this module need to be placed last for trimming with OSLinkFixed
+		int delayLeft = getModuleDelay(left.moduleID);
+		int delayRight = getModuleDelay(right.moduleID);
+		if (delayLeft != delayRight)
+			return delayLeft < delayRight;
+		
 		return std::tuple<uint32_t, uint32_t, uint32_t>(left.moduleID, left.section, left.offset)
 			   < std::tuple<uint32_t, uint32_t, uint32_t>(right.moduleID, right.section, right.offset);
 	});
@@ -482,6 +497,7 @@ int main(int argc, char **argv)
 	int currentModuleID = -1;
 	int currentSectionIndex = -1;
 	int currentOffset = 0;
+	int fixedRelocationsSize = 0;
 	while (!allRelocations.empty())
 	{
 		Relocation nextRel = allRelocations.front();
@@ -519,6 +535,11 @@ int main(int argc, char **argv)
 			{
 				writeRelocation(outputBuffer, 0, R_DOLPHIN_END, 0, 0);
 			}
+
+			// If the next module ID was forced to the back and the current one wasn't,
+			// then this is the end of the relocations included in the fixed size
+			if (getModuleDelay(nextRel.moduleID) > getModuleDelay(currentModuleID))
+				fixedRelocationsSize = outputBuffer.size() - relocationOffset;
 
 			currentModuleID = nextRel.moduleID;
 			currentSectionIndex = -1;
@@ -570,6 +591,11 @@ int main(int argc, char **argv)
 	}
 	writeRelocation(outputBuffer, 0, R_DOLPHIN_END, 0, 0);
 
+	// If the final module referenced isn't forced to the back, then all
+	// relocations must be included in the fixed size
+	if (getModuleDelay(currentModuleID) == 0)
+		fixedRelocationsSize = outputBuffer.size() - relocationOffset;
+
 	// Write final import infos
 	int importInfoSize = importInfoBuffer.size();
 	std::copy(importInfoBuffer.begin(), importInfoBuffer.end(), outputBuffer.begin() + importInfoOffset);
@@ -589,7 +615,7 @@ int main(int argc, char **argv)
 					  prologOffset, epilogOffset, unresolvedOffset,
 					  maxAlign,
 					  maxBssAlign,
-					  relocationOffset);
+					  relocationOffset + fixedRelocationsSize);
 	std::copy(headerBuffer.begin(), headerBuffer.end(), outputBuffer.begin());
 
 	// Write final REL file

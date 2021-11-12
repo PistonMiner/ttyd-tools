@@ -52,6 +52,8 @@ patchInstructionHookSaveContextAndHandle:
 	# Correct SRR0 to trampoline (keep pointer for access below)
 	lwz %r4, (IH_STACKFRAME_TRAMPOLINE)(%r1)
 	stw %r4, (IH_STACKFRAME_CTX + 0x198)(%r1)
+
+	# Set saved LR for debugging purposes
 	stw %r4, (IH_STACKFRAME_SIZE + 0x4)(%r1)
 
 	# Invoke handler
@@ -70,6 +72,9 @@ patchInstructionHookSaveContextAndHandle:
 	# Set control bit to restore all GPRs
 	li %r3, 2
 	sth %r3, (IH_STACKFRAME_CTX + 0x1a2)(%r1)
+
+	# Disable interrupts prior to OSLoadContext since it must be invoked such
+	bl OSDisableInterrupts
 
 	# Restore everything else, jumping back into the trampoline
 	addi %r3, %r1, IH_STACKFRAME_CTX

@@ -763,6 +763,45 @@
 80085f50:seq_logoExit
 80085f94:seq_logoInit
 
+// mario_motion.o
+// 800901ec:mot_forceReset
+// 80090350:mot_bottomless
+// 80090870:mot_dummy
+// 80090890:mot_partyUse
+// 800908b0:mot_shadow
+// 800909f4:mot_kaze
+80090c38:marioChgMotJump2
+80090d10:marioRollChgChk
+80090e9c:L_marioChkRub
+80090ea4:marioChkItemMotion
+80091070:marioChkTransform
+80091260:marioChkJump
+// 80091488:mot_getItem
+// 800914e0:mot_talk
+800916e0:marioLandOn
+80092208:marioFall
+800925f0:marioJump
+800928d8:marioMakeJumpPara
+80092950:marioGetFallSpd
+800929e4:marioSetFallPara
+80092a74:marioSetJumpPara
+80092c60:marioClearJumpPara
+80092c94:marioChgMot2
+80092d0c:marioChgMotSub
+80092e14:marioChgMot
+80092ed4:marioMotion
+80092f38:marioBoots
+800930e8:marioChkTalkable
+800931a4:marioChkItemGetMotion
+80093234:marioChgSmallJumpMotion
+80093340:marioChgJumpStandMotion
+800934f8:marioChgRollMotion
+80093528:marioChgShipMotion
+80093548:marioChgGetItemMotion
+80093648:marioChgTalkMotion
+80093700:marioChgStayMotion
+800937e0:marioChgMoveMotion
+
 // evt_shop.o
 800e9ee8:evtShopIsActive
 // 800e9f38:evt_shop_main_func

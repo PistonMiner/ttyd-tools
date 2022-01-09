@@ -739,6 +739,20 @@
 80084604:setupDataCheck
 800846c0:setupDataLoad
 
+// swdrv.o
+800847b8:_swByteGet
+800847c8:_swByteSet
+800847d8:_swClear
+80084818:_swGet
+80084860:_swSet
+800848a0:swByteGet
+800848c4:swByteSet
+800848e8:swClear
+80084928:swGet
+80084970:swSet
+800849b0:swReInit
+800849f4:swInit
+
 // seq_logo.o
 // 80084a6c:progDisp
 // unused:arcLoad

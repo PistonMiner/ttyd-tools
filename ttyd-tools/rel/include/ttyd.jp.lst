@@ -905,6 +905,19 @@
 80291bbc:OSSetErrorHandler
 80291dd4:__OSUnhandledException
 
+// os.a OSInterrupt.c
+80293cd0:OSDisableInterrupts
+80293ce4:OSEnableInterrupts
+80293cf8:OSRestoreInterrupts
+80293d1c:__OSSetInterruptHandler
+80293d38:__OSGetInterruptHandler
+80293d4c:__OSInterruptInit
+// 80293dc0:SetInterruptMask
+80294098:__OSMaskInterrupts
+80294120:__OSUnmaskInterrupts
+802941a8:__OSDispatchInterrupt
+// 802944ec:ExternalInterruptHandler
+
 // os.a OSTime.c
 80297a48:OSGetTime
 80297a60:OSGetTick

@@ -802,6 +802,22 @@
 // 800f0560:help_main
 // 800f0580:name_disp
 
+// mario_party.o
+80140e60:partyGetTechLv
+80140ea4:partyGetHp
+80140ee8:partyChkJoin
+80140f30:partyLeft
+80140f74:partyJoin
+80140fb8:marioGetExtraPartyId
+80141050:marioGetPartyId
+801410e8:marioGetParty
+80141198:marioPartyKill
+80141204:marioPartyGoodbye
+8014124c:marioPartyHello
+801412fc:marioPartyEntry
+// 8014140c:unk_JP_US_EU_32_8014140c
+801414a0:marioUseParty
+
 // envdrv.o
 80199178:envSetYami
 80199558:envSetYamiView

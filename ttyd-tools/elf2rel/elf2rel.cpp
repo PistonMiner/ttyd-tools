@@ -49,7 +49,7 @@ std::map<std::string, SymbolLocation> loadSymbolMap(const std::string &filename)
 		// Handle comma separators, if present
 		// Commas can be included in mangled symbol names, so this has to be limited to before the name
 		std::string locInfo = line.substr(0, colonIndex);
-		size_t commaIndex1 = line.find_first_of(',');
+		size_t commaIndex1 = locInfo.find_first_of(',');
 		if (commaIndex1 == std::string::npos)
 		{
 			moduleId = 0;
@@ -58,7 +58,7 @@ std::map<std::string, SymbolLocation> loadSymbolMap(const std::string &filename)
 		}
 		else
 		{
-			size_t commaIndex2 = line.find_first_of(',', commaIndex1 + 1);
+			size_t commaIndex2 = locInfo.find_first_of(',', commaIndex1 + 1);
 
 			std::string moduleIdStr = locInfo.substr(0, commaIndex1);
 			if (moduleIdStr.substr(0, 2) == "0x")

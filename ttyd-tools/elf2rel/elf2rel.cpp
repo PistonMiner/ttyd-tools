@@ -12,6 +12,11 @@
 #include <fstream>
 #include <tuple>
 #include <deque>
+#include <regex>
+
+// dol symbols:    addr:symbolName
+// rel symbols:    module,section,offset:symbolName
+static std::regex SYMBOL_RE("(([a-fA-F0-9]{1,8}),([a-fA-F0-9]{1,8}),)?([a-fA-F0-9]{1,8}):(.+)");
 
 struct SymbolLocation
 {
@@ -35,54 +40,17 @@ std::map<std::string, SymbolLocation> loadSymbolMap(const std::string &filename)
 			continue;
 		}
 
-		// dol symbols:    addr:symbolName
-		// rel symbols:    module,section,offset:symbolName
-		
-		uint32_t moduleId, sectionId, addr;
-		std::string name;
-
-		// Find name after colon separator, always present
-		size_t colonIndex = line.find_first_of(':');
-		name = line.substr(colonIndex + 1);
-		boost::trim_left(name);
-
-		// Handle comma separators, if present
-		// Commas can be included in mangled symbol names, so this has to be limited to before the name
-		std::string locInfo = line.substr(0, colonIndex);
-		size_t commaIndex1 = locInfo.find_first_of(',');
-		if (commaIndex1 == std::string::npos)
+		std::smatch match;
+		if (!std::regex_match(line, match, SYMBOL_RE))
 		{
-			moduleId = 0;
-			sectionId = 0;
-			addr = std::stoul(locInfo, nullptr, 16);
+			std::cerr << "Invalid symbol: " << line << std::endl;
+			continue;
 		}
-		else
-		{
-			size_t commaIndex2 = locInfo.find_first_of(',', commaIndex1 + 1);
 
-			std::string moduleIdStr = locInfo.substr(0, commaIndex1);
-			if (moduleIdStr.substr(0, 2) == "0x")
-			{
-				moduleId = std::stoul(moduleIdStr.substr(2), nullptr, 16);
-			}
-			else
-			{
-				moduleId = std::stoul(moduleIdStr, nullptr, 10);
-			}
-
-			std::string sectionIdStr = locInfo.substr(commaIndex1 + 1, commaIndex2 - commaIndex1);
-			if (sectionIdStr.substr(0, 2) == "0x")
-			{
-				sectionId = std::stoul(sectionIdStr.substr(2), nullptr, 16);
-			}
-			else
-			{
-				sectionId = std::stoul(sectionIdStr, nullptr, 10);
-			}
-
-			std::string addrStr = locInfo.substr(commaIndex2 + 1);
-			addr = std::stoul(addrStr, nullptr, 16);
-		}
+		uint32_t moduleId = match[1].matched ? std::stoul(match[2], nullptr, 16) : 0;
+		uint32_t sectionId = match[1].matched ? std::stoul(match[3], nullptr, 16) : 0;
+		uint32_t addr = std::stoul(match[4], nullptr, 16);
+		std::string name = match[5];
 
 		outputMap[name] = { moduleId, sectionId, addr };
 	}

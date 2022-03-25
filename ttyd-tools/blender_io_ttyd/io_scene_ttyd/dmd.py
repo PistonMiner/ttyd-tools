@@ -695,7 +695,7 @@ class DmdModel:
 			loop_indices = [i for i in blender_polygon.loop_indices]
 			polygon_tessellated_loop_indices = []
 			if len(loop_indices) == 3:
-				polygon_tessellated_loop_indices.append(loop_indices[:])
+				polygon_tessellated_loop_indices.append(list(reversed(loop_indices)))
 			elif len(loop_indices) > 3:
 				# todo-blender_io_ttyd: Tessellate polygons into strips instead
 				# of outputting individual triangles
@@ -1247,7 +1247,7 @@ class DmdAnimation:
 
 							value = k.co[1]
 							tangent_in = (k.co[1] - k.handle_left[1]) / (k.co[0] - k.handle_left[0])
-							tangent_out = (k.handle_right[1] - k.co[1]) / (k.handle_left[0] - k.co[0])
+							tangent_out = (k.handle_right[1] - k.co[1]) / (k.handle_right[0] - k.co[0])
 							is_step = False
 							break
 

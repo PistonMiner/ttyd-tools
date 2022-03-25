@@ -166,6 +166,81 @@
 80038b44:areaDataPtr
 80038bdc:mapDataPtr
 
+// animdrv.o
+80038d28:animPoseGetGroupName
+80038d64:animPoseGetGroupIdx
+80038e10:animPoseGetShapeIdx
+80038ebc:animPoseDrawShape
+80039154:animPoseSetDispCallBack
+80039170:animPoseGetVivianType
+80039188:animPoseVivianMain
+800391c0:animPoseWorldMatrixEvalOn
+80039278:L_animPoseWorldPositionEvalOff
+800392d0:animPoseWorldPositionEvalOn
+// 80039388:evalProc
+80039570:animPoseTestXLU
+800395a8:animPoseGetCurrentAnim
+800395e8:animPoseGetAnimBaseDataPtr
+80039618:animPoseGetAnimDataPtr
+8003965c:animPoseGetAnimPosePtr
+80039670:animGroupBaseAsync
+800397a4:animSetPaperTexMtx
+80039870:animPoseDisp_MakeExtTexture
+// 80039ff4:animPaperPoseDispSub
+// 8003a914:animPaperPoseDisp
+8003a98c:animPoseAutoRelease
+8003ab58:animPaperPoseRelease
+8003ac34:animPoseRelease
+8003adc8:animSetPaperTexObj
+8003ae3c:animPoseDrawMtx
+8003b5cc:_animPoseDrawMtx
+8003bdb4:animPoseDraw
+// 8003be20:dispProc
+// 8003c1e8:renderProc
+// 8003cf70:materialProc
+// 8003d660:animSetMaterial_Texture
+// 8003dc0c:pushGXModelMtx_JointNode__
+// 8003e150:pushGXModelMtx_TransformNode__
+8003e690:animPoseMain
+8003ffd0:animPoseGetMaterialEvtColor
+8003ffe8:animPoseGetMaterialLightFlag
+80040000:animPoseGetMaterialFlag
+80040018:animPoseSetMaterialEvtColor
+80040034:animPoseSetMaterialLightFlagOff
+80040054:animPoseSetMaterialLightFlagOn
+80040074:animPoseSetMaterialFlagOff
+80040094:animPoseSetMaterialFlagOn
+800400b4:animPoseGetPeraEnd
+80040100:animPoseGetLoopTimes
+80040118:animPoseGetHeight
+8004017c:animPoseGetRadius
+800401e0:animPoseSetGXFunc
+800401fc:animPoseSetEffectAnim
+8004038c:animPoseSetEffect
+80040608:animPoseSetPaperAnim
+80040768:animPoseSetPaperAnimGroup
+800409f0:animPaperPoseGetId
+80040ad4:animPoseSetAnim
+80040c50:animPoseSetStartTime
+80040c70:animPoseSetLocalTime
+80040d90:animPoseSetLocalTimeRate
+80040da8:animPosePaperPeraOff
+80040dd0:animPosePaperPeraOn
+80040e14:animPosePeraOff
+80040e30:animPosePeraOn
+80040e4c:animEffectAsync
+80040f84:animPaperPoseEntry
+800410d0:animPoseEntry
+800415bc:animPoseBattleInit
+800415e8:animPoseRefresh
+// 80041844:animPose_AllocBuffer
+80042180:animMain
+800421b8:animInit
+// 8004242c:testAlloc
+// 800427c0:initTestHeap
+8004280c:animTimeGetTime
+80042894:animGetPtr
+
 // npcdrv.o
 8004289c:fbatPreventMarioEventChk
 800428d0:npcCheckBlow
@@ -420,6 +495,103 @@
 8005d204:marioGetColor
 8005d214:marioGetPtr
 
+// evt_mobj.o
+80060924:evt_mobj_koopa_pole
+// 80060b98:mobj_koopa_pole_evt
+// 80060f78:kpa_clear_jump_data
+// 80060fa4:kpa_disp_pole_init
+// 80060ff4:kpa_disp_pole_score_main
+// 80061100:kpa_disp_pole_score
+// 80061178:kpa_score_to_str
+// 800612c0:kpa_get_width
+// 80061318:kpa_get_level
+// 80061364:kpa_get_hata_name
+// 800613b0:kpa_get_pole_name
+800613fc:evt_mobj_koopa_fireber_dodai
+// 800616ec:mobj_koopa_fireber_dodai_evt
+80061c28:evt_mobj_koopa_sango
+// 80061dc4:mobj_koopa_sango_evt
+// 80062154:fire_func
+800622c4:evt_mobj_koopa_dokan
+// 8006249c:mobj_koopa_dokan_evt
+8006269c:evt_mobj_koopa_blk
+// 80062800:mobj_koopa_blk
+8006293c:evt_mobj_koopa_hidden_blk
+80062ae0:evt_mobj_koopa_badgeblk
+// 80062c6c:mobj_koopa_badgeblk
+80062f70:evt_mobj_koopa_brick
+// 80063138:mobj_koopa_brickblk
+80063498:evt_mobj_koopa_stone_blk
+// 800635f4:mobj_koopa_stone_blk_evt
+800635fc:evt_mobj_koopa_ojama_blk
+// 80063780:mobj_koopa_ojama_blk_evt
+// 800639d0:kpa_powerup
+80063a58:evt_mobj_kururing_floor
+// 80063c3c:mobj_kururing_floor
+// 800643e4:kururing_capture
+80064740:evt_mobj_breaking_floor
+// 80064904:mobj_breaking_floor
+80064a88:evt_mobj_brick
+// 80064dd4:mobj_10countblk
+// 80065038:mobj_brickblk
+80065334:evt_mobj_powerupblk
+// 800654b4:mobj_powerupblk
+80065738:evt_mobj_badgeblk
+// 800658ec:mobj_badgeblk
+80065bf0:evt_mobj_save_blk
+// 80065d74:mobj_save_blk
+80065f00:evt_mobj_recovery_blk
+// 800660a4:mobj_recovery_blk
+80066694:evt_mobj_signboard
+// 800667c8:mobj_signboard
+80066868:evt_mobj_itembox
+// 80066be8:mobj_itembox
+800670c8:evt_mobj_lock
+// 80067270:mobj_lock
+800676d4:evt_mobj_lock_unlock
+8006776c:evt_mobj_switch_float_blk
+// 800679d8:mobj_switch_float_blk
+80068040:evt_mobj_float_blk
+// 800682e4:mobj_float_blk
+80068458:evt_mobj_lv_blk
+// 80068604:mobj_lv_blk_evt
+80068a94:evt_mobj_jumpstand_blue
+// 80068c18:mobj_jumpstand_blue
+80068e40:evt_mobj_jumpstand_red
+// 80068fb8:mobj_jumpstand_red
+80069224:evt_mobj_rideswitch_lightblue
+// 800693a8:mobj_rideswitch_lightblue
+80069648:evt_mobj_timerswitch
+// 80069890:mobj_timerswitch
+80069bc0:evt_mobj_floatswitch_red
+80069d24:evt_mobj_switch_red
+// 80069eb0:mobj_switch_red
+80069fe0:evt_mobj_tornadoswitch_blue
+8006a144:evt_mobj_floatswitch_blue
+8006a2a8:evt_mobj_switch_blue
+// 8006a450:mobj_switch_blue
+8006a580:evt_mobj_hit_onoff
+8006a640:evt_mobj_hitevt_onoff
+8006a6e4:evt_mobj_set_camid
+8006a768:evt_mobj_wait_animation_end
+8006a7e8:evt_mobj_set_anim
+8006a87c:evt_mobj_set_gravity_bound
+8006a928:evt_mobj_exec_cancel
+8006a99c:evt_mobj_set_z_position
+8006aa58:evt_mobj_set_y_position
+8006ab14:evt_mobj_set_x_position
+8006abd0:evt_mobj_set_position
+8006acdc:evt_mobj_get_z_position
+8006ad5c:evt_mobj_get_y_position
+8006addc:evt_mobj_get_x_position
+8006ae5c:evt_mobj_get_position
+8006aefc:evt_mobj_set_scale
+8006aff8:evt_mobj_get_kindname
+8006b050:evt_mobj_flag_onoff
+8006b0d4:evt_mobj_check
+8006b128:evt_mobj_delete
+8006b158:evt_mobj_entry
+
 // mariost.o
 // unused:gcResetDone
 // unused:gcResetCheck
@@ -480,10 +652,106 @@
 80076e98:fontmgrTexSetup
 8007711c:fontmgrInit
 
+// evt_bero.o
+// text
+// 80077f88:evt_camera_change_event_from_road
+// 80078130:evt_bero_1stcheck
+800781a4:evt_bero_mario_go_wait
+800781c0:evt_bero_mario_go
+800781d0:evt_bero_mario_go_init
+// 800781e0:evt_bero_cam_shift_init
+// 80078208:evt_bero_cam3d_change
+8007831c:evt_bero_overwrite
+// 800783fc:evt_bero_move_mario_speed
+// 800786ac:evt_bero_disppos_load
+// 80078700:evt_bero_disppos_save
+80078744:evt_bero_case_id_load
+800787a0:evt_bero_case_id_save
+80078800:evt_bero_get_number
+800788c0:evt_bero_switch_off
+800789c4:evt_bero_switch_on
+// 80078ac8:bero_set_disp_position_pipe
+// 80078b98:bero_get_position_pipe2
+// 80078ce4:bero_get_position_pipe_pure
+// 80078dcc:bero_get_position_pipe_sub
+80079088:bero_get_position_normal
+80079398:evt_bero_get_info_num
+8007959c:evt_bero_id_filter
+// 80079668:evt_bero_read_mario_pera
+80079728:evt_bero_get_into_info
+80079a20:evt_bero_get_info
+80079b20:evt_bero_get_now_number
+80079b50:evt_bero_set_now_number
+80079b80:evt_bero_get_info_nextarea
+80079bf8:evt_bero_get_info_kinddir
+80079c80:evt_bero_get_info_length
+80079d74:evt_bero_get_info_anime
+80079e0c:evt_bero_get_end_position
+80079e70:evt_bero_get_start_position
+80079ed4:evt_bero_exec_wait
+80079f18:evt_bero_exec_get
+80079f48:evt_bero_exec_onoff
+80079fb0:evt_bero_get_entername
+80079fe4:evt_bero_mapchange
+8007a058:bero_id_filter
+8007a0fc:bero_clear_Offset
+8007a110:bero_get_ptr
+8007a11c:bero_get_BeroEZ
+8007a124:bero_get_BeroEY
+8007a12c:bero_get_BeroEX
+8007a134:bero_get_BeroSZ
+8007a13c:bero_get_BeroSY
+8007a144:bero_get_BeroSX
+8007a14c:bero_get_BeroNUM
+8007a154:bero_get_BeroEXEC
+// 8007a15c:N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos
+// 8007a190:N_evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry
+// data
+// 8030b384:evt_bero_nonride_check
+8030b418:bero_open_door_play_se
+8030b708:bero_close_door_play_se
+8030b9f8:bero_play_enter_anime
+8030bc44:bero_play_out_anime
+// 8030be58:bero_case_init_check
+// 8030bfe4:bero_case_exec_none
+// 8030c098:bero_case_exec_road
+// 8030c1c4:bero_case_exec_door
+// 8030c328:bero_case_exec_pipe_sub
+// 8030c85c:bero_case_exec_pipe
+// 8030cb24:bero_case_exec_gate
+8030cbd8:bero_case_entry
+// 8030cd68:bero_case_entry_sub
+8030ce84:bero_case_switch_on
+8030ced0:bero_case_switch_off
+// 8030cf4c:evt_bero_info_run_road
+// 8030cff0:evt_bero_info_run_door
+// 8030d0ac:evt_bero_info_run_pipe_sub00
+// 8030d178:evt_bero_info_run_pipe
+8030d24c:evt_bero_info_run
+// 8030d630:evt_bero_initial_pos
+// 8030d8a8:evt_bero_mario_enter
+// sdata
+// 804103a0:evt_bero_info_run_none
+// 804103b4:evt_bero_info_run_gate
+
 // database.o
 80083f9c:setupDataBase
 80084604:setupDataCheck
 800846c0:setupDataLoad
+
+// swdrv.o
+800847b8:_swByteGet
+800847c8:_swByteSet
+800847d8:_swClear
+80084818:_swGet
+80084860:_swSet
+800848a0:swByteGet
+800848c4:swByteSet
+800848e8:swClear
+80084928:swGet
+80084970:swSet
+800849b0:swReInit
+800849f4:swInit
 
 // seq_logo.o
 // 80084a6c:progDisp
@@ -495,7 +763,348 @@
 80085f50:seq_logoExit
 80085f94:seq_logoInit
 
-// printf.o
+// mario_motion.o
+// 800901ec:mot_forceReset
+// 80090350:mot_bottomless
+// 80090870:mot_dummy
+// 80090890:mot_partyUse
+// 800908b0:mot_shadow
+// 800909f4:mot_kaze
+80090c38:marioChgMotJump2
+80090d10:marioRollChgChk
+80090e9c:L_marioChkRub
+80090ea4:marioChkItemMotion
+80091070:marioChkTransform
+80091260:marioChkJump
+// 80091488:mot_getItem
+// 800914e0:mot_talk
+800916e0:marioLandOn
+80092208:marioFall
+800925f0:marioJump
+800928d8:marioMakeJumpPara
+80092950:marioGetFallSpd
+800929e4:marioSetFallPara
+80092a74:marioSetJumpPara
+80092c60:marioClearJumpPara
+80092c94:marioChgMot2
+80092d0c:marioChgMotSub
+80092e14:marioChgMot
+80092ed4:marioMotion
+80092f38:marioBoots
+800930e8:marioChkTalkable
+800931a4:marioChkItemGetMotion
+80093234:marioChgSmallJumpMotion
+80093340:marioChgJumpStandMotion
+800934f8:marioChgRollMotion
+80093528:marioChgShipMotion
+80093548:marioChgGetItemMotion
+80093648:marioChgTalkMotion
+80093700:marioChgStayMotion
+800937e0:marioChgMoveMotion
+
+// event.o
+800e73a8:eventStgNum
+800e73b0:eventStgDtPtr
+800e73c4:N_stg9_02_init
+// 800e73f0:stg8_15_init
+// 800e741c:stg8_14_init
+// 800e7448:stg8_13_init
+// 800e747c:stg8_11_init
+// 800e74a8:stg8_10_init
+// 800e74cc:stg8_06_init
+// 800e7610:stg8_05_init
+// 800e7664:stg8_02_init
+// 800e7688:stg8_01_02_init
+// 800e76ac:stg7_52_init
+// 800e76b0:stg7_51_init
+// 800e76f4:stg7_50_init
+// 800e7718:stg7_25_00_init
+// 800e7744:stg7_20_init
+// 800e7768:stg7_19_init
+// 800e7794:stg7_17_init
+// 800e77e0:stg7_16_init
+// 800e7814:stg7_15_room_C_init
+// 800e7840:stg7_15_room_B_init
+// 800e786c:stg7_15_room_A_init
+// 800e7890:stg7_15_init
+// 800e78b4:stg7_11_init
+// 800e78d8:stg7_10_init
+// 800e78fc:stg7_06_init
+// 800e7920:stg7_04_init
+// 800e7944:stg7_03_white_5
+// 800e7978:stg7_03_white_4
+// 800e799c:stg7_03_white_3
+// 800e79c0:stg7_03_white_2
+// 800e79e4:stg7_03_white_1
+// 800e7a08:stg7_03_white_0
+// 800e7a44:stg7_01_init
+// 800e7a68:stg6_end_init02
+// 800e7a8c:stg6_end_init01
+// 800e7ab8:stg6_72_init
+// 800e7abc:stg6_71_01_init
+// 800e7b28:stg6_70_init
+// 800e7b54:stg6_56_init
+// 800e7b78:stg6_54_init
+// 800e7ba4:stg6_47_00_init
+// 800e7bd0:stg6_44_init
+// 800e7bfc:stg6_39_init
+// 800e7c20:stg6_38_init
+// 800e7c44:stg6_37_init
+// 800e7c68:stg6_34_init
+// 800e7cdc:stg6_33_init
+// 800e7d00:stg6_32_init
+// 800e7d24:stg6_30_init
+// 800e7d48:stg6_29_init
+// 800e7d6c:stg6_27_init
+// 800e7da0:stg6_24_init
+// 800e7dc4:stg6_22_init
+// 800e7df0:stg6_20_init
+// 800e7e14:stg6_19_init
+// 800e7e40:stg6_18_init
+// 800e7e64:stg6_13_init
+// 800e7e88:stg6_12_init
+// 800e7eac:stg6_06_init
+// 800e7ed0:stg6_00_init
+// 800e7efc:stg5_66_init
+// 800e7f28:stg5_65_init
+// 800e7f54:stg5_64_03_init
+// 800e7f78:stg5_64_02_init
+// 800e7f9c:stg5_64_01_init
+// 800e7fc8:stg5_64_init
+// 800e7fec:stg5_63_init
+// 800e8010:stg5_62_init
+// 800e8034:stg5_60_init
+// 800e8078:stg5_59_01_init
+// 800e809c:stg5_58_init
+// 800e80c0:stg5_47_init
+// 800e80f4:stg5_43_init
+// 800e8120:stg5_30_init02
+// 800e8154:stg5_30_init01
+// 800e8178:stg5_29_init
+// 800e819c:stg5_22_init01
+// 800e81c0:stg5_22_init00
+// 800e81ec:stg5_21_01_init00
+// 800e8210:stg5_21_init03
+// 800e8234:stg5_21_init01
+// 800e8260:stg5_21_init00
+// 800e8284:stg5_19_01_init
+// 800e8288:stg5_19_init02
+// 800e82bc:stg5_19_init01
+// 800e82e0:stg5_19_init00
+// 800e82e4:stg5_18_init_02
+// 800e8310:stg5_18_init
+// 800e833c:stg5_17_init
+// 800e8360:stg5_15_init02
+// 800e8384:stg5_15_init01
+// 800e83a8:stg5_12_init01
+// 800e83cc:stg4_end_init
+// 800e83f8:stg4_37_init
+// 800e841c:stg4_36_init
+// 800e8440:stg4_35_init
+// 800e846c:stg4_30_init
+// 800e8498:stg4_16_init
+// 800e84bc:stg4_15_03_init
+// 800e8508:stg4_15_init
+// 800e852c:stg4_14_init
+// 800e8568:stg4_13_03_init
+// 800e858c:stg4_13_02_init
+// 800e85b8:stg4_13_init
+// 800e85dc:stg4_11_init
+// 800e8618:stage4_10_init
+// 800e863c:stage4_09_05_init
+// 800e8660:stage4_05_init
+// 800e869c:stage4_04_01_init
+// 800e86d0:stage4_04_init
+// 800e86f4:stage4_00_init
+// 800e86f8:stg3_end_init
+// 800e86fc:stg3_52_init
+// 800e8730:stg3_50_init
+// 800e875c:stg3_35_init
+// 800e8780:stg3_34_init
+// 800e8814:stg3_33_04_init
+// 800e8838:stg3_33_03_init
+// 800e8864:stg3_33_init
+// 800e8890:stg3_32_init
+// 800e88b4:stg3_31_init
+// 800e88d8:stg3_31_00_init
+// 800e8914:stg3_30_init
+// 800e89b8:stg3_21_init
+// 800e8a14:stg3_20_15_init
+// 800e8a38:stg3_20_14_init
+// 800e8a6c:stg3_20_13_init
+// 800e8a90:stg3_20_init_1
+// 800e8b00:stg3_20_init_2
+// 800e8b60:stg3_20_init_3
+// 800e8bc0:stg3_20_12_init
+// 800e8c24:stg3_20_09_init
+// 800e8c50:stg3_20_08_init
+// 800e8c7c:stg3_20_07_00_init
+// 800e8ca0:stg3_20_06_init
+// 800e8cd4:stg3_20_init_4
+// 800e8d2c:stg3_20_init_5
+// 800e8d7c:stg3_20_init_6
+// 800e8dd4:stg3_20_init_7
+// 800e8e44:stg3_20_02_init
+// 800e8e78:stg3_20_01_init
+// 800e8ea4:stg3_20_init_8
+// 800e8ef4:stg3_20_init_9
+// 800e8f44:stg3_20_init_10
+// 800e8fac:stg3_12_2_init
+// 800e8fec:stg3_12_init__1
+// 800e903c:stg3_12_init__2
+// 800e908c:stg3_12_init__3
+// 800e90dc:stg3_12_init__4
+// 800e9184:stg3_10_init__5
+// 800e91d4:stg3_07_init__6
+// 800e9224:stg3_07_init__7
+// 800e9274:stg3_07_init__8
+// 800e92cc:stg3_07_init__9
+// 800e9334:stg3_06_init
+// 800e9388:stg2_end_init
+// 800e93b4:stg2_47_init
+// 800e93d8:stg2_44_init
+// 800e93fc:stg2_40_init
+// 800e9430:stg2_26_init
+// 800e9454:stg2_25_02_init
+// 800e9478:stg2_25_init
+// 800e94ac:stg2_23_01_init
+// 800e94d8:stg2_23_init
+// 800e94fc:stg2_21_06_init01
+// 800e9520:stg2_21_06_init00
+// 800e95d8:stg2_21_04_init
+// 800e95fc:stg2_21_03_init
+// 800e9620:stg2_21_02_init
+// 800e9644:stg2_21_01_init
+// 800e96fc:stg2_21_init02
+// 800e9728:stg2_21_init00
+// 800e9778:stg2_20_init
+// 800e979c:stg2_19_init
+// 800e97c8:stg2_18_init02
+// 800e97f4:stg2_18_init01
+// 800e9818:stg2_16_init01
+// 800e983c:stg2_16_init00
+// 800e9874:stg2_15_init
+// 800e98a8:stg2_14_init
+// 800e98d4:stg2_12_01_init
+// 800e9904:stg2_11_init
+// 800e9928:stg2_10_init
+// 800e9964:stg2_09_init
+// 800e9988:stg2_03_03_init
+// 800e998c:stg2_00_init
+// 800e99dc:stg1_35_init01
+// 800e9a00:stg1_30_init01
+// 800e9a2c:stg1_30_init
+// 800e9a58:stg1_20_init
+// 800e9a7c:stg1_19_init
+// 800e9ab0:stg1_17_init
+// 800e9adc:stg1_16_init01
+// 800e9b00:stg1_16_init00
+// 800e9b50:stg1_15_04_init
+// 800e9b74:stg1_15_03_init
+// 800e9b98:stg1_15_02_init
+// 800e9bbc:stg1_14_init
+// 800e9be0:stg1_13_03_init
+// 800e9c04:stg1_13_02_init
+// 800e9c30:stg1_13_01_init
+// 800e9c54:stg1_13_init
+// 800e9c78:stg1_12_02_init
+// 800e9c9c:stg1_10_init
+// 800e9ca0:stg1_09_02_init
+// 800e9ca4:stg1_09_init
+// 800e9cd0:stg1_08_init
+// 800e9d04:stg1_06_01_init
+// 800e9d40:stg1_03_init
+// 800e9d74:stg1_01a_init
+// 800e9d98:stg0_16_init
+// 800e9dbc:stg0_13_init00
+// 800e9de8:stg0_12_02_init
+// 800e9e0c:stg0_11_init
+// 800e9e30:stg0_08_init
+// 800e9e54:stg0_05_init
+800e9e78:stg0_00_init
+
+// evt_shop.o
+800e9ee8:evtShopIsActive
+// 800e9f38:evt_shop_main_func
+// 800ea3a4:unkeep_pouchcheck_func
+// 800ea3e4:keep_pouchcheck_func
+// 800ea424:item_data_db_restore
+// 800ea468:item_data_db_arrange
+// 800ea4c0:sell_pouchcheck_func
+// 800ea4f8:name_price
+// 800ea584:get_fook_evt
+// 800ea5bc:get_ptr
+// 800ea5ec:set_buy_item_id
+// 800ea620:get_buy_evt
+// 800ea658:get_msg
+// 800ea6cc:get_value
+// 800ea78c:disp_off
+// 800ea7c4:shopper_name
+// 800ea7fc:shop_point_item
+// 800ea8e0:exchange_shop_point
+// 800ea95c:chk_shop_point
+// 800eaaf8:reset_shop_point
+// 800eab28:add_shop_point
+// 800eac7c:get_shop_point
+// 800eacc8:shop_flag_onoff
+// 800ead40:point_wait
+// 800ead90:point_disp_onoff
+800eadf4:evt_shop_setup
+// 800eb0fc:disp_list
+// 800eb1c0:list_disp
+// 800eb598:title_disp
+// 800eb638:point_disp
+// 800eb824:help_disp
+// 800eb8a4:help_main
+// 800eb8c4:name_disp
+
+// mario_party.o
+8013b868:partyGetTechLv
+8013b8ac:partyGetHp
+8013b8f0:partyChkJoin
+8013b938:partyLeft
+8013b97c:partyJoin
+8013b9c0:marioGetExtraPartyId
+8013ba58:marioGetPartyId
+8013baf0:marioGetParty
+8013bba0:marioPartyKill
+8013bc0c:marioPartyGoodbye
+8013bc54:marioPartyHello
+8013bd04:marioPartyEntry
+// 8013be14:unk_JP_US_EU_32_8013be14
+8013bea8:marioUseParty
+
+// envdrv.o
+80193418:envSetYami
+801937f8:envSetYamiView
+80193838:envSetWater
+80193f10:envAddTev
+// 80195554:envTevLoadTexMtxImm
+// 80195cf8:envDisp_FF
+801962b8:envGlareFilterZ
+801962ec:envGlareFilter
+// 801963d8:envGlare
+801969f8:envBlurOff
+80196a50:envBlurOn
+// 80196b40:envDisp_Blur
+// 80197014:envDisp_DepthOfField
+80197d64:envMain
+// 80197df0:envDisp2
+// 80197ed8:envDisp
+// 80197f34:envCapture2
+// 80198050:envCapture
+80198218:envTexSetup
+801982ec:envReInit
+80198330:envInit
+// 80198384:_callback
+
+// MSL_C.PPCEABI.bare.H.a mem.c
+80263cb8:memcmp
+// 80263d04:__memrchr
+80263d30:memchr
+80263d5c:memmove
+
+// MSL_C.PPCEABI.bare.H.a printf.c
 80264108:sprintf
 // unused:snprintf
 802641e8:vsprintf
@@ -514,13 +1123,13 @@
 // 80265aac:long2str
 // 80265d04:parse_format
 
-// scanf.c
+// MSL_C.PPCEABI.bare.H.a scanf.c
 80266394:sscanf
 // 80266458:__StringRead
 // 802664e8:__sformatter
 // 80266e94:parse_format
 
-// string.c
+// MSL_C.PPCEABI.bare.H.a string.c
 802673dc:strchr
 8026740c:strncmp
 8026744c:strcmp
@@ -542,6 +1151,105 @@
 // data
 80418ea0:OSAlloc_HeapArray
 80418ea4:OSAlloc_NumHeaps
+
+// os.a OSCache.c
+802909fc:DCEnable
+80290a10:DCInvalidateRange
+80290a3c:DCFlushRange
+80290a6c:DCStoreRange
+80290a9c:DCFlushRangeNoSync
+80290ac8:DCStoreRangeNoSync
+80290af4:DCZeroRange
+80290b20:ICInvalidateRange
+80290b54:ICFlashInvalidate
+80290b64:ICEnable
+// 80290b78:__LCEnable
+80290c44:LCEnable
+80290c7c:LCDisable
+80290ca4:LCStoreBlocks
+80290cc8:LCStoreData
+80290d74:LCQueueWait
+80290d88:L2GlobalInvalidate
+80290e20:DMAErrorHandler
+80290f80:__OSCacheInit
+
+// os.a OSContext.c
+80291074:__OSLoadFPUContext
+80291198:__OSSaveFPUContext
+802912c0:OSSaveFPUContext
+802912c8:OSSetCurrentContext
+80291324:OSGetCurrentContext
+80291330:OSSaveContext
+802913b0:OSLoadContext
+80291488:OSGetStackPointer
+80291490:OSClearContext
+802914b4:OSInitContext
+80291570:OSDumpContext
+// 80291818:OSSwitchFPUContext
+8029189c:__OSContextInit
+802918e4:OSFillFPUContext
+
+// os.a OSError.c
+80291a10:OSReport
+80291a90:OSPanic
+80291bbc:OSSetErrorHandler
+80291dd4:__OSUnhandledException
+
+// os.a OSInterrupt.c
+80293cd0:OSDisableInterrupts
+80293ce4:OSEnableInterrupts
+80293cf8:OSRestoreInterrupts
+80293d1c:__OSSetInterruptHandler
+80293d38:__OSGetInterruptHandler
+80293d4c:__OSInterruptInit
+// 80293dc0:SetInterruptMask
+80294098:__OSMaskInterrupts
+80294120:__OSUnmaskInterrupts
+802941a8:__OSDispatchInterrupt
+// 802944ec:ExternalInterruptHandler
+
+// os.a OSTime.c
+80297a48:OSGetTime
+80297a60:OSGetTick
+80297a68:__OSGetSystemTime
+// 80297acc:GetDates
+80297c68:OSTicksToCalendarTime
+
+// demo.a
+// DEMOPuts.c
+8029f53c:DEMOInitCaption
+8029f798:DEMOPuts
+8029faa8:DEMOPrintf
+// DEMOStats.c
+8029fb6c:DEMOWriteStats
+8029ff00:DEMOUpdateStats
+8029ff58:DEMOPrintStats
+
+// exi.a EXIBios.c
+// 802b5a20:SetExiInterruptMask
+802b5b14:EXIImm
+802b5d70:EXIImmEx
+802b5e10:EXIDma
+802b5efc:EXISync
+802b6148:EXIClearInterrupts
+802b6190:EXISetExiCallback
+// 802b620c:__EXIProbe
+802b6380:EXIProbe
+802b6400:EXIProbeEx
+802b64b4:EXIAttach
+802b65c0:EXIDetach
+802b667c:EXISelect
+802b67a8:EXIDeselect
+// 802b68b8:EXIIntrruptHandler
+// 802b6980:TCIntrruptHandler
+// 802b6b98:EXTIntrruptHandler
+802b6c68:EXIInit
+802b6e3c:EXILock
+802b6f30:EXIUnlock
+802b700c:EXIGetState
+// 802b7024:UnlockedHandler
+802b704c:EXIGetID
+802b73fc:EXIGetType
 
 // si.a
 802b7acc:SIBusy

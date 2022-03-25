@@ -71,7 +71,12 @@ for import_entry in imports:
 			
 			effectiveOffset = sections[curRelSection][0] + curRelOffset
 			if relID == import_entry[0]:
-				targetAddress = sections[targetSection][0] + addend + baseAddress
+				targetSectionOffset = sections[targetSection][0]
+				if targetSectionOffset != 0:
+					targetAddress = targetSectionOffset + addend + baseAddress
+				else:
+					# BSS
+					targetAddress = 0x81000000 + addend
 			else:
 				targetAddress = addend
 			

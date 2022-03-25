@@ -67,12 +67,12 @@ struct Player
 	float unk_190;
 	float wControlStickSensitivity;
 	float wControlStickAngle;
-	float unk_19c;
-	float unk_1a0;
+	float viewDirectionForwardWorld;
+	float playerDirectionWorld;
 	float wPlayerAngle;
 	float unk_1a8;
-	float wPlayerDirection;
-	uint32_t unk_1b0;
+	float playerDisplayDirectionCurrent;
+	float playerDisplayDirectionTarget;
 	uint32_t unk_1b4;
 	float wPlayerCollisionBox[3];
 	float wPlayerCollisionRelated[3];

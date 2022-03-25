@@ -1,0 +1,49 @@
+//------------------------------------------------
+//--- 010 Editor v10.0 Binary Template
+//
+//      File: MarioSt_IconBin
+//   Authors: Linus S. (PistonMiner)
+//   Version: 1
+//   Purpose: Template for Paper Mario: The Thousand Year Door icon.bin
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+BigEndian();
+
+typedef struct
+{
+    uint16 wFlags;
+    uint16 texWidth;
+    uint16 texHeight;
+    uint16 stageCount;
+    struct
+    {
+        uint16 tplIndex;
+        uint16 holdTimeFrames;
+    } stages[stageCount];
+} IconBinFileEntry<read=IconBinFileEntry_read>;
+
+local string IconBinFileEntry_read(IconBinFileEntry &e)
+{
+    local string out;
+    SPrintf(out, "flags %04x, size %dx%d, %d stages, TPL start %d", e.wFlags, e.texWidth, e.texHeight, e.stageCount, e.stages[0].tplIndex);
+    return out;
+}
+
+uint16 count;
+uint16 offsets[count];
+
+local uint i;
+for (i = 0; i < count; ++i)
+{
+    FSeek(offsets[i]);
+    IconBinFileEntry entry;
+
+    if (entry.stageCount != 1)
+    {
+        Printf("Entry %d has animation\n", i);
+    }
+}

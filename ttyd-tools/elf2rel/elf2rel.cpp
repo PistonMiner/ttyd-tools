@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright 2019 Linus S. (aka PistonMiner)
+
 #include "elf2rel.h"
 
 #include <elfio/elfio.hpp>
@@ -494,7 +497,7 @@ int main(int argc, char **argv)
 		int targetDelta = nextRel.offset - currentOffset;
 		while (targetDelta > 0xFFFF)
 		{
-			writeRelocation(outputBuffer, 0, R_DOLPHIN_NOP, 0, 0);
+			writeRelocation(outputBuffer, 0xFFFF, R_DOLPHIN_NOP, 0, 0);
 			targetDelta -= 0xFFFF;
 		}
 		

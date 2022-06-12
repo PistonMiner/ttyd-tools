@@ -12,11 +12,6 @@
 #include <fstream>
 #include <tuple>
 #include <deque>
-#include <regex>
-
-// dol symbols:    addr:symbolName
-// rel symbols:    module,section,offset:symbolName
-static std::regex SYMBOL_RE("(([a-fA-F0-9]{1,8}),([a-fA-F0-9]{1,8}),)?([a-fA-F0-9]{1,8}):(.+)");
 
 struct SymbolLocation
 {
@@ -24,6 +19,60 @@ struct SymbolLocation
 	uint32_t targetSection; // OSLink ignores for dol
 	uint32_t addr;
 };
+
+void trimAll(std::vector<std::string> &strs)
+{
+	for (std::string &str : strs)
+	{
+		boost::trim(str);
+	}
+}
+
+bool parseInt(const std::string &str, uint32_t &out, int base=0)
+{
+	size_t len;
+	out = std::stoul(str, &len, base);
+	return len == str.length();
+}
+
+// dol symbols: addr:symbolName
+// rel symbols: module,section,offset:symbolName
+// module and section can be prefixed with 0x for hex or 0 for octal, addr/offset is always hex
+bool parseSymbol(const std::string &line, SymbolLocation &sym, std::string &name)
+{
+	// Split around colon
+	std::vector<std::string> colonParts;
+	boost::split(colonParts, line, boost::is_any_of(":"));
+	if (colonParts.size() != 2)
+	{
+		return false;
+	}
+	trimAll(colonParts);
+	name = colonParts[1];
+
+	// Split first part around commas
+	std::vector<std::string> commaParts;
+	boost::split(commaParts, colonParts[0], boost::is_any_of(","));
+	if (commaParts.size() == 1)
+	{
+		// Dol
+		sym.moduleId = 0;
+		sym.targetSection = 0;
+		return parseInt(commaParts[0], sym.addr, 16);
+	}
+	else if (commaParts.size() == 3)
+	{
+		// Other rel
+		trimAll(commaParts);
+		return parseInt(commaParts[0], sym.moduleId)
+			&& parseInt(commaParts[1], sym.targetSection)
+			&& parseInt(commaParts[2], sym.addr, 16);
+	}
+	else
+	{
+		return false;
+	}
+}
 
 std::map<std::string, SymbolLocation> loadSymbolMap(const std::string &filename)
 {
@@ -40,19 +89,15 @@ std::map<std::string, SymbolLocation> loadSymbolMap(const std::string &filename)
 			continue;
 		}
 
-		std::smatch match;
-		if (!std::regex_match(line, match, SYMBOL_RE))
+		// Try parse line
+		SymbolLocation sym;
+		std::string name;
+		if (!parseSymbol(line, sym, name))
 		{
 			std::cerr << "Invalid symbol: " << line << std::endl;
 			continue;
 		}
-
-		uint32_t moduleId = match[1].matched ? std::stoul(match[2], nullptr, 16) : 0;
-		uint32_t sectionId = match[1].matched ? std::stoul(match[3], nullptr, 16) : 0;
-		uint32_t addr = std::stoul(match[4], nullptr, 16);
-		std::string name = match[5];
-
-		outputMap[name] = { moduleId, sectionId, addr };
+		outputMap[name] = sym;
 	}
 
 	return outputMap;

@@ -30,9 +30,15 @@ void trimAll(std::vector<std::string> &strs)
 
 bool parseInt(const std::string &str, uint32_t &out, int base=0)
 {
-	size_t len;
-	out = std::stoul(str, &len, base);
-	return len == str.length();
+	try {
+		size_t len;
+		out = std::stoul(str, &len, base);
+		return len == str.length();
+	}
+	catch (std::invalid_argument)
+	{
+		return false;
+	}
 }
 
 // dol symbols: addr:symbolName

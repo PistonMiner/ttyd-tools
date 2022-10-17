@@ -7,12 +7,13 @@
 #define EVT_END() \
 	0x1 };
 
+// We use a C-style cast in order to convert both pointers and other integers
 #define EVT_HELPER_OP(op) \
-	reinterpret_cast<int32_t>((op))
+	(int32_t)((op))
 
 // Expression types
 #define EVT_HELPER_EXPR(base, offset) \
-	EVT_HELPER_OP((base) + (offset))
+	static_cast<int32_t>((base) + (offset))
 
 #define EVT_HELPER_LW_BASE -30000000
 #define EVT_HELPER_GW_BASE -50000000
@@ -53,7 +54,7 @@
 		EVT_HELPER_FLOAT_BASE, static_cast<int32_t>((value) * 1024.f) \
 	)
 #define PTR(value) \
-	reinterpret_cast<int32_t>(value)
+	(int32_t)(value)
 
 // Commands
 #define EVT_HELPER_CMD(parameter_count, opcode) \
@@ -231,21 +232,17 @@
 	EVT_HELPER_CMD(1, 74), EVT_HELPER_OP(val),
 #define SET_USER_FLG(val) \
 	EVT_HELPER_CMD(1, 75), EVT_HELPER_OP(val),
-#define ALLOC_USER_WRK(count) \
-	EVT_HELPER_CMD(1, 76), EVT_HELPER_OP(count),
+#define ALLOC_USER_WRK(count, out) \
+	EVT_HELPER_CMD(2, 76), EVT_HELPER_OP(count), EVT_HELPER_OP(out),
 
-#define AND(out, lhs, rhs) \
-	EVT_HELPER_CMD(3, 77), EVT_HELPER_OP(out), EVT_HELPER_OP(lhs), \
-	EVT_HELPER_OP(rhs),
-#define ANDI(out, lhs, rhs) \
-	EVT_HELPER_CMD(3, 78), EVT_HELPER_OP(out), EVT_HELPER_OP(lhs), \
-	EVT_HELPER_OP(rhs),
-#define OR(out, lhs, rhs) \
-	EVT_HELPER_CMD(3, 79), EVT_HELPER_OP(out), EVT_HELPER_OP(lhs), \
-	EVT_HELPER_OP(rhs),
-#define ORI(out, lhs, rhs) \
-	EVT_HELPER_CMD(3, 80), EVT_HELPER_OP(out), EVT_HELPER_OP(lhs), \
-	EVT_HELPER_OP(rhs),
+#define AND(lhs, rhs) \
+	EVT_HELPER_CMD(2, 77), EVT_HELPER_OP(lhs), EVT_HELPER_OP(rhs),
+#define ANDI(lhs, rhs) \
+	EVT_HELPER_CMD(2, 78), EVT_HELPER_OP(lhs), EVT_HELPER_OP(rhs),
+#define OR(lhs, rhs) \
+	EVT_HELPER_CMD(2, 79), EVT_HELPER_OP(lhs), EVT_HELPER_OP(rhs),
+#define ORI(lhs, rhs) \
+	EVT_HELPER_CMD(2, 80), EVT_HELPER_OP(lhs), EVT_HELPER_OP(rhs),
 
 #define SET_FRAME_FROM_MSEC(out, in) \
 	EVT_HELPER_CMD(2, 81), EVT_HELPER_OP(out), EVT_HELPER_OP(in),
@@ -346,10 +343,10 @@ using evt_helper_int_array = int32_t[];
 
 #define DEBUG_PUT_MSG(msg) \
 	EVT_HELPER_CMD(1, 113), EVT_HELPER_OP(msg)
-#define DEBUG_MSG_CLEAR(msg) \
+#define DEBUG_MSG_CLEAR() \
 	EVT_HELPER_CMD(0, 114),
 #define DEBUG_PUT_REG(reg) \
-	EVT_HELPER_CMD(0, 115), EVT_HELPER_OP(reg),
+	EVT_HELPER_CMD(1, 115), EVT_HELPER_OP(reg),
 #define DEBUG_NAME(name) \
 	EVT_HELPER_CMD(1, 116), EVT_HELPER_OP(name),
 #define DEBUG_REM(text) \

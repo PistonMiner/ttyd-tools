@@ -3,6 +3,7 @@
 #include "console.h"
 
 #include <ttyd/seq_logo.h>
+#include <ttyd/mapdata.h>
 
 #include <cstdio>
 
@@ -53,6 +54,14 @@ ConCommand seq_change_map("seq_change_map", [](const char *text) {
 	{
 		beroName[0] = '\0';
 	}
+
+	void *mapData = ttyd::mapdata::mapDataPtr(mapName);
+	if (!mapData)
+	{
+		gConsole->logError("No map named '%s'!\n", mapName);
+		return;
+	}
+
 	ttyd::seqdrv::seqSetSeq(ttyd::seqdrv::SeqIndex::kMapChange, mapName, beroName);
 });
 

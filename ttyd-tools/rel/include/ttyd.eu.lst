@@ -73,6 +73,49 @@
 80010e28:dispReInit
 80010e34:dispInit
 
+// hitdrv.o
+80013eb0:hitBindUpdate
+80013fbc:hitBindMapObj
+800140b4:hitGetDamageReturnPos
+800140c0:hitGrpDamageReturnSet
+// 80014188:hitDamageReturnSet
+800144d4:hitGetAttr
+800144ec:hitGetName
+80014588:hitObjGetNormal
+80014660:hitObjGetPos
+// 800147b0:hitObjGetPosSub
+80014d1c:hitNameToPtr
+80014dcc:hitCheckSphereFilter
+80015364:hitCheckAttr
+// 80015498:chkFilterAttr
+800154b0:hitCheckVecHitObjXZ
+// 80015594:checkTriVec_xz
+80015940:hitCheckFilter
+80015a68:hitCheckVecFilter
+// 8001676c:hitCalcVtxPosition
+// 80016c20:hitReCalcMatrix2
+800170cc:hitReCalcMatrix
+8001712c:hitGrpAttrOff
+80017204:hitGrpAttrOn
+// 800172dc:hitAtrOff
+// 800175f0:hitAtrOn
+80017900:hitObjAttrOff
+800179d4:hitObjAttrOn
+80017aa8:hitGrpFlagOff
+80017b80:hitGrpFlagOn
+// 80017c58:hitFlgOff
+// 80017f70:hitFlgOn
+80018280:hitObjFlagOff
+80018354:hitObjFlagOn
+80018428:hitMain
+80018674:hitDelete
+800187ac:hitEntryMOBJ
+8001881c:hitEntry
+// 800188b8:hitEntrySub
+// 80018b30:_hitEnt
+80018fbc:hitReInit
+8001905c:hitInit
+
 // seqdrv.o
 8002e2cc:seqCheckSeq
 8002e2e8:seqGetNextSeq

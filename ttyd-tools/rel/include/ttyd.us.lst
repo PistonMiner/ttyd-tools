@@ -1213,6 +1213,55 @@
 80299fac:__OSDispatchInterrupt
 // 8029a2f0:ExternalInterruptHandler
 
+// mtx.a mtx.c
+8029dd04:PSMTXIdentity
+8029dd30:PSMTXCopy
+8029dd64:PSMTXConcat
+8029de30:PSMTXInverse
+8029df28:PSMTXInvXpose
+8029dff0:PSMTXRotRad
+8029e060:PSMTXRotTrig
+// 8029e110:__PSMTXRotAxisRadInternal
+8029e1c0:PSMTXRotAxisRad
+8029e230:PSMTXTrans
+8029e264:PSMTXTransApply
+8029e2b0:PSMTXScale
+8029e2d8:PSMTXScaleApply
+8029e330:C_MTXLookAt
+8029e4bc:C_MTXLightFrustum
+8029e550:C_MTXLightPerspective
+8029e61c:C_MTXLightOrtho
+
+// mtx.a mtxvec.c
+8029e6a4:PSMTXMultVec
+8029e6f8:PSMTXMultVecSR
+
+// mtx.a mtx44.c
+8029e74c:C_MTXFrustum
+8029e7e8:C_MTXPerspective
+8029e8b8:C_MTXOrtho
+8029e950:PSMTX44Copy
+8029e994:PSMTX44Concat
+8029ea98:PSMTX44Trans
+8029ead4:PSMTX44Scale
+
+// mtx.a mtx44vec.c
+8029eb08:PSMTX44MultVec
+
+// mtx.a vec.c
+8029eb80:PSVECAdd
+8029eba4:PSVECSubtract
+8029ebc8:PSVECScale
+8029ebe4:PSVECNormalize
+8029ec28:PSVECSquareMag
+8029ec40:PSVECMag
+8029ec84:PSVECDotProduct
+8029eca4:PSVECCrossProduct
+8029ece0:C_VECHalfAngle
+8029edb8:C_VECReflect
+8029ee8c:PSVECSquareDistance
+8029eeb4:PSVECDistance
+
 // os.a OSTime.c
 8029d84c:OSGetTime
 8029d864:OSGetTick

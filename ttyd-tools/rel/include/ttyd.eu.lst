@@ -1090,6 +1090,19 @@
 // 80142ef4:unk_JP_US_EU_32_80142ef4
 80142f88:marioUseParty
 
+// dvdmgr.o
+80146878:DVDMgrSetupCallback
+80146880:DVDMgrGetLength
+80146888:DVDMgrClose
+80146898:DVDMgrReadAsync
+801468cc:DVDMgrRead
+8014693c:DVDMgrOpen
+80146ad8:DVDMgrMain
+// 80146d3c:compare
+80146d80:DVDMgrDelete
+80146dbc:DVDMgrInit
+// 80146e4c:proc_main
+
 // envdrv.o
 8019ae54:envSetYami
 8019b234:envSetYamiView

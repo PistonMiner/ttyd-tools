@@ -90,8 +90,8 @@ struct Player
 	void *wUnkObj6;
 	uint8_t gap_210[52];
 	uint8_t unk_244;
-	uint8_t wFollowerFlags[2];
-	uint8_t prevFollowerId[2];
+	uint8_t partyId[2];
+	uint8_t prevPartyId[2];
 	uint8_t unk_249;
 	uint16_t wPauseButtonBuffer;
 	uint32_t unk_24c;

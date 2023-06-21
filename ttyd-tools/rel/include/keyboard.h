@@ -2,8 +2,6 @@
 
 #include <cstdint>
 
-#include <vector>
-
 namespace mod {
 
 enum class KeyCode : uint8_t

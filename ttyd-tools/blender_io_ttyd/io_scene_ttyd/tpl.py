@@ -230,7 +230,7 @@ class TplTexture:
 		texture_header_blob_name = "texture_headers:" + str(texture_id)
 		texture_header_data = bytearray(0x24)
 
-		struct.pack_into(">HH", texture_header_data, 0x00, self.size[0], self.size[1])
+		struct.pack_into(">HH", texture_header_data, 0x00, self.size[1], self.size[0])
 		struct.pack_into(">L", texture_header_data, 0x04, TPL_FORMAT_IDS[self.format])
 
 		wrap_mode = TPL_WRAP_MODES[self.wrap]

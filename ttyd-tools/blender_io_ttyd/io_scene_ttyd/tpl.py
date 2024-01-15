@@ -3,6 +3,7 @@
 
 import math
 
+from .dxt1 import *
 from .util import *
 
 TPL_FORMAT_IDS = {
@@ -65,13 +66,6 @@ def get_block(pixels, size, block_size, block_x, block_y):
 			block.extend([None] * (block_size[0] - block_backed_size_x))
 
 	return block
-
-def float_to_quantized(value, bits):
-	# Very primitive conversion
-	maximum_value = 2 ** bits - 1
-	quantized = round(value * maximum_value)
-	assert(quantized <= 2 ** bits - 1)
-	return quantized
 
 def downsample_pixels(pixels, size):
 	# Box-filter four pixels into one.
@@ -206,152 +200,6 @@ def encode_pixels(pixels, size, image_format):
 			elif image_format == "C14X2":
 				assert(False)
 			elif image_format == "CMPR":
-				# Very primitive DXT1 compressor. Should be replaced.
-				# Try all colors in the blocks as endpoints and fit the
-				# best ones. Has various flaws like checking color similarity
-				# in float space and not in RGB565 space. Not optimized, can
-				# check same color combination twice.
-				# todo-blender_io_ttyd: Replace crude DXT1 compressor with
-				# Simon Brown's cluster fit technique.
-				def dxt1_compress_block(block):
-					has_alpha = False
-					for p in block:
-						if p == None:
-							continue
-	
-						if p[3] < 0.5:
-							has_alpha = True
-							break
-	
-					# Find colors relevant for palette creation
-					opaque_pixels = [pixel for pixel in block if pixel != None]
-					if has_alpha:
-						opaque_pixels = [pixel for pixel in opaque_pixels if pixel[3] >= 0.5]
-	
-					#print("TPL - CMPR: Opaque pixels {}".format(opaque_pixels))
-	
-					def color_to_rgb565(color):
-						red_data = float_to_quantized(color[0], 5)
-						green_data = float_to_quantized(color[1], 6)
-						blue_data = float_to_quantized(color[2], 5)
-						packed_data = red_data << 11 | green_data << 5 | blue_data
-						return packed_data
-	
-					def lerp_colors(lhs, rhs, factor):
-						out_color = [lhs[i] * (1 - factor) + rhs[i] * factor for i in range(3)]
-						return tuple(out_color)
-	
-					def color_distance(lhs, rhs):
-						distance = sum([(lhs[i] - rhs[i]) ** 2 for i in range(3)])
-						#print("Calculated distance: {}".format(distance))
-						return distance
-	
-					if len(opaque_pixels) == 0:
-						# No opaque pixels, make everything transparent
-						assert(has_alpha)
-						best_block_indices = [3] * 16
-						best_block_first_ep_packed = 0
-						best_block_second_ep_packed = 0
-					else:
-						best_block_distance = None
-						best_block_first_ep_packed = None
-						best_block_second_ep_packed = None
-						best_block_indices = None
-						for first_ep_index in range(len(opaque_pixels)):
-							for second_ep_index in range(len(opaque_pixels)):
-								first_ep_color = opaque_pixels[first_ep_index][:3]
-								second_ep_color = opaque_pixels[second_ep_index][:3]
-								#print("TPL - CMPR: Trying {}/{}".format(first_ep_color, second_ep_color))
-
-								first_ep_packed = color_to_rgb565(first_ep_color)
-								second_ep_packed = color_to_rgb565(second_ep_color)
-								#print("TPL - CMPR: Packed endpoints: {:x}/{:x}".format(first_ep_packed, second_ep_packed))
-
-								# Force colors in right order if using alpha
-								if has_alpha and not (first_ep_packed <= second_ep_packed):
-									first_ep_color, second_ep_color = second_ep_color, first_ep_color
-									first_ep_packed, second_ep_packed = second_ep_packed, first_ep_packed
-
-								# Construct palette
-								if first_ep_packed <= second_ep_packed:
-									palette_colors = [
-										first_ep_color,
-										second_ep_color,
-										lerp_colors(first_ep_color, second_ep_color, 1/2)
-									]
-								else:
-									palette_colors = [
-										first_ep_color,
-										second_ep_color,
-										lerp_colors(first_ep_color, second_ep_color, 1/3),
-										lerp_colors(first_ep_color, second_ep_color, 2/3)
-									]
-		
-								# Fit colors to palette
-								block_indices = []
-								for pixel in block:
-									# Pixels outside the image
-									# Color we pick doesn't matter so we'll go with
-									# the potentially transparent one
-									if pixel == None:
-										block_indices.append(3)
-										continue
-	
-									# Transparent pixels
-									if has_alpha and pixel[3] < 0.5:
-										block_indices.append(3)
-										continue
-	
-									best_pixel_distance = None
-									best_pixel_index = None
-									for palette_index, palette_color in enumerate(palette_colors):
-										distance = color_distance(pixel, palette_color)
-										if (best_pixel_distance == None
-											or distance < best_pixel_distance):
-											#print("New best index: {}".format(palette_index))
-											best_pixel_distance = distance
-											best_pixel_index = palette_index
-
-									assert(best_pixel_distance != None)
-									block_indices.append(best_pixel_index)
-
-								#print("TPL - CMPR: Candidate {}".format(block_indices))
-	
-								# Calculate block score
-								block_distance = 0.0
-								for i in range(len(block)):
-									original_color = block[i]
-									if original_color == None:
-										continue
-	
-									palette_index = block_indices[i]
-			
-									# Skip alpha entries
-									if has_alpha and palette_index == 3:
-										continue
-			
-									palette_color = palette_colors[palette_index]
-									block_distance += color_distance(original_color, palette_color)
-	
-								if (best_block_distance == None
-									or block_distance < best_block_distance):
-									best_block_distance = block_distance
-									best_block_first_ep_packed = first_ep_packed
-									best_block_second_ep_packed = second_ep_packed
-									best_block_indices = block_indices
-	
-					# Pack final block
-					#print("TPL - CMPR: Best indices: {}".format(best_block_indices))
-					block_data = bytearray(8)
-					struct.pack_into(">HH", block_data, 0x0, best_block_first_ep_packed, best_block_second_ep_packed)
-					packed_indices = 0
-					for i, palette_index in enumerate(best_block_indices):
-						packed_indices |= (palette_index << ((15 - i) * 2))
-					struct.pack_into(">L", block_data, 0x4, packed_indices)
-
-					return block_data
-
-				# Actual compression
 				#print("TPL - CMPR: Block {}".format(block))
 				block_data = bytearray()
 				for subblock_y in range(2):
@@ -455,8 +303,6 @@ class TplTexture:
 
 		# Convert texture data to target format now to save memory
 		if format == None:
-			# This really ought to be CMPR, but the current DXT1 encoder is so
-			# slow that I'm using RGB5A3 for now for decent quality
 			format = "RGB5A3"
 		texture.format = format
 		texture.texture_data = encode_pixels(pixels, texture.size, format)

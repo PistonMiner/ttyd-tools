@@ -161,3 +161,13 @@ class Linker:
 			serialized_data[address:address + len(data)] = data
 
 		return serialized_data
+
+def float_to_quantized(value, bits):
+	assert(value >= 0.0)
+	assert(value <= 1.0)
+
+	# Very primitive conversion
+	maximum_value = 2 ** bits - 1
+	quantized = round(value * maximum_value)
+	assert(quantized <= 2 ** bits - 1)
+	return quantized

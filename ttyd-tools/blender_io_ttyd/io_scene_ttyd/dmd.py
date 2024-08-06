@@ -1641,9 +1641,9 @@ class DmdFile:
 		linker.place_section("information")
 		linker.place_section("texture_data")
 		linker.place_section("sampler_data")
-		linker.place_section("vertex_attribute_data", 32)
+		linker.place_section("vertex_attribute_data", 32) # Align by 32 for vertex cache efficiency
 		linker.place_section("materials")
-		linker.place_section("meshs")
+		linker.place_section("meshs", 32) # Align by 32 since this contains display lists
 		linker.place_section("joints")
 		linker.place_section("vcd_table")
 		linker.place_section("material_name_table")

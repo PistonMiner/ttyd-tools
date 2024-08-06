@@ -592,6 +592,7 @@ typedef struct
 // - color data (referenced by vcd_table)
 // - Material[] table (referenced by material_name_table)
 
+// <align to 0x20>
 // - Polygon data for following Mesh (referenced by Mesh) (size aligned upwards to 0x20)
 // - Mesh (size aligned upwards to 0x20)
 // - Repeat for all meshes (referenced by joints)

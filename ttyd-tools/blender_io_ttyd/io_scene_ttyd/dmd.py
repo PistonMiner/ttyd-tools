@@ -811,6 +811,8 @@ class DmdJoint:
 		self.rotation = (0.0, 0.0, 0.0)
 		self.scale = (1.0, 1.0, 1.0)
 
+		self.hit_attributes = []
+
 	def link(self, linker, vcd_table, parent = None, next = None, prev = None):
 		blob_name = "joints:{}".format(self.name)
 		joint_data = bytearray(0x60 + len(self.models) * 0x8)
@@ -868,8 +870,32 @@ class DmdJoint:
 		if parent != None: # Root node does not have drawmode
 			drawmode_blob_name = "drawmodes:{}".format(self.name)
 			linker.add_relocation(blob_name, 0x58, drawmode_blob_name)
+			
 			drawmode_data = bytearray(0x14)
 			struct.pack_into(">B", drawmode_data, 0x1, 1) # cullMode = back
+
+			# Assemble hit attributes
+			hit_attribute_values = {
+				"hazard_water": 0x00000200,
+				"hazard_spike": 0x00000800,
+			}
+			hit_attribute_flags = 0
+			for hit_attribute in self.hit_attributes:
+				hit_attribute_bit = None
+				if hit_attribute in hit_attribute_values:
+					hit_attribute_bit = hit_attribute_values[hit_attribute]
+				else:
+					# See if it's a raw flag value
+					try:
+						hit_attribute_bit = int(hit_attribute, 0)
+					except ValueError:
+						pass
+
+				assert hit_attribute_bit is not None, "Invalid hit attribute {}".format(repr(hit_attribute))
+				hit_attribute_flags |= hit_attribute_bit
+
+			struct.pack_into(">L", drawmode_data, 0x8, hit_attribute_flags)
+
 			linker.add_blob(drawmode_blob_name, drawmode_data)
 			linker.place_blob_in_section(drawmode_blob_name, "drawmodes")
 
@@ -931,6 +957,11 @@ class DmdJoint:
 			blender_mesh = blender_evaluated_object.to_mesh()
 			joint.models = DmdModel.list_from_blender_mesh(blender_mesh, materials)
 			blender_evaluated_object.to_mesh_clear()
+
+		# Parse hit attributes
+		hit_attribute_property_name = "hit_attributes"
+		if hit_attribute_property_name in blender_object:
+			joint.hit_attributes = [n.strip() for n in blender_object[hit_attribute_property_name].split(",")]
 
 		return joint
 

@@ -52,6 +52,9 @@ The Blend Mode set in the *Settings* panel of the Eevee material settings maps t
 #### Animations
 Map object transform and texture coordinate transform animations are currently supported. To export an animation, push all the relevant Blender animation data into Actions and put them into NLA Tracks. All NLA tracks of the same name will be packed into one TTYD animation.
 
+#### Hit attributes
+By adding a custom property named `hit_attributes` to an object in the Hit collection, you may specify hit attributes as a comma separated list. You may either specify them by name, or when named support is not available, you can alternatively specify them directly by value. For example you could specify `hazard_water,0x1` to set flags 0x200 (deep water) and 0x1.
+
 ### Camera
 The Camera collection contains the camera marker meshes and curves that will end up in the camera road file (`c`).
 A camera curve defines the path the camera should follow in order to track Mario and map to Blender curve objects. There is exactly one curve active at any one time. A curve is considered to be active when any of the markers attached to it is the one Mario is standing in. The actual curve should lie on the XZ-plane (XY in Blender). When the curve is active, the camera is positioned pointing orthogonally to the left-hand side of the curve and "slides" around the curve until it points at Mario. Effectively, this means that if you want to have the camera point forward, the curve should be going from left to right, so that the left side of the curve is facing forwards.

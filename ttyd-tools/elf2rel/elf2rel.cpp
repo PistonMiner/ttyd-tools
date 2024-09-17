@@ -13,9 +13,76 @@
 #include <tuple>
 #include <deque>
 
-std::map<std::string, uint32_t> loadSymbolMap(const std::string &filename)
+struct SymbolLocation
 {
-	std::map<std::string, uint32_t> outputMap;
+	uint32_t moduleId; // 0 means dol
+	uint32_t targetSection; // OSLink ignores for dol
+	uint32_t addr;
+};
+
+void trimAll(std::vector<std::string> &strs)
+{
+	for (std::string &str : strs)
+	{
+		boost::trim(str);
+	}
+}
+
+bool parseInt(const std::string &str, uint32_t &out, int base=0)
+{
+	try {
+		size_t len;
+		out = std::stoul(str, &len, base);
+		return len == str.length();
+	}
+	catch (std::invalid_argument)
+	{
+		return false;
+	}
+}
+
+// dol symbols: addr:symbolName
+// rel symbols: module,section,offset:symbolName
+// module and section can be prefixed with 0x for hex or 0 for octal, addr/offset is always hex
+bool parseSymbol(const std::string &line, SymbolLocation &sym, std::string &name)
+{
+	// Split around colon
+	std::vector<std::string> colonParts;
+	boost::split(colonParts, line, boost::is_any_of(":"));
+	if (colonParts.size() != 2)
+	{
+		return false;
+	}
+	trimAll(colonParts);
+	name = colonParts[1];
+
+	// Split first part around commas
+	std::vector<std::string> commaParts;
+	boost::split(commaParts, colonParts[0], boost::is_any_of(","));
+	if (commaParts.size() == 1)
+	{
+		// Dol
+		sym.moduleId = 0;
+		sym.targetSection = 0;
+		return parseInt(commaParts[0], sym.addr, 16);
+	}
+	else if (commaParts.size() == 3)
+	{
+		// Other rel
+		trimAll(commaParts);
+		return parseInt(commaParts[0], sym.moduleId)
+			&& parseInt(commaParts[1], sym.targetSection)
+			&& parseInt(commaParts[2], sym.addr, 16);
+	}
+	else
+	{
+		return false;
+	}
+}
+
+std::map<std::string, SymbolLocation> loadSymbolMap(const std::string &filename)
+{
+	std::map<std::string, SymbolLocation> outputMap;
 
 	std::ifstream inputStream(filename);
 	for (std::string line; std::getline(inputStream, line); )
@@ -28,14 +95,15 @@ std::map<std::string, uint32_t> loadSymbolMap(const std::string &filename)
 			continue;
 		}
 
-		size_t index = line.find_first_of(':');
-
-		std::string name = line.substr(index + 1);
-		boost::trim_left(name);
-
-		uint32_t addr = strtoul(line.substr(0, index).c_str(), nullptr, 16);
-
-		outputMap[name] = addr;
+		// Try parse line
+		SymbolLocation sym;
+		std::string name;
+		if (!parseSymbol(line, sym, name))
+		{
+			std::cerr << "Invalid symbol: " << line << std::endl;
+			continue;
+		}
+		outputMap[name] = sym;
 	}
 
 	return outputMap;
@@ -382,10 +450,9 @@ int main(int argc, char **argv)
 					{
 						// Known external!
 						resolved = true;
-
-						rel.moduleID = 0;
-						rel.targetSection = 0; // #todo-elf2rel: Check if this is important
-						rel.addend = static_cast<uint32_t>(addend + it->second);
+						rel.moduleID = it->second.moduleId;
+						rel.targetSection = it->second.targetSection;
+						rel.addend = static_cast<uint32_t>(addend + it->second.addr);
 					}
 				}
 
@@ -401,10 +468,31 @@ int main(int argc, char **argv)
 		}
 	}
 
+	// Returns whether a module should be placed at the end of relocations for trimming
+	auto getModuleDelay = [moduleID](uint32_t id)
+	{
+		if (id == 0 || id == moduleID)
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	};
+
 	// Sort relocations
 	std::sort(allRelocations.begin(), allRelocations.end(),
-			  [](const Relocation &left, const Relocation &right)
+			  [&](const Relocation &left, const Relocation &right)
 	{
+		// Relocations against the dol & this module need to be placed last for trimming with OSLinkFixed
+		int delayLeft = getModuleDelay(left.moduleID);
+		int delayRight = getModuleDelay(right.moduleID);
+		if (delayLeft != delayRight)
+		{
+			return delayLeft < delayRight;
+		}
+		
 		return std::tuple<uint32_t, uint32_t, uint32_t>(left.moduleID, left.section, left.offset)
 			   < std::tuple<uint32_t, uint32_t, uint32_t>(right.moduleID, right.section, right.offset);
 	});
@@ -442,6 +530,7 @@ int main(int argc, char **argv)
 	int currentModuleID = -1;
 	int currentSectionIndex = -1;
 	int currentOffset = 0;
+	int fixedRelocationsSize = 0;
 	while (!allRelocations.empty())
 	{
 		Relocation nextRel = allRelocations.front();
@@ -478,6 +567,13 @@ int main(int argc, char **argv)
 			if (currentModuleID != -1)
 			{
 				writeRelocation(outputBuffer, 0, R_DOLPHIN_END, 0, 0);
+			}
+
+			// If the next module ID was forced to the back and the current one wasn't,
+			// then this is the end of the relocations included in the fixed size
+			if (getModuleDelay(nextRel.moduleID) > getModuleDelay(currentModuleID))
+			{
+				fixedRelocationsSize = outputBuffer.size() - relocationOffset;
 			}
 
 			currentModuleID = nextRel.moduleID;
@@ -530,6 +626,13 @@ int main(int argc, char **argv)
 	}
 	writeRelocation(outputBuffer, 0, R_DOLPHIN_END, 0, 0);
 
+	// If the final module referenced isn't forced to the back, then all
+	// relocations must be included in the fixed size
+	if (getModuleDelay(currentModuleID) == 0)
+	{
+		fixedRelocationsSize = outputBuffer.size() - relocationOffset;
+	}
+
 	// Write final import infos
 	int importInfoSize = importInfoBuffer.size();
 	std::copy(importInfoBuffer.begin(), importInfoBuffer.end(), outputBuffer.begin() + importInfoOffset);
@@ -549,7 +652,7 @@ int main(int argc, char **argv)
 					  prologOffset, epilogOffset, unresolvedOffset,
 					  maxAlign,
 					  maxBssAlign,
-					  relocationOffset);
+					  relocationOffset + fixedRelocationsSize);
 	std::copy(headerBuffer.begin(), headerBuffer.end(), outputBuffer.begin());
 
 	// Write final REL file

@@ -1,7 +1,7 @@
 """
 File: ttydview.py
 Author: Brett B.
-Revision: 1.0.2
+Revision: 1.2.0
 Purpose: Create .obj file from map collision data for viewing
 """
 
@@ -14,7 +14,11 @@ import struct
 inputPath = os.path.join(os.path.dirname(__file__), "map_data") + "/"
 inputFile = inputPath + sys.argv[1]
 outputPath = os.path.join(os.path.dirname(__file__), "obj_files") + "/"
-outputFile = outputPath + sys.argv[2] + ".obj"
+outputFile = outputPath + sys.argv[2]
+rootNodeType = ""
+
+if len(sys.argv) > 3:
+	rootNodeType = sys.argv[3].upper()
 
 f = open(inputFile, "rb")
 binaryData = f.read()
@@ -78,37 +82,37 @@ class Vertex(object):
 
 		if (parentClass.parentClass.parentClass.elementMask & 0x001):
 			self.positionIndex = struct.unpack_from(">H", binaryData, address)[0]
-		
+
 		if (parentClass.parentClass.parentClass.elementMask & 0x002):
 			self.normalIndex   = struct.unpack_from(">H", binaryData, address + 0x2)[0]
-		
+
 		if (parentClass.parentClass.parentClass.elementMask & 0x004):
 			self.colorIndex0   = struct.unpack_from(">H", binaryData, address + 0x4)[0]
-		
+
 		if (parentClass.parentClass.parentClass.elementMask & 0x008):
 			self.colorIndex1   = struct.unpack_from(">H", binaryData, address + 0x6)[0]
-		
+
 		if (parentClass.parentClass.parentClass.elementMask & 0x010):
 			self.textureCoordinateIndex0 = struct.unpack_from(">H", binaryData, address + 0x8)[0]
-		
+
 		if (parentClass.parentClass.parentClass.elementMask & 0x020):
 			self.textureCoordinateIndex1 = struct.unpack_from(">H", binaryData, address + 0xA)[0]
-		
+
 		if (parentClass.parentClass.parentClass.elementMask & 0x040):
 			self.textureCoordinateIndex2 = struct.unpack_from(">H", binaryData, address + 0xC)[0]
-		
+
 		if (parentClass.parentClass.parentClass.elementMask & 0x080):
 			self.textureCoordinateIndex3 = struct.unpack_from(">H", binaryData, address + 0xE)[0]
-		
+
 		if (parentClass.parentClass.parentClass.elementMask & 0x100):
 			self.textureCoordinateIndex4 = struct.unpack_from(">H", binaryData, address + 0x10)[0]
-		
+
 		if (parentClass.parentClass.parentClass.elementMask & 0x200):
 			self.textureCoordinateIndex5 = struct.unpack_from(">H", binaryData, address + 0x12)[0]
-		
+
 		if (parentClass.parentClass.parentClass.elementMask & 0x400):
 			self.textureCoordinateIndex6 = struct.unpack_from(">H", binaryData, address + 0x14)[0]
-		
+
 		if (parentClass.parentClass.parentClass.elementMask & 0x800):
 			self.textureCoordinateIndex7 = struct.unpack_from(">H", binaryData, address + 0x16)[0]
 
@@ -131,7 +135,7 @@ class Node(object):
 		self.meshCount    = struct.unpack_from(">L", binaryData, address + 0x5C)[0]
 		self.parentNode   = None
 		self.children     = []
-		
+
 		self.meshDescriptors = []
 		self.meshes = []
 
@@ -182,38 +186,46 @@ def rawToFloat(address, scale):
 def getStringLength(address):
 	charCount = 0
 	curChar = struct.unpack_from(">b", binaryData, address)[0]
-	while curChar: 
+	while curChar:
 		charCount += 1
 		curChar = struct.unpack_from(">b", binaryData, address + charCount)[0]
 	return charCount
-	
+
 def fillScene(curNode):
+	global rootNode
 	if curNode.nextOffset:
 		curNode.parentNode.add_child(0x20 + curNode.nextOffset)
 		fillScene(curNode.parentNode.children[-1])
 	if curNode.childOffset:
 		curNode.add_child(0x20 + curNode.childOffset)
 		fillScene(curNode.children[-1])
+	if (curNode.name == nodeAString and rootNodeType == "A") or (curNode.name == nodeSString and rootNodeType == "S"):
+		rootNode = curNode
 
 sceneGraphRootOffset = struct.unpack_from(">L", binaryData, 0x24)[0]
+nodeSStringOffset = 0x20 + struct.unpack_from(">L", binaryData, 0x28)[0]
+nodeAStringOffset = 0x20 + struct.unpack_from(">L", binaryData, 0x2C)[0]
+
+nodeSString = struct.unpack_from(">{}s".format(getStringLength(nodeSStringOffset)), binaryData, nodeSStringOffset)[0].decode("utf-8")
+nodeAString = struct.unpack_from(">{}s".format(getStringLength(nodeAStringOffset)), binaryData, nodeAStringOffset)[0].decode("utf-8")
+
 curAddress = 0x20 + sceneGraphRootOffset
 
 rootNode = Node(curAddress)
 fillScene(rootNode)
 
-
 def getTransformationMatrix(curNode):
 	radX = math.radians(curNode.rotation.x)
 	radY = math.radians(curNode.rotation.y)
 	radZ = math.radians(curNode.rotation.z)
-	
+
 	scaleMatrix  = numpy.array([[curNode.scale.x, 0, 0, 0], [0, curNode.scale.y, 0, 0], [0, 0, curNode.scale.z, 0], [0, 0, 0, 1]])
 	rotationMatX = numpy.array([[1, 0, 0, 0], [0, math.cos(radX), -math.sin(radX), 0], [0, math.sin(radX), math.cos(radX), 0], [0, 0, 0, 1]])
 	rotationMatY = numpy.array([[math.cos(radY), 0, math.sin(radY), 0], [0, 1, 0, 0], [-math.sin(radY), 0, math.cos(radY), 0], [0, 0, 0, 1]])
 	rotationMatZ = numpy.array([[math.cos(radZ), -math.sin(radZ), 0, 0], [math.sin(radZ), math.cos(radZ), 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
 	translationMatrix = numpy.array([[1, 0, 0, curNode.translation.x], [0, 1, 0, curNode.translation.y], [0, 0, 1, curNode.translation.z], [0, 0, 0, 1]])
 
-	return translationMatrix @ (rotationMatZ @ rotationMatY @ rotationMatX) @ scaleMatrix
+	return translationMatrix @ rotationMatZ @ rotationMatY @ rotationMatX @ scaleMatrix
 
 def vectorToNumpy(vector):
 	return numpy.array([(vector.x), (vector.y), (vector.z), 1])
@@ -224,7 +236,7 @@ def DFS(curNode):
 	for node in curNode.children:
 		DFS(node)
 	if curNode.meshCount:
-		writeGroup(curNode)
+		writeGroup(curNode.name)
 	for mesh in curNode.meshes:
 		if not vertexCount:
 			vcdTable = VCDTable(0x20 + mesh.vcdTableOffset)
@@ -242,12 +254,15 @@ def writeVertex(vertex):
 
 def writeFace(vCount):
 	global curFaceStart
-	for v in range(curFaceStart, curFaceStart + vCount-2, 1):
+	for v in range(curFaceStart, curFaceStart + vCount-3, 2):
 		out.write("f " + str(v+1) + " " + str(v+2) + " " + str(v+3) + "\n")
+		out.write("f " + str(v+3) + " " + str(v+2) + " " + str(v+4) + "\n")
+	if vCount % 2 == 1:
+		out.write("f " + str(curFaceStart+vCount-2) + " " + str(curFaceStart+vCount-1) + " " + str(curFaceStart+vCount) + "\n")
 	curFaceStart = vertexCount
 
-def writeGroup(node):
-	out.write("g " + node.name + "\n")
+def writeGroup(name):
+	out.write("g " + name + "\n")
 
 vcdTable = None
 
